@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../colors.dart';
 
-class PhoneNumberFowTextField extends StatefulWidget {
+class PhoneNumberTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
   final String? labelText;
@@ -12,7 +12,7 @@ class PhoneNumberFowTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
   final ValueNotifier<bool>? validNotifier;
-  const PhoneNumberFowTextField({Key? key,
+  const PhoneNumberTextField({Key? key,
     this.focusNode,
     this.nextFocusNode,
     this.labelText,
@@ -24,11 +24,11 @@ class PhoneNumberFowTextField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PhoneNumberFowTextFieldState createState() =>
-      _PhoneNumberFowTextFieldState();
+  _PhoneNumberTextFieldState createState() =>
+      _PhoneNumberTextFieldState();
 }
 
-class _PhoneNumberFowTextFieldState extends State<PhoneNumberFowTextField> {
+class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
   bool isValid = false;
 
   @override

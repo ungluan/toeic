@@ -16,7 +16,7 @@
 // import 'package:fow/ui_kit/widget/view/fow_checkbox.dart';
 // import 'package:fow/ui_kit/widget/view/fow_textfield.dart';
 // import 'package:fow/ui_kit/widget/view/password_fow_textfield.dart';
-// import 'package:fow/ui_kit/widget/view/phone_number_fow_textfiled.dart';
+// import 'package:fow/ui_kit/widget/view/phone_number_text_field.dart';
 // import 'package:fow/utils/utils.dart';
 // import 'package:google_fonts/google_fonts.dart';
 //

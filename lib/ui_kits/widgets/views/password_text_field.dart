@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../colors.dart';
 
-class PasswordFowTextFieldV1 extends StatefulWidget {
+class PasswordTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
   final String? labelText;
@@ -15,7 +15,8 @@ class PasswordFowTextFieldV1 extends StatefulWidget {
   final bool isRepeat;
   final ValueNotifier<bool>? validNotifier;
   final String image;
-  const PasswordFowTextFieldV1({Key? key,
+
+  const PasswordTextField({Key? key,
     this.focusNode,
     this.nextFocusNode,
     this.labelText,
@@ -29,10 +30,10 @@ class PasswordFowTextFieldV1 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PasswordFowTextFieldV1State createState() => _PasswordFowTextFieldV1State();
+  _PasswordTextFieldState createState() => _PasswordTextFieldState();
 }
 
-class _PasswordFowTextFieldV1State extends State<PasswordFowTextFieldV1> {
+class _PasswordTextFieldState extends State<PasswordTextField> {
   bool isValid = false;
   bool showPassword = false;
 
@@ -43,7 +44,7 @@ class _PasswordFowTextFieldV1State extends State<PasswordFowTextFieldV1> {
       if (widget.validator != null && mounted) {
         setState(() {
           isValid =
-              !(widget.validator!(widget.controller?.text)?.isNotEmpty == true);
+          !(widget.validator!(widget.controller?.text)?.isNotEmpty == true);
           if (widget.validNotifier != null) {
             widget.validNotifier!.value = isValid;
           }
@@ -64,7 +65,7 @@ class _PasswordFowTextFieldV1State extends State<PasswordFowTextFieldV1> {
         widget.nextFocusNode?.requestFocus();
       },
       validator: widget.validator,
-      autovalidateMode: AutovalidateMode.disabled,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       obscureText: !showPassword,
       decoration: InputDecoration(
         hintText: widget.labelText,
@@ -73,7 +74,7 @@ class _PasswordFowTextFieldV1State extends State<PasswordFowTextFieldV1> {
         prefixIcon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(width: 19),
+            const SizedBox(width: 21),
             SvgPicture.asset(
               widget.image,
             ),
@@ -88,19 +89,19 @@ class _PasswordFowTextFieldV1State extends State<PasswordFowTextFieldV1> {
         ),
         suffixIcon: /*isValid
             ?*/
-            Padding(
+        Padding(
           padding: const EdgeInsets.only(right: 12),
           child: IconButton(
             icon: showPassword
                 ? SvgPicture.asset(
-                    'assets/images/eye-off-line.svg',
-                    color: lightPurpleColor,
-                  )
+              'assets/images/eye-off-line.svg',
+              color: lightPurpleColor,
+            )
                 : SvgPicture.asset(
-                    'assets/images/eye-line.svg',
-                    width: 24,
-                    color: lightPurpleColor,
-                  ),
+              'assets/images/eye-line.svg',
+              width: 24,
+              color: lightPurpleColor,
+            ),
             onPressed: () {
               setState(() {
                 showPassword = !showPassword;

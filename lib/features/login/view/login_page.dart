@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../injection/injection.dart';
 import '../../../ui_kits/colors.dart';
 import '../../../ui_kits/widgets/cubits/loading_cubit.dart';
-import '../../../ui_kits/widgets/views/password_fow_textfield_v1.dart';
-import '../../../ui_kits/widgets/views/phone_number_fow_textfiled.dart';
+import '../../../ui_kits/widgets/views/password_text_field.dart';
+import '../../../ui_kits/widgets/views/phone_number_text_field.dart';
 import '../../../ui_kits/widgets/views/sbox_button.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
 import '../../../utils/utils.dart';
@@ -103,7 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        Image.asset('assets/images/logo.png', width: 128, height: 128,),
+                        Image.asset(
+                          'assets/images/logo.png', width: 128, height: 128,),
                         const SizedBox(height: 20),
                         // RichText(
                         //   text: TextSpan(
@@ -152,15 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                         //   ),
                         // ),
                         // const SizedBox(height: 16),
-                        PhoneNumberFowTextField(
-                          validator: (String? value) {
-                            final nineNumberPhone = trimStart(value);
-                            if (nineNumberPhone.length == 12 &&
-                                RegExp(r'^[0-9]*$').hasMatch(value!)) {
-                              return null;
-                            } else
-                              return 'Số điện thoại không hợp lệ';
-                          },
+                        PhoneNumberTextField(
+                          validator: validatorPhoneNumber,
                           controller: userNameController,
                           labelText: 'Số điện thoại',
                           validNotifier: phoneNotifier,
@@ -168,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        PasswordFowTextFieldV1(
+                        PasswordTextField(
                           validator: validatorPassword,
                           controller: passwordController,
                           labelText: 'Mật khẩu',
@@ -186,10 +180,10 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 'Quên mật khẩu',
                                 style: GoogleFonts.poppins(
-                                    color: orangeColor,
-                                    fontSize: 14,
-                                    letterSpacing: 0.1,
-                                    fontWeight: FontWeight.w500,
+                                  color: orangeColor,
+                                  fontSize: 14,
+                                  letterSpacing: 0.1,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -210,12 +204,13 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         ValueListenableBuilder<bool>(
                           valueListenable: loginNotifier,
-                          builder: (context, enable, _) => makeSBoxButton(
-                            'Đăng Nhập',
-                            onTap: _onPressed,
-                            height: 50,
-                            isEnable: true,
-                          ),
+                          builder: (context, enable, _) =>
+                              makeSBoxButton(
+                                'Đăng Nhập',
+                                onTap: _onPressed,
+                                height: 50,
+                                isEnable: true,
+                              ),
                         ),
                         const SizedBox(height: 14),
                         Align(
@@ -256,11 +251,21 @@ class _LoginPageState extends State<LoginPage> {
 
   String? validatorPassword(String? password) {
     RegExp regex =
-        RegExp(r'^((?=.*[A-Z])|(?=.*[@$!%*#?&]))[A-Za-z\d@$!%*#?&]{8,20}$');
+    RegExp(r'^((?=.*[A-Z])|(?=.*[@$!%*#?&]))[A-Za-z\d@$!%*#?&]{8,20}$');
     if (password != null && regex.hasMatch(password)) {
       return null;
     } else {
-      return 'labels.registerText07';
+      return 'Mật khẩu chứa 8-20 ký tự và chứa ít nhất 1 ký tự in hoa hoặc 1 ký tự đặc biệt.';
+    }
+  }
+
+  String? validatorPhoneNumber(String? phoneNumber) {
+    final nineNumberPhone = trimStart(phoneNumber);
+    if (nineNumberPhone.length == 12 &&
+        RegExp(r'^[0-9]*$').hasMatch(phoneNumber!)) {
+      return null;
+    } else {
+      return 'Số điện thoại không hợp lệ';
     }
   }
 }
