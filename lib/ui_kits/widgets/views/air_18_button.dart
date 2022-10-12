@@ -209,7 +209,7 @@ Widget miniButton(String title,
       style: miniButtonStyle,
       child: Text(
         title.toUpperCase(),
-        style: GoogleFonts.poppins(color: Colors.white),
+        style: GoogleFonts.openSans(color: Colors.white),
       ),
     );
 
@@ -220,7 +220,7 @@ Widget miniBorderButton(String title,
       style: miniBorderButtonStyle,
       child: Text(
         title.toUpperCase(),
-        style: GoogleFonts.poppins(color: blueColor),
+        style: GoogleFonts.openSans(color: blueColor),
       ),
     );
 

@@ -36,15 +36,18 @@ void main() async {
       )));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key, required this.cubit}) : super(key: key);
   final AuthenticationCubit cubit;
 
-  // This widgets is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  // This widgets is the root of your application.
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -56,11 +59,11 @@ class MyApp extends StatelessWidget {
           //   create: (BuildContext context) => getIt<UserCubit>(),
           // ),
           BlocProvider<AuthenticationCubit>(
-            create: (BuildContext context) => cubit,
+            create: (BuildContext context) => widget.cubit,
           ),
         ],
         child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
-          bloc: cubit,
+          bloc: widget.cubit,
           builder: (BuildContext context, state) => state.maybeWhen(
             authenticated: () => HomePage(),
             unauthenticated: () => LoginPage(),
@@ -70,6 +73,18 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _setup();
+  }
+
+  void _setup() async{
+    await Future.delayed(const Duration(seconds: 1));
+    FlutterNativeSplash.remove();
+  }
+
 }
 
 setupNotification() {

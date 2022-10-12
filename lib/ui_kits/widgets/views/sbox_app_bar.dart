@@ -65,7 +65,7 @@ class _SBoxAppBarState extends State<SBoxAppBar> {
                     : Text(
                   widget.title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.openSans(
                       fontSize: 20, fontWeight: FontWeight.w600),
                 )),
             Opacity(

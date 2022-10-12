@@ -1,5 +1,4 @@
-
-
+import '../apis/models/Verify_response.dart';
 import '../apis/models/user.dart';
 import '../features/login/cubit/authentication_cubit.dart';
 
@@ -30,12 +29,11 @@ abstract class AuthenticationRepository {
 
   // void updateOnboarding(bool value);
 
-  // Future<UserExits> checkUserExists(
-  //     String username, String email, String phone, String password);
-  //
-  // Future<DataResponse<User>> saveToken();
-  //
-  // Future<DataResponse<Object>> deleteUserPhone(String phone);
-  //
-  // Future<DataResponse<Object>> changeNotificationSetting();
+  Future<VerifyResponse> checkUserExists(String phoneNumber, String email);
+
+// Future<DataResponse<User>> saveToken();
+//
+// Future<DataResponse<Object>> deleteUserPhone(String phone);
+//
+// Future<DataResponse<Object>> changeNotificationSetting();
 }

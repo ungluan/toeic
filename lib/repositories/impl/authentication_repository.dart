@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:toeic/apis/models/Verify_response.dart';
 
 import '../../apis/models/user.dart';
 import '../../apis/rest_client.dart';
@@ -154,18 +155,15 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   //   hiveService.updateOnBoarding(value);
   // }
   //
-  // @override
-  // Future<UserExits> checkUserExists(
-  //     String username, String email, String phone, String password) async {
-  //   Map<String, dynamic> data = {
-  //     "username": username,
-  //     "email": email,
-  //     "phone": phone,
-  //     "password": password,
-  //     "agree": true
-  //   };
-  //   return _restClient.checkUserExists(data);
-  // }
+  @override
+  Future<VerifyResponse> checkUserExists(
+      String phoneNumber, String email) async {
+    Map<String, dynamic> data = {
+      "phone_number": phoneNumber,
+      "email": email
+    };
+    return _restClient.checkUserExists(data);
+  }
   //
   // @override
   // Future<String> getDeviceId() async {

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:toeic/apis/models/User_response.dart';
+import 'package:toeic/apis/models/Verify_response.dart';
 
 import 'models/user.dart';
 
@@ -29,7 +30,7 @@ abstract class RestClient {
   //
   // @PUT("/auth/reset-password")
   // Future<DataResponse<Object>> resetPassword(@Body() Map<String, dynamic> data);
-  //
-  // @POST('/utils/check-user-exists')
-  // Future<UserExits> checkUserExists(@Body() Map<String, dynamic> data);
+
+  @POST('/user/check_exist')
+  Future<VerifyResponse> checkUserExists(@Body() Map<String, dynamic> data);
 }

@@ -47,7 +47,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                     Expanded(
                       child: Text(
                         'Chú ý',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: primaryColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -69,7 +69,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                     text: TextSpan(
                       text:
                           'Bạn vui lòng nộp tiền qua tài khoản học viện, sau khi nộp đơn.',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.openSans(
                         color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -82,7 +82,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                   RichText(
                     text: TextSpan(
                         text: 'Tên tài khoản: ',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: darkBlueColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -91,7 +91,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                           TextSpan(
                             text:
                                 'Học viện Công nghệ Bưu chính Viễn Thông Cơ sở tại TPHCM',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontSize: 14,
                               // fontWeight: FontWeight.w500,
@@ -102,7 +102,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                   RichText(
                     text: TextSpan(
                         text: 'Tên tài khoản: ',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: darkBlueColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -111,7 +111,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                           TextSpan(
                             text:
                                 'Học viện Công nghệ Bưu chính Viễn Thông Cơ sở tại TPHCM',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontSize: 14,
                               // fontWeight: FontWeight.w500,
@@ -123,7 +123,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                     children: [
                       Text(
                         'Số tài khoản:  ',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: darkBlueColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -143,7 +143,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                   RichText(
                     text: TextSpan(
                         text: 'Ngân hàng: ',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: darkBlueColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -151,7 +151,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                         children: [
                           TextSpan(
                             text: 'Agribank chi nhánh Miền Đông',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontSize: 14,
                               // fontWeight: FontWeight.w500,
@@ -162,7 +162,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                   RichText(
                     text: TextSpan(
                         text: 'Nội dung chuyển tiền: ',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: darkBlueColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -171,7 +171,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                           TextSpan(
                             text:
                                 'Mã sinh viên_Họ và tên sinh viên_Nội dung nộp tiền',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontSize: 14,
                               // fontWeight: FontWeight.w500,
@@ -182,7 +182,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                   RichText(
                     text: TextSpan(
                         text: 'Mức phí: ',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: darkBlueColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -190,7 +190,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                         children: [
                           TextSpan(
                             text: '${widget.price} vnđ',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.openSans(
                               color: primaryColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -201,7 +201,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                   RichText(
                     text: TextSpan(
                         text: 'Thời gian xử lý: ',
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: darkBlueColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -210,7 +210,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                           TextSpan(
                             text:
                             '3-4 ',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.openSans(
                               color: primaryColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -219,7 +219,7 @@ class _NoticeDialogState extends State<NoticeDialog> {
                           TextSpan(
                             text:
                             'ngày',
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontSize: 14,
                               // fontWeight: FontWeight.w500,

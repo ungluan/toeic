@@ -76,7 +76,7 @@ class _SBoxTextFieldMutilineState extends State<SBoxTextFieldMutiline> {
         if (widget.stringNotifier != null) widget.stringNotifier!.value = value;
       },
       style:
-      GoogleFonts.poppins(color: widget.isEnable ? null : Colors.black38),
+      GoogleFonts.openSans(color: widget.isEnable ? null : Colors.black38),
       maxLength: widget.maxLength,
       validator: widget.validator,
       autovalidateMode: AutovalidateMode.disabled,
@@ -96,7 +96,7 @@ class _SBoxTextFieldMutilineState extends State<SBoxTextFieldMutiline> {
           ),
         )
             : const SizedBox(),
-        hintStyle: GoogleFonts.poppins(fontSize: 15),
+        hintStyle: GoogleFonts.openSans(fontSize: 15),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: primaryColor, width: 2)),
@@ -198,7 +198,7 @@ class _SBoxTextField2State extends State<SBoxTextField2> {
         if (widget.stringNotifier != null) widget.stringNotifier!.value = value;
       },
       style:
-      GoogleFonts.poppins(color: widget.isEnable ? null : Colors.black38),
+      GoogleFonts.openSans(color: widget.isEnable ? null : Colors.black38),
       maxLength: widget.maxLength,
       validator: widget.validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -218,7 +218,7 @@ class _SBoxTextField2State extends State<SBoxTextField2> {
           ),
         )
             : const SizedBox(),
-        hintStyle: GoogleFonts.poppins(fontSize: 15),
+        hintStyle: GoogleFonts.openSans(fontSize: 15),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: blueColor, width: 2)),

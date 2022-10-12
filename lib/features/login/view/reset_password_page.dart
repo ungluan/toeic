@@ -137,7 +137,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   children: [
                                     Text(
                                       'Reset password',
-                                      style: GoogleFonts.poppins(
+                                      style: GoogleFonts.openSans(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
                                           color: darkBlueColor,
@@ -153,7 +153,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 const SizedBox(height: 24),
                                 Text(
                                   'Your new password must be different from previous used password',
-                                  style: GoogleFonts.poppins(
+                                  style: GoogleFonts.openSans(
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),

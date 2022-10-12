@@ -17,6 +17,7 @@ class SBoxTextField extends StatefulWidget {
   final ValueNotifier<String>? stringNotifier;
   final bool isEnable;
   final bool isBlueColor;
+  final bool validateModeAlways ;
 
   const SBoxTextField({
     Key? key,
@@ -33,6 +34,7 @@ class SBoxTextField extends StatefulWidget {
     this.stringNotifier,
     this.isEnable = true,
     this.isBlueColor = false,
+    this.validateModeAlways = false,
   }) : super(key: key);
 
   @override
@@ -74,10 +76,10 @@ class _SBoxTextFieldState extends State<SBoxTextField> {
         if (widget.stringNotifier != null) widget.stringNotifier!.value = value;
       },
       style:
-          GoogleFonts.poppins(color: widget.isEnable ? null : Colors.black38),
+          GoogleFonts.openSans(color: widget.isEnable ? null : Colors.black38),
       maxLength: widget.maxLength,
       validator: widget.validator,
-      autovalidateMode: AutovalidateMode.disabled,
+      autovalidateMode: widget.validateModeAlways  ? AutovalidateMode.always : AutovalidateMode.onUserInteraction,
       enabled: widget.isEnable,
       decoration: InputDecoration(
         hintText: widget.labelText,
@@ -93,7 +95,7 @@ class _SBoxTextFieldState extends State<SBoxTextField> {
                 ),
               )
             : const SizedBox(),
-        hintStyle: GoogleFonts.poppins(fontSize: 15),
+        hintStyle: GoogleFonts.openSans(fontSize: 15),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: blueColor, width: 2)),
@@ -194,7 +196,7 @@ class _SBoxTextField2State extends State<SBoxTextField2> {
         if (widget.stringNotifier != null) widget.stringNotifier!.value = value;
       },
       style:
-          GoogleFonts.poppins(color: widget.isEnable ? null : Colors.black38),
+          GoogleFonts.openSans(color: widget.isEnable ? null : Colors.black38),
       maxLength: widget.maxLength,
       validator: widget.validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -213,7 +215,7 @@ class _SBoxTextField2State extends State<SBoxTextField2> {
                 ),
               )
             : const SizedBox(),
-        hintStyle: GoogleFonts.poppins(fontSize: 15),
+        hintStyle: GoogleFonts.openSans(fontSize: 15),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: blueColor, width: 2)),

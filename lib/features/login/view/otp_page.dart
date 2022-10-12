@@ -155,7 +155,7 @@ class _OtpPageState extends State<OtpPage> {
                               children: [
                                 Text(
                                   'OTP VERIFICATION',
-                                  style: GoogleFonts.poppins(
+                                  style: GoogleFonts.openSans(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: darkBlueColor,
@@ -171,14 +171,14 @@ class _OtpPageState extends State<OtpPage> {
                             const SizedBox(height: 24),
                             Text(
                               'Please enter the OTP code in the message to',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.openSans(
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               phone,
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.openSans(
                                   fontSize: 18,
                                   color: blueColor,
                                   fontWeight: FontWeight.bold),
@@ -198,7 +198,7 @@ class _OtpPageState extends State<OtpPage> {
                                           ),
                                           Text(
                                             'Incorrect OTP Code',
-                                            style: GoogleFonts.poppins(
+                                            style: GoogleFonts.openSans(
                                                 color: darkRedColor,
                                                 fontWeight: FontWeight.w700),
                                           )
@@ -215,7 +215,7 @@ class _OtpPageState extends State<OtpPage> {
                                       if (time.inSeconds == 0) {
                                         return Text(
                                           'Time out!',
-                                          style: GoogleFonts.poppins(
+                                          style: GoogleFonts.openSans(
                                               color: darkRedColor,
                                               fontSize: 18,
                                               fontWeight: FontWeight.w600),
@@ -229,12 +229,12 @@ class _OtpPageState extends State<OtpPage> {
                                         children: [
                                           Text(
                                             'Authentication will be expired in ',
-                                            style: GoogleFonts.poppins(
+                                            style: GoogleFonts.openSans(
                                                 fontWeight: FontWeight.w500),
                                           ),
                                           Text(
                                             '${digitFormat(time.inMinutes % 60)}:${digitFormat(time.inSeconds % 60)}',
-                                            style: GoogleFonts.poppins(
+                                            style: GoogleFonts.openSans(
                                                 color: darkRedColor,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w600),
@@ -290,7 +290,7 @@ class _OtpPageState extends State<OtpPage> {
                                 const SizedBox(height: 32),
                                 Text(
                                   'Did not receive OTP code?',
-                                  style: GoogleFonts.poppins(
+                                  style: GoogleFonts.openSans(
                                       fontWeight: FontWeight.w700),
                                 ),
                                 const SizedBox(height: 4),
@@ -303,7 +303,7 @@ class _OtpPageState extends State<OtpPage> {
                                           },
                                     child: Text(
                                       'Resend OTP Code',
-                                      style: GoogleFonts.poppins(
+                                      style: GoogleFonts.openSans(
                                           color: isTimeOut
                                               ? orangeColor
                                               : Colors.grey,

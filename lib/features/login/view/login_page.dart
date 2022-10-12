@@ -83,10 +83,6 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.text = 'Passlagi@123';
   }
 
-  bool isPhoneNumber(String? s) {
-    if (s == null) return false;
-    return double.tryParse(s) != null && trimStart(s).length == 12;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +90,11 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          body: Stack(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Stack(
             children: [
               SingleChildScrollView(
                 child: Container(
@@ -108,7 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         Image.asset(
-                          'assets/images/logo.png', width: 128, height: 128,),
+                          'assets/images/logo.png',
+                          width: 128,
+                          height: 128,
+                        ),
                         const SizedBox(height: 20),
                         // RichText(
                         //   text: TextSpan(
@@ -183,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               child: Text(
                                 'Quên mật khẩu',
-                                style: GoogleFonts.poppins(
+                                style: GoogleFonts.openSans(
                                   color: orangeColor,
                                   fontSize: 14,
                                   letterSpacing: 0.1,
@@ -197,11 +196,11 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               child: Text(
                                 'Đăng ký',
-                                style: GoogleFonts.poppins(
-                                    color: orangeColor,
-                                    fontSize: 14,
-                                    letterSpacing: 0.1,
-                                    fontWeight: FontWeight.w500,
+                                style: GoogleFonts.openSans(
+                                  color: orangeColor,
+                                  fontSize: 14,
+                                  letterSpacing: 0.1,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -209,13 +208,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         ValueListenableBuilder<bool>(
                           valueListenable: loginNotifier,
-                          builder: (context, enable, _) =>
-                              makeSBoxButton(
-                                'Đăng Nhập',
-                                onTap: _onPressed,
-                                height: 50,
-                                isEnable: true,
-                              ),
+                          builder: (context, enable, _) => makeSBoxButton(
+                            'Đăng Nhập',
+                            onTap: _onPressed,
+                            height: 50,
+                            isEnable: true,
+                          ),
                         ),
                         const SizedBox(height: 14),
                         Align(
@@ -254,5 +252,4 @@ class _LoginPageState extends State<LoginPage> {
       loadingCubit.hideLoading();
     }
   }
-
 }

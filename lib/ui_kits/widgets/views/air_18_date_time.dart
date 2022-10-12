@@ -130,7 +130,7 @@ class _Air18DateTimeState extends State<Air18DateTime> {
             },
             enabled: false,
             style: !widget.isEnable
-                ? GoogleFonts.poppins(color: Colors.black38)
+                ? GoogleFonts.openSans(color: Colors.black38)
                 : null,
             decoration: InputDecoration(
               hintText: widget.labelText,
@@ -144,7 +144,7 @@ class _Air18DateTimeState extends State<Air18DateTime> {
                       widget.isEnable ? blueColor : blueColor.withOpacity(0.4),
                 ),
               ),
-              hintStyle: GoogleFonts.poppins(fontSize: 15),
+              hintStyle: GoogleFonts.openSans(fontSize: 15),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(color: blueColor, width: 2)),

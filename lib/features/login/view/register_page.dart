@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toeic/features/login/cubit/authentication_cubit.dart';
+import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/widgets/views/sbox_text_field.dart';
 
 import '../../../ui_kits/colors.dart';
 import '../../../ui_kits/widgets/cubits/loading_cubit.dart';
 import '../../../ui_kits/widgets/views/air_18_checkbox.dart';
-import '../../../ui_kits/widgets/views/air_18_date_time.dart';
 import '../../../ui_kits/widgets/views/password_text_field.dart';
 import '../../../ui_kits/widgets/views/phone_number_text_field.dart';
 import '../../../ui_kits/widgets/views/sbox_button.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
 import '../../../utils/utils.dart';
+import '../cubit/otp_cubit.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final repeatPasswordController = TextEditingController();
+
   // final dateController = TextEditingController();
 
   final ValueNotifier<bool> firstNameNotifier = ValueNotifier(false);
@@ -39,10 +42,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final ValueNotifier<bool> passwordNotifier = ValueNotifier(false);
   final ValueNotifier<bool> repeatPasswordNotifier = ValueNotifier(false);
   final ValueNotifier<bool> phoneNotifier = ValueNotifier(false);
-  final ValueNotifier<bool> dateNotifier = ValueNotifier(false);
   final ValueNotifier<bool> checkNotifier = ValueNotifier(false);
   final ValueNotifier<bool> checkErrorNotifier = ValueNotifier(false);
   final ValueNotifier<bool> createAccountNotifier = ValueNotifier(false);
+  final ValueNotifier<bool> phoneExistedNotifier = ValueNotifier(false);
+  final ValueNotifier<bool> emailExistedNotifier = ValueNotifier(false);
 
   FocusNode lastNameFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
@@ -56,16 +60,14 @@ class _RegisterPageState extends State<RegisterPage> {
   // late RegisterCubit registerCubit =
   //     RegisterCubit(repository: registerRepository);
   //
-  // late OTPService otpService = OTPService();
-  // late OTPRepository otpRepository = OTPRepository(otpService: otpService);
-  // late OtpCubit otpCubit = OtpCubit(otpRepository);
-  //
+
+  late OtpCubit otpCubit = getIt<OtpCubit>();
+
+  late AuthenticationCubit authenticationCubit = getIt<AuthenticationCubit>();
   late LoadingCubit loadingCubit = LoadingCubit();
 
-  // late SwitchCubit genderCubit = SwitchCubit(registerRepository: registerRepository);
-
-  bool phoneExisted = false;
-  bool emailExisted = false;
+  String phoneExisted = "";
+  String emailExisted = "";
   var isTheFirst = true;
 
   // late SwitchCubit genderCubit = SwitchCubit(userRepository);
@@ -108,94 +110,69 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     });
 
-    // otpCubit.stream.listen((state) {
-    //   if (state is OtpStateInValidEmail) {
-    //     print("Email Existed");
+    otpCubit.stream.listen((state) {
+      state.maybeWhen(
+        userExisted: (data) => {
+          handleEmailAndPassword(
+              email: data['email'] != '', phone: data['phoneNumber'] != '')
+        },
+        userNotExisted: () => {
+          // Send Otp
+          logger("userNotExisted")
+        },
+        orElse: () => {logger("logger")},
+      );
+      // if (state is OtpStateSendSuccess) {
+      //   loadingCubit.hideLoading();
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (context) =>
+      //           OtpPage(isRegister: true, data: data, otpCubit: otpCubit)));
+      // } else if (state is OtpStateSendFailed) {
+      //   print("Send Otp Failed");
+      //   loadingCubit.hideLoading();
+      //   showDialog(
+      //     context: context,
+      //     builder: (context) => Air18NotificationDialog(
+      //       title: "Notification",
+      //       content: "Send Otp Failed. Please try again.",
+      //       positive: "Ok",
+      //       onPositiveTap: () => Navigator.pop(context),
+      //       onNegativeTap: () {},
+      //       isShowNegative: false,
+      //     ),
+      //   );
+      // } else if (state is OtpStateVerifySuccess) {
+      //   loadingCubit.showLoading();
+      //   registerCubit.register(data);
+      // } else if (state is OtpStateLoading) {
+      //   loadingCubit.showLoading();
+      // } else {
+      //   loadingCubit.hideLoading();
+      // }
+    });
+
+    // registerCubit.stream.listen((state) {
+    //   if (state is RegisterStateSuccessful && isTheFirst) {
+    //     isTheFirst = false;
     //     loadingCubit.hideLoading();
-    //
     //     showDialog(
     //       context: context,
     //       builder: (context) => Air18NotificationDialog(
     //         title: "Notification",
-    //         content: "Email has been used by anyone yet.",
-    //         positive: "Ok",
-    //         onPositiveTap: () => Navigator.pop(context),
+    //         content:
+    //             "You registered account successfully. Let's login and enjoy my app.",
+    //         positive: "Let's go",
+    //         onPositiveTap: () {
+    //           Navigator.pop(context);
+    //           // registerCubit.completed();
+    //         },
     //         onNegativeTap: () {},
     //         isShowNegative: false,
     //       ),
     //     );
-    //   } else if (state is OtpStateValidEmail) {
-    //     print("Calling Api Check Phone");
-    //     otpCubit.checkPhone(phoneNumberController.text);
-    //   } else if (state is OtpStateValidPhone) {
-    //     print("Send Otp");
-    //     otpCubit.sendOtp("+84" + phoneNumberController.text.substring(1));
-    //   } else if (state is OtpStateInValidPhone) {
-    //     Fluttertoast.showToast(msg: "Phone Existed");
-    //     print("Phone Existed");
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => Air18NotificationDialog(
-    //         title: "Notification",
-    //         content: "Phone number has already been taken.",
-    //         positive: "Ok",
-    //         onPositiveTap: () => Navigator.pop(context),
-    //         onNegativeTap: () {},
-    //         isShowNegative: false,
-    //       ),
-    //     );
-    //   } else if (state is OtpStateSendSuccess) {
-    //     loadingCubit.hideLoading();
-    //     Navigator.of(context).push(MaterialPageRoute(
-    //         builder: (context) =>
-    //             OtpPage(isRegister: true, data: data, otpCubit: otpCubit)));
-    //   } else if (state is OtpStateSendFailed) {
-    //     print("Send Otp Failed");
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => Air18NotificationDialog(
-    //         title: "Notification",
-    //         content: "Send Otp Failed. Please try again.",
-    //         positive: "Ok",
-    //         onPositiveTap: () => Navigator.pop(context),
-    //         onNegativeTap: () {},
-    //         isShowNegative: false,
-    //       ),
-    //     );
-    //   } else if (state is OtpStateVerifySuccess) {
-    //     loadingCubit.showLoading();
-    //     registerCubit.register(data);
-    //   } else if (state is OtpStateLoading) {
-    //     loadingCubit.showLoading();
-    //   } else {
-    //     loadingCubit.hideLoading();
+    //   } else if (state is RegisterStateCompleted) {
+    //     Navigator.pop(context);
     //   }
-    //
-    //   registerCubit.stream.listen((state) {
-    //     if (state is RegisterStateSuccessful && isTheFirst) {
-    //       isTheFirst = false;
-    //       loadingCubit.hideLoading();
-    //       showDialog(
-    //         context: context,
-    //         builder: (context) => Air18NotificationDialog(
-    //           title: "Notification",
-    //           content:
-    //               "You registered account successfully. Let's login and enjoy my app.",
-    //           positive: "Let's go",
-    //           onPositiveTap: () {
-    //             Navigator.pop(context);
-    //             // registerCubit.completed();
-    //           },
-    //           onNegativeTap: () {},
-    //           isShowNegative: false,
-    //         ),
-    //       );
-    //     } else if (state is RegisterStateCompleted) {
-    //       Navigator.pop(context);
-    //     }
-    //   });
     // });
     super.initState();
   }
@@ -204,10 +181,21 @@ class _RegisterPageState extends State<RegisterPage> {
     // await genderCubit.setUpGender();
   }
 
+  void handleEmailAndPassword({required bool email, required bool phone}) {
+    if (email) {
+      emailExisted = emailController.text;
+    }
+    if (phone) {
+      phoneExisted = phoneNumberController.text;
+    }
+    emailExistedNotifier.value = email;
+    phoneExistedNotifier.value = phone;
+  }
+
   void mock() {
     firstNameController.text = 'a';
     lastNameController.text = 'a';
-    emailController.text = 'devXXX@gmail.com';
+    emailController.text = 'luan@gmail.com';
     phoneNumberController.text = '0382916020';
     passwordController.text = 'Passlagi123';
     repeatPasswordController.text = 'Passlagi123';
@@ -238,254 +226,288 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.only(top: 80, left: 24, right: 24),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 32),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: SvgPicture.asset(
-                                  'assets/images/arrow-left-icon.svg',
-                                  color: orangeColor,
-                                ),
-                              ),
-                              Image.asset(
-                                "assets/images/logo_app.png",
-                                width: 96,
-                                height: 96,
-                                fit: BoxFit.scaleDown,
-                              ),
-                              Container()
-                            ],
-                        ),
-                      ),
-                      SBoxTextField(
-                        validator: validatorFirstName,
-                        validNotifier: firstNameNotifier,
-                        controller: firstNameController,
-                        labelText: 'First Name',
-                        nextFocusNode: lastNameFocusNode,
-                      ),
-                      const SizedBox(height: 24),
-                      SBoxTextField(
-                        validator: validatorLastName,
-                        validNotifier: lastNameNotifier,
-                        controller: lastNameController,
-                        labelText: 'Last Name',
-                        focusNode: lastNameFocusNode,
-                        nextFocusNode: emailFocusNode,
-                      ),
-                      const SizedBox(height: 24),
-                      SBoxTextField(
-                        validator: validatorEmail,
-                        validNotifier: emailNotifier,
-                        controller: emailController,
-                        labelText: 'Email Address',
-                        focusNode: emailFocusNode,
-                        nextFocusNode: passwordFocusNode,
-                      ),
-                      const SizedBox(height: 24),
-                      PasswordTextField(
-                        validator: validatorPassword,
-                        validNotifier: passwordNotifier,
-                        controller: passwordController,
-                        labelText: 'Password',
-                        textInputAction: TextInputAction.next,
-                        focusNode: passwordFocusNode,
-                        nextFocusNode: repeatPasswordFocusNode,
-                        image: 'assets/images/password.svg',
-                      ),
-                      const SizedBox(height: 24),
-                      ValueListenableBuilder<bool>(
-                        valueListenable: repeatPasswordNotifier,
-                        builder: (context, value, _) => PasswordTextField(
-                          validator: (String? value) {
-                            if (passwordController.text == value &&
-                                value != null) {
-                              return null;
-                            } else {
-                              return 'Password must similar above';
-                            }
-                          },
-                          validNotifier: repeatPasswordNotifier,
-                          controller: repeatPasswordController,
-                          labelText: 'Repeat Password',
-                          textInputAction: TextInputAction.next,
-                          focusNode: repeatPasswordFocusNode,
-                          nextFocusNode: phoneFocusNode,
-                          isRepeat: true,
-                          image: '',
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      PhoneNumberTextField(
-                        validator: validatorPhoneNumber,
-                        controller: phoneNumberController,
-                        labelText: 'Phone',
-                        validNotifier: phoneNotifier,
-                        focusNode: phoneFocusNode,
-                        textInputAction: TextInputAction.done,
-                      ),
-                      // const SizedBox(
-                      //   height: 12,
-                      // ),
-                      // ValueListenableBuilder<bool>(
-                      //   valueListenable: dateNotifier,
-                      //   builder: (context, isBlue, _) => Air18DateTime(
-                      //     currentDateTime: DateTime.now(),
-                      //     isBirthDate: true,
-                      //     isBlueColor: isBlue,
-                      //     validNotifier: dateNotifier,
-                      //     labelText: 'Birthday',
-                      //     controller: dateController,
-                      //   ),
-                      // ),
-                      const SizedBox(height: 8),
-                      Row(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(
+                          bottom: 24, left: 16, right: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ValueListenableBuilder(
-                            builder: (BuildContext context, bool value,
-                                Widget? child) {
-                              return Air18CheckBox(
-                                valueChanged: (v) {
-                                  checkErrorNotifier.value = false;
-                                },
-                                isCheck: value,
-                                checkNotifier: checkNotifier,
-                              );
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
                             },
-                            valueListenable: checkNotifier,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 0.5),
-                            child: Text(
-                              'Please agree to our ',
-                              style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700),
+                            child: SvgPicture.asset(
+                              'assets/images/arrow-left-icon.svg',
+                              color: orangeColor,
+                              width: 32,
+                              height: 32,
                             ),
                           ),
-                          Expanded(
-                            child: Text(
-                              'Terms and conditions',
-                              overflow: TextOverflow.clip,
-                              softWrap: false,
-                              style: GoogleFonts.poppins(
-                                  decoration: TextDecoration.underline,
-                                  color: blueColor,
-                                  fontWeight: FontWeight.w700),
+                          Center(
+                            child: Image.asset(
+                              "assets/images/logo.png",
+                              width: 128,
+                              height: 128,
+                              fit: BoxFit.scaleDown,
                             ),
                           ),
-                        ],
-                      ),
-                      ValueListenableBuilder(
-                          valueListenable: checkErrorNotifier,
-                          builder: (context, bool value, widget) {
-                            return value
-                                ? Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 24,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          'Check Error',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              color:
-                                                  Theme.of(context).errorColor,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : const SizedBox();
-                          }),
-                      const SizedBox(height: 24),
-                      Column(
-                        children: [
-                          ValueListenableBuilder(
-                            valueListenable: createAccountNotifier,
-                            builder: (context, bool value, widget) {
-                              return makeSBoxButton('Register',
-                                  onTap: _onPressed,
-                                  // height: 50,
-                                  isEnable: true);
-                            },
-                          ),
                           const SizedBox(
-                            height: 16,
-                          ),
-                          // TextButton(
-                          //     onPressed: () {
-                          //       Navigator.pop(context);
-                          //     },
-                          //     child: RichText(
-                          //       text: TextSpan(
-                          //         text: '${labels.registerText08} ',
-                          //         style: GoogleFonts.poppins(
-                          //             fontWeight: FontWeight.w600,
-                          //             fontSize: 14,
-                          //             color: Colors.black),
-                          //         children: <TextSpan>[
-                          //           TextSpan(
-                          //               text: labels.registerChoose03,
-                          //               style: GoogleFonts.poppins(
-                          //                   fontWeight: FontWeight.w600,
-                          //                   color: orangeColor,
-                          //                   fontSize: 14)),
-                          //         ],
-                          //       ),
-                          //     )),
-                          SvgPicture.asset(
-                              'assets/images/character-vector.svg'),
-                          const SizedBox(
-                            height: 40,
+                            width: 32,
+                            height: 32,
                           )
                         ],
                       ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SBoxTextField(
+                              validator: validatorFirstName,
+                              validNotifier: firstNameNotifier,
+                              controller: firstNameController,
+                              labelText: 'Họ',
+                              nextFocusNode: lastNameFocusNode,
+                            ),
+                            const SizedBox(height: 24),
+                            SBoxTextField(
+                              validator: validatorLastName,
+                              validNotifier: lastNameNotifier,
+                              controller: lastNameController,
+                              labelText: 'Tên',
+                              focusNode: lastNameFocusNode,
+                              nextFocusNode: emailFocusNode,
+                            ),
+                            const SizedBox(height: 24),
+                            ValueListenableBuilder<bool>(
+                              valueListenable: emailExistedNotifier,
+                              builder: (_, value, __) => SBoxTextField(
+                                validator: validateEmail,
+                                validNotifier: emailNotifier,
+                                controller: emailController,
+                                labelText: 'Email',
+                                focusNode: emailFocusNode,
+                                nextFocusNode: passwordFocusNode,
+                                validateModeAlways: value,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            PasswordTextField(
+                              validator: validatorPassword,
+                              validNotifier: passwordNotifier,
+                              controller: passwordController,
+                              labelText: 'Mật khẩu',
+                              textInputAction: TextInputAction.next,
+                              focusNode: passwordFocusNode,
+                              nextFocusNode: repeatPasswordFocusNode,
+                              image: 'assets/images/password.svg',
+                            ),
+                            const SizedBox(height: 24),
+                            ValueListenableBuilder<bool>(
+                              valueListenable: repeatPasswordNotifier,
+                              builder: (context, value, _) => PasswordTextField(
+                                validator: (String? value) {
+                                  if (passwordController.text == value &&
+                                      value != null) {
+                                    return null;
+                                  } else {
+                                    return 'Mật khẩu phải trùng khớp';
+                                  }
+                                },
+                                validNotifier: repeatPasswordNotifier,
+                                controller: repeatPasswordController,
+                                labelText: 'Nhập lại mật khẩu',
+                                textInputAction: TextInputAction.next,
+                                focusNode: repeatPasswordFocusNode,
+                                nextFocusNode: phoneFocusNode,
+                                isRepeat: true,
+                                image: 'assets/images/password.svg',
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            ValueListenableBuilder<bool>(
+                              valueListenable: phoneExistedNotifier,
+                              builder: (context, value, _) =>
+                                  PhoneNumberTextField(
+                                validator: validatePhone,
+                                controller: phoneNumberController,
+                                labelText: 'Số điện thoại',
+                                validNotifier: phoneNotifier,
+                                focusNode: phoneFocusNode,
+                                textInputAction: TextInputAction.done,
+                                validateModeAlways: value,
+                              ),
+                            ),
+                            // const SizedBox(
+                            //   height: 12,
+                            // ),
+                            // ValueListenableBuilder<bool>(
+                            //   valueListenable: dateNotifier,
+                            //   builder: (context, isBlue, _) => Air18DateTime(
+                            //     currentDateTime: DateTime.now(),
+                            //     isBirthDate: true,
+                            //     isBlueColor: isBlue,
+                            //     validNotifier: dateNotifier,
+                            //     labelText: 'Birthday',
+                            //     controller: dateController,
+                            //   ),
+                            // ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                ValueListenableBuilder(
+                                  builder: (BuildContext context, bool value,
+                                      Widget? child) {
+                                    return Air18CheckBox(
+                                      valueChanged: (v) {
+                                        checkErrorNotifier.value = false;
+                                      },
+                                      isCheck: value,
+                                      checkNotifier: checkNotifier,
+                                    );
+                                  },
+                                  valueListenable: checkNotifier,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 0.5),
+                                  child: Text(
+                                    'Đồng ý với những ',
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'điều khoản của chúng tôi',
+                                    overflow: TextOverflow.clip,
+                                    softWrap: false,
+                                    style: GoogleFonts.openSans(
+                                        decoration: TextDecoration.underline,
+                                        color: blueColor,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ValueListenableBuilder(
+                                valueListenable: checkErrorNotifier,
+                                builder: (context, bool value, widget) {
+                                  return value
+                                      ? Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 24,
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                'Vui lòng chấp nhận điều khoản',
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .errorColor,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : const SizedBox();
+                                }),
+                            const SizedBox(height: 24),
+                            Column(
+                              children: [
+                                ValueListenableBuilder(
+                                  valueListenable: createAccountNotifier,
+                                  builder: (context, bool value, widget) {
+                                    return makeSBoxButton('Đăng ký',
+                                        onTap: _onPressed,
+                                        // height: 50,
+                                        isEnable: true);
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                // TextButton(
+                                //     onPressed: () {
+                                //       Navigator.pop(context);
+                                //     },
+                                //     child: RichText(
+                                //       text: TextSpan(
+                                //         text: '${labels.registerText08} ',
+                                //         style: GoogleFonts.openSans(
+                                //             fontWeight: FontWeight.w600,
+                                //             fontSize: 14,
+                                //             color: Colors.black),
+                                //         children: <TextSpan>[
+                                //           TextSpan(
+                                //               text: labels.registerChoose03,
+                                //               style: GoogleFonts.openSans(
+                                //                   fontWeight: FontWeight.w600,
+                                //                   color: orangeColor,
+                                //                   fontSize: 14)),
+                                //         ],
+                                //       ),
+                                //     )),
+                                SvgPicture.asset(
+                                  'assets/images/character-illustration.svg',
+                                  width: double.infinity,
+                                  height: 200,
+                                ),
+                                const SizedBox(
+                                  height: 40,
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Loading(loadingCubit: loadingCubit)
-          ],
+              Loading(loadingCubit: loadingCubit)
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  String? validatePhone(String? phone) {
+    if (phoneExistedNotifier.value) {
+      if (phone == phoneExisted) return "Số điện thoại đã tồn tại";
+      return null;
+    }
+    return validatorPhoneNumber(phone);
+  }
+
+  String? validateEmail(String? email){
+    if (phoneExistedNotifier.value) {
+      if (email == emailExisted) return "Email đã tồn tại";
+      return null;
+    }
+    return validatorEmail(email);
   }
 
   void _onPressed() async {
     FocusScope.of(context).unfocus();
     if (!checkNotifier.value) {
       checkErrorNotifier.value = true;
+      phoneNumberController.text = phoneNumberController.text;
     }
     if (_formKey.currentState!.validate() && checkNotifier.value) {
-      // loadingCubit.showLoading();
-      // await
-      // loadingCubit.hideLoading();
-      // loadingCubit.fetchData(otpCubit.checkAndSendOtp(
-      //   context,
-      //   userController.text.trim(),
-      //   emailController.text.trim(),
-      //   trimStart(phoneNumberController.text),
-      //   passwordController.text,
-      // ));
       data = {
         "firstName": firstNameController.text,
         "lastName": lastNameController.text,
@@ -494,6 +516,11 @@ class _RegisterPageState extends State<RegisterPage> {
         "password": passwordController.text,
         // "birthDay": dateController.text
       };
+      logger(data);
+      loadingCubit.showLoading();
+      await otpCubit.checkUserExist(
+          phoneNumber: phoneNumberController.text, email: emailController.text);
+      loadingCubit.hideLoading();
       // await otpCubit.checkEmail(emailController.text);
     }
   }

@@ -12,7 +12,10 @@ class PhoneNumberTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
   final ValueNotifier<bool>? validNotifier;
-  const PhoneNumberTextField({Key? key,
+  final bool validateModeAlways;
+
+  const PhoneNumberTextField({
+    Key? key,
     this.focusNode,
     this.nextFocusNode,
     this.labelText,
@@ -21,11 +24,11 @@ class PhoneNumberTextField extends StatefulWidget {
     this.controller,
     this.textInputType = TextInputType.number,
     this.textInputAction = TextInputAction.next,
+    this.validateModeAlways = false,
   }) : super(key: key);
 
   @override
-  _PhoneNumberTextFieldState createState() =>
-      _PhoneNumberTextFieldState();
+  _PhoneNumberTextFieldState createState() => _PhoneNumberTextFieldState();
 }
 
 class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
@@ -59,7 +62,9 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
         widget.nextFocusNode?.requestFocus();
       },
       validator: widget.validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: widget.validateModeAlways
+          ? AutovalidateMode.always
+          : AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         hintText: widget.labelText,
         fillColor: Colors.white,
@@ -70,7 +75,7 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
             const SizedBox(width: 16),
             Text(
               '+84',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.openSans(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
                 color: blueColor,
@@ -94,7 +99,7 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
                 ),
               )
             : const SizedBox(),
-        hintStyle: GoogleFonts.poppins(fontSize: 15),
+        hintStyle: GoogleFonts.openSans(fontSize: 15),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: blueColor, width: 2)),

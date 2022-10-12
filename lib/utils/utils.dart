@@ -47,16 +47,17 @@ String? validatorEmail(String? email) {
       regex.hasMatch(email)) {
     return null;
   } else {
-    return 'Invalid Email';
+    return 'Email không hợp lệ.';
   }
 }
 
 String? validatorFirstName(String? name) {
-  return (name != null && name.isNotEmpty) == true ? null : 'First Name isn\'t empty';
+  return (name != null && name.isNotEmpty) == true ? null : 'Họ không được để trống';
 }
 String? validatorLastName(String? name) {
-  return (name != null && name.isNotEmpty) == true ? null : 'Last Name isn\'t empty';
+  return (name != null && name.isNotEmpty) == true ? null : 'Tên không được để trống';
 }
+
 
 String digitFormat(int? number) {
   if (number == null) return '00';

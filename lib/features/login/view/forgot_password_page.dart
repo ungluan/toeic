@@ -156,7 +156,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                       child: Text(
                                         'Forgot password?',
                                         maxLines: 2,
-                                        style: GoogleFonts.poppins(
+                                        style: GoogleFonts.openSans(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
                                           color: darkBlueColor,
@@ -173,7 +173,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 const SizedBox(height: 24),
                                 Text(
                                   'Enter your registered phone number, a message with OTP code will be sent to you',
-                                  style: GoogleFonts.poppins(
+                                  style: GoogleFonts.openSans(
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),

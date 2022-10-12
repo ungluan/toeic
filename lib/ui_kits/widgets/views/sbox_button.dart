@@ -197,7 +197,7 @@ Widget miniBorderButton(String title,
         onPressed: isEnable ? onTap : null,
         style: miniBorderButtonStyle,
         child: Text(title.toUpperCase(),
-            style: GoogleFonts.poppins(color: blueColor)));
+            style: GoogleFonts.openSans(color: blueColor)));
 
 Widget makeFowButtonOops(
   String title, {

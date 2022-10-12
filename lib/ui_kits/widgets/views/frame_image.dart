@@ -41,7 +41,7 @@ class _IdUploadViewState extends State<IdUploadView> {
         children: [
           // Text(
           //   widget.title,
-          //   style: GoogleFonts.poppins(
+          //   style: GoogleFonts.openSans(
           //       fontSize: 15, fontWeight: FontWeight.bold, color: darkBlueColor),
           // ),
           Stack(
@@ -98,7 +98,7 @@ class _IdUploadViewState extends State<IdUploadView> {
                                   ),
                                   Text(
                                     'Upload Image',
-                                    style: GoogleFonts.poppins(
+                                    style: GoogleFonts.openSans(
                                       color: blueColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,

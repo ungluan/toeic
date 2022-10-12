@@ -39,7 +39,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
                     Expanded(
                       child: Text(
                         "Thắc mắc",
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: orangeColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -56,7 +56,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
                   child: RichText(
                     text: TextSpan(
                       text: "Nội dung thắc mắc",
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.openSans(
                           color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.w500),

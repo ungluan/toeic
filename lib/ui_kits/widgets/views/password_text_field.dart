@@ -109,7 +109,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             },
           ),
         ) /*: SizedBox()*/,
-        hintStyle: GoogleFonts.poppins(fontSize: 15),
+        hintStyle: GoogleFonts.openSans(fontSize: 15),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: blueColor, width: 2)),

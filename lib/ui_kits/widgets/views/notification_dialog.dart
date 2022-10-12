@@ -54,7 +54,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     Expanded(
                       child: Text(
                         widget.title,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.openSans(
                           color: orangeColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -71,7 +71,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   child: RichText(
                     text: TextSpan(
                       text: widget.content,
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.openSans(
                           color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
