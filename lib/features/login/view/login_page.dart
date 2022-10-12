@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toeic/features/login/view/register_page.dart';
@@ -9,6 +11,7 @@ import '../../../ui_kits/widgets/views/phone_number_text_field.dart';
 import '../../../ui_kits/widgets/views/sbox_button.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
 import '../../../utils/utils.dart';
+import '../cubit/login_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -22,7 +25,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // LoginCubit cubit = getIt<LoginCubit>();
+  LoginCubit cubit = getIt<LoginCubit>();
   LoadingCubit loadingCubit = getIt<LoadingCubit>();
 
   // HiveService hive = HiveService();
@@ -198,7 +201,8 @@ class _LoginPageState extends State<LoginPage> {
                                     color: orangeColor,
                                     fontSize: 14,
                                     letterSpacing: 0.1,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
@@ -238,14 +242,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onPressed() async {
+    // print("OK");
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
       final userName = userNameController.text;
       final password = passwordController.text;
-      print("UserName: " + userName);
-      print("Password: " + password);
+      logger("phone_number: $userName");
+      logger("password: $password");
       loadingCubit.showLoading();
-      // await cubit.login(username: trimStart(userName), password: password);
+      await cubit.login(username: trimStart(userName), password: password);
       loadingCubit.hideLoading();
     }
   }

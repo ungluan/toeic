@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 
-// import '../data/services/models/user.dart';
+// import '../data/services/models/user_repository.dart';
 
 String boxName = "settings";
 
@@ -18,3 +18,4 @@ class HiveService {
   bool get hasFingerPrint => box.get('finger_print', defaultValue: false);
   void updateFingerPrint(bool enable) => box.put('finger_print', enable);
 }
+

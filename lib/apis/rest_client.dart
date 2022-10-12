@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:toeic/apis/models/User_response.dart';
+
+import 'models/user.dart';
 
 
 part 'rest_client.g.dart';
@@ -12,9 +15,9 @@ abstract class RestClient {
   // Future<DataResponse<UserResponse>> register(
   //     @Body() Map<String, dynamic> data);
   //
-  // @POST("/auth/login")
-  // Future<DataResponse<UserResponse>> login(@Body() Map<String, dynamic> data);
-  //
+  @POST("/login")
+  Future<UserResponse> login(@Body() Map<String, dynamic> data);
+
   // @POST("/auth/apple-login")
   // Future<DataResponse<UserResponse>> loginApple(@Body() Map<String, dynamic> data);
   //

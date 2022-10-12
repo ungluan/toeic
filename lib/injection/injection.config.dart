@@ -8,9 +8,12 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../apis/rest_client_factory.dart' as _i6;
-import '../features/login/cubit/login_cubit.dart' as _i5;
+import '../apis/rest_client_factory.dart' as _i5;
+import '../features/login/cubit/authentication_cubit.dart' as _i9;
+import '../features/login/cubit/login_cubit.dart' as _i8;
 import '../hive/hive_service.dart' as _i3;
+import '../repositories/authentication_repository.dart' as _i6;
+import '../repositories/impl/authentication_repository.dart' as _i7;
 import '../ui_kits/widgets/cubits/loading_cubit.dart'
     as _i4; // ignore_for_file: unnecessary_lambdas
 
@@ -28,7 +31,15 @@ _i1.GetIt $initGetIt(
   );
   gh.singleton<_i3.HiveService>(_i3.HiveService());
   gh.factory<_i4.LoadingCubit>(() => _i4.LoadingCubit());
-  gh.factory<_i5.LoginCubit>(() => _i5.LoginCubit());
-  gh.singleton<_i6.RestClientFactory>(_i6.RestClientFactory());
+  gh.singleton<_i5.RestClientFactory>(_i5.RestClientFactory());
+  gh.lazySingleton<_i6.AuthenticationRepository>(
+      () => _i7.AuthenticationRepositoryImpl(
+            get<_i5.RestClientFactory>(),
+            get<_i3.HiveService>(),
+          ));
+  gh.factory<_i8.LoginCubit>(
+      () => _i8.LoginCubit(get<_i6.AuthenticationRepository>()));
+  gh.factory<_i9.AuthenticationCubit>(
+      () => _i9.AuthenticationCubit(get<_i6.AuthenticationRepository>()));
   return get;
 }

@@ -1,12 +1,14 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:toeic/features/blank_page.dart';
+import 'package:toeic/features/main_page.dart';
 
+import 'features/login/cubit/authentication_cubit.dart';
 import 'features/login/view/login_page.dart';
 import 'hive/hive_service.dart';
 import 'injection/injection.dart';
@@ -14,7 +16,6 @@ import 'injection/injection.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
   await Hive.initFlutter();
 
   // if(!Hive.isAdapterRegistered(0)){
@@ -26,15 +27,21 @@ void main() async {
 
   // await Firebase.initializeApp();
   // setupNotification();
-  configureDependencies();
+  configureInjection();
+  AuthenticationCubit cubit = getIt<AuthenticationCubit>();
+  await cubit.dispatch();
 
-  initializeDateFormatting().then((_) => runApp(const MyApp()));
+  initializeDateFormatting().then((_) => runApp(MyApp(
+        cubit: cubit,
+      )));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.cubit}) : super(key: key);
+  final AuthenticationCubit cubit;
 
   // This widgets is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
@@ -43,7 +50,24 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      home: MultiBlocProvider(
+        providers: [
+          // BlocProvider<UserCubit>(
+          //   create: (BuildContext context) => getIt<UserCubit>(),
+          // ),
+          BlocProvider<AuthenticationCubit>(
+            create: (BuildContext context) => cubit,
+          ),
+        ],
+        child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
+          bloc: cubit,
+          builder: (BuildContext context, state) => state.maybeWhen(
+            authenticated: () => HomePage(),
+            unauthenticated: () => LoginPage(),
+            orElse: () => const BlankPage(),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -59,7 +83,6 @@ setupNotification() {
         defaultColor: Colors.red,
         importance: NotificationImportance.High,
         channelShowBadge: true,
-
       ),
       NotificationChannel(
         channelKey: 's_box_notification',
@@ -68,7 +91,6 @@ setupNotification() {
         defaultColor: Colors.red,
         importance: NotificationImportance.High,
         channelShowBadge: true,
-
       ),
       NotificationChannel(
         channelKey: 'scheduled_channel',

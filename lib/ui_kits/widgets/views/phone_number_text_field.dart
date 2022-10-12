@@ -59,7 +59,7 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
         widget.nextFocusNode?.requestFocus();
       },
       validator: widget.validator,
-      autovalidateMode: AutovalidateMode.disabled,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         hintText: widget.labelText,
         fillColor: Colors.white,
