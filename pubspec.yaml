@@ -101,7 +101,9 @@ dependencies:
   google_sign_in: ^5.3.3
   firebase_core: ^1.18.0
   loading_indicator: ^3.0.3
-
+  email_validator: ^2.0.1
+  flutter_countdown_timer: ^4.1.0
+  pin_code_fields: ^7.4.0
 
   flutter_holo_date_picker: ^1.0.3
   r_dotted_line_border: ^0.1.1

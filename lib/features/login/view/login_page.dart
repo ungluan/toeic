@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toeic/features/login/view/register_page.dart';
 import '../../../injection/injection.dart';
 import '../../../ui_kits/colors.dart';
 import '../../../ui_kits/widgets/cubits/loading_cubit.dart';
@@ -189,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                // Navigator.push(context, ForgotPasswordPage.route());
+                                Navigator.push(context, RegisterPage.route());
                               },
                               child: Text(
                                 'Đăng ký',
@@ -249,23 +250,4 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  String? validatorPassword(String? password) {
-    RegExp regex =
-    RegExp(r'^((?=.*[A-Z])|(?=.*[@$!%*#?&]))[A-Za-z\d@$!%*#?&]{8,20}$');
-    if (password != null && regex.hasMatch(password)) {
-      return null;
-    } else {
-      return 'Mật khẩu chứa 8-20 ký tự và chứa ít nhất 1 ký tự in hoa hoặc 1 ký tự đặc biệt.';
-    }
-  }
-
-  String? validatorPhoneNumber(String? phoneNumber) {
-    final nineNumberPhone = trimStart(phoneNumber);
-    if (nineNumberPhone.length == 12 &&
-        RegExp(r'^[0-9]*$').hasMatch(phoneNumber!)) {
-      return null;
-    } else {
-      return 'Số điện thoại không hợp lệ';
-    }
-  }
 }

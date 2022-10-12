@@ -96,7 +96,7 @@ class _SBoxTextFieldState extends State<SBoxTextField> {
         hintStyle: GoogleFonts.poppins(fontSize: 15),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: primaryColor, width: 2)),
+            borderSide: BorderSide(color: blueColor, width: 2)),
         contentPadding: const EdgeInsets.only(top: 12, bottom: 12, left: 24),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -105,14 +105,14 @@ class _SBoxTextFieldState extends State<SBoxTextField> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: widget.isBlueColor ? primaryColor : lightPurpleColor,
+            color: widget.isBlueColor ? blueColor : lightPurpleColor,
             width: 2,
           ),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide:
-              BorderSide(color: primaryColor.withOpacity(0.4), width: 1),
+              BorderSide(color: blueColor.withOpacity(0.4), width: 1),
         ),
         errorMaxLines: 3,
       ),
