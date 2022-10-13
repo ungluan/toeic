@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:toeic/features/blank_page.dart';
 import 'package:toeic/features/main_page.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'features/login/cubit/authentication_cubit.dart';
 import 'features/login/view/login_page.dart';
 import 'hive/hive_service.dart';
@@ -25,15 +25,13 @@ void main() async {
   await Hive.openBox(boxName);
   // await Hive.openBox<User>("user_box");
 
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   // setupNotification();
   configureInjection();
   AuthenticationCubit cubit = getIt<AuthenticationCubit>();
   await cubit.dispatch();
 
-  initializeDateFormatting().then((_) => runApp(MyApp(
-        cubit: cubit,
-      )));
+  runApp(MyApp(cubit: cubit));
 }
 
 class MyApp extends StatefulWidget {
@@ -80,11 +78,10 @@ class _MyAppState extends State<MyApp> {
     _setup();
   }
 
-  void _setup() async{
+  void _setup() async {
     await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
   }
-
 }
 
 setupNotification() {

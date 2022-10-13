@@ -23,10 +23,11 @@ mixin _$OtpState {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,10 +37,11 @@ mixin _$OtpState {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -49,10 +51,11 @@ mixin _$OtpState {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -63,10 +66,11 @@ mixin _$OtpState {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -76,10 +80,11 @@ mixin _$OtpState {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -89,10 +94,11 @@ mixin _$OtpState {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -158,10 +164,11 @@ class _$OtpStateLoading implements OtpStateLoading {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return loading();
   }
@@ -174,10 +181,11 @@ class _$OtpStateLoading implements OtpStateLoading {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return loading?.call();
   }
@@ -190,10 +198,11 @@ class _$OtpStateLoading implements OtpStateLoading {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -210,10 +219,11 @@ class _$OtpStateLoading implements OtpStateLoading {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return loading(this);
   }
@@ -226,10 +236,11 @@ class _$OtpStateLoading implements OtpStateLoading {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return loading?.call(this);
   }
@@ -242,10 +253,11 @@ class _$OtpStateLoading implements OtpStateLoading {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -334,10 +346,11 @@ class _$OtpStateUserExisted implements OtpStateUserExisted {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return userExisted(data);
   }
@@ -350,10 +363,11 @@ class _$OtpStateUserExisted implements OtpStateUserExisted {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return userExisted?.call(data);
   }
@@ -366,10 +380,11 @@ class _$OtpStateUserExisted implements OtpStateUserExisted {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (userExisted != null) {
@@ -386,10 +401,11 @@ class _$OtpStateUserExisted implements OtpStateUserExisted {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return userExisted(this);
   }
@@ -402,10 +418,11 @@ class _$OtpStateUserExisted implements OtpStateUserExisted {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return userExisted?.call(this);
   }
@@ -418,10 +435,11 @@ class _$OtpStateUserExisted implements OtpStateUserExisted {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (userExisted != null) {
@@ -488,10 +506,11 @@ class _$OtpStateUserNotExisted implements OtpStateUserNotExisted {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return userNotExisted();
   }
@@ -504,10 +523,11 @@ class _$OtpStateUserNotExisted implements OtpStateUserNotExisted {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return userNotExisted?.call();
   }
@@ -520,10 +540,11 @@ class _$OtpStateUserNotExisted implements OtpStateUserNotExisted {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (userNotExisted != null) {
@@ -540,10 +561,11 @@ class _$OtpStateUserNotExisted implements OtpStateUserNotExisted {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return userNotExisted(this);
   }
@@ -556,10 +578,11 @@ class _$OtpStateUserNotExisted implements OtpStateUserNotExisted {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return userNotExisted?.call(this);
   }
@@ -572,10 +595,11 @@ class _$OtpStateUserNotExisted implements OtpStateUserNotExisted {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (userNotExisted != null) {
@@ -660,10 +684,11 @@ class _$OtpStateSendFailed implements OtpStateSendFailed {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return sendFailed(error);
   }
@@ -676,10 +701,11 @@ class _$OtpStateSendFailed implements OtpStateSendFailed {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return sendFailed?.call(error);
   }
@@ -692,10 +718,11 @@ class _$OtpStateSendFailed implements OtpStateSendFailed {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (sendFailed != null) {
@@ -712,10 +739,11 @@ class _$OtpStateSendFailed implements OtpStateSendFailed {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return sendFailed(this);
   }
@@ -728,10 +756,11 @@ class _$OtpStateSendFailed implements OtpStateSendFailed {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return sendFailed?.call(this);
   }
@@ -744,10 +773,11 @@ class _$OtpStateSendFailed implements OtpStateSendFailed {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (sendFailed != null) {
@@ -837,10 +867,11 @@ class _$OtpStateVerifyFailed implements OtpStateVerifyFailed {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return verifyFailed(error);
   }
@@ -853,10 +884,11 @@ class _$OtpStateVerifyFailed implements OtpStateVerifyFailed {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return verifyFailed?.call(error);
   }
@@ -869,10 +901,11 @@ class _$OtpStateVerifyFailed implements OtpStateVerifyFailed {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (verifyFailed != null) {
@@ -889,10 +922,11 @@ class _$OtpStateVerifyFailed implements OtpStateVerifyFailed {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return verifyFailed(this);
   }
@@ -905,10 +939,11 @@ class _$OtpStateVerifyFailed implements OtpStateVerifyFailed {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return verifyFailed?.call(this);
   }
@@ -921,10 +956,11 @@ class _$OtpStateVerifyFailed implements OtpStateVerifyFailed {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (verifyFailed != null) {
@@ -942,153 +978,6 @@ abstract class OtpStateVerifyFailed implements OtpState {
   @JsonKey(ignore: true)
   _$$OtpStateVerifyFailedCopyWith<_$OtpStateVerifyFailed> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$OtpStateSendSuccessCopyWith<$Res> {
-  factory _$$OtpStateSendSuccessCopyWith(_$OtpStateSendSuccess value,
-          $Res Function(_$OtpStateSendSuccess) then) =
-      __$$OtpStateSendSuccessCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$OtpStateSendSuccessCopyWithImpl<$Res>
-    extends _$OtpStateCopyWithImpl<$Res>
-    implements _$$OtpStateSendSuccessCopyWith<$Res> {
-  __$$OtpStateSendSuccessCopyWithImpl(
-      _$OtpStateSendSuccess _value, $Res Function(_$OtpStateSendSuccess) _then)
-      : super(_value, (v) => _then(v as _$OtpStateSendSuccess));
-
-  @override
-  _$OtpStateSendSuccess get _value => super._value as _$OtpStateSendSuccess;
-}
-
-/// @nodoc
-
-class _$OtpStateSendSuccess implements OtpStateSendSuccess {
-  const _$OtpStateSendSuccess();
-
-  @override
-  String toString() {
-    return 'OtpState.sendSuccess()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$OtpStateSendSuccess);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(Map<String, String> data) userExisted,
-    required TResult Function() userNotExisted,
-    required TResult Function(String error) sendFailed,
-    required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
-    required TResult Function() verifySuccess,
-    required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
-  }) {
-    return sendSuccess();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(Map<String, String> data)? userExisted,
-    TResult Function()? userNotExisted,
-    TResult Function(String error)? sendFailed,
-    TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
-    TResult Function()? verifySuccess,
-    TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
-  }) {
-    return sendSuccess?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(Map<String, String> data)? userExisted,
-    TResult Function()? userNotExisted,
-    TResult Function(String error)? sendFailed,
-    TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
-    TResult Function()? verifySuccess,
-    TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
-    required TResult orElse(),
-  }) {
-    if (sendSuccess != null) {
-      return sendSuccess();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(OtpStateLoading value) loading,
-    required TResult Function(OtpStateUserExisted value) userExisted,
-    required TResult Function(OtpStateUserNotExisted value) userNotExisted,
-    required TResult Function(OtpStateSendFailed value) sendFailed,
-    required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
-    required TResult Function(OtpStateVerifySuccess value) verifySuccess,
-    required TResult Function(OtpStateRegisterFailed value) registerFailed,
-    required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
-  }) {
-    return sendSuccess(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(OtpStateLoading value)? loading,
-    TResult Function(OtpStateUserExisted value)? userExisted,
-    TResult Function(OtpStateUserNotExisted value)? userNotExisted,
-    TResult Function(OtpStateSendFailed value)? sendFailed,
-    TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
-    TResult Function(OtpStateVerifySuccess value)? verifySuccess,
-    TResult Function(OtpStateRegisterFailed value)? registerFailed,
-    TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
-  }) {
-    return sendSuccess?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(OtpStateLoading value)? loading,
-    TResult Function(OtpStateUserExisted value)? userExisted,
-    TResult Function(OtpStateUserNotExisted value)? userNotExisted,
-    TResult Function(OtpStateSendFailed value)? sendFailed,
-    TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
-    TResult Function(OtpStateVerifySuccess value)? verifySuccess,
-    TResult Function(OtpStateRegisterFailed value)? registerFailed,
-    TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
-    required TResult orElse(),
-  }) {
-    if (sendSuccess != null) {
-      return sendSuccess(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class OtpStateSendSuccess implements OtpState {
-  const factory OtpStateSendSuccess() = _$OtpStateSendSuccess;
 }
 
 /// @nodoc
@@ -1137,10 +1026,11 @@ class _$OtpStateVerifySuccess implements OtpStateVerifySuccess {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return verifySuccess();
   }
@@ -1153,10 +1043,11 @@ class _$OtpStateVerifySuccess implements OtpStateVerifySuccess {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return verifySuccess?.call();
   }
@@ -1169,10 +1060,11 @@ class _$OtpStateVerifySuccess implements OtpStateVerifySuccess {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (verifySuccess != null) {
@@ -1189,10 +1081,11 @@ class _$OtpStateVerifySuccess implements OtpStateVerifySuccess {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return verifySuccess(this);
   }
@@ -1205,10 +1098,11 @@ class _$OtpStateVerifySuccess implements OtpStateVerifySuccess {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return verifySuccess?.call(this);
   }
@@ -1221,10 +1115,11 @@ class _$OtpStateVerifySuccess implements OtpStateVerifySuccess {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (verifySuccess != null) {
@@ -1236,6 +1131,159 @@ class _$OtpStateVerifySuccess implements OtpStateVerifySuccess {
 
 abstract class OtpStateVerifySuccess implements OtpState {
   const factory OtpStateVerifySuccess() = _$OtpStateVerifySuccess;
+}
+
+/// @nodoc
+abstract class _$$OtpStateSendSuccessCopyWith<$Res> {
+  factory _$$OtpStateSendSuccessCopyWith(_$OtpStateSendSuccess value,
+          $Res Function(_$OtpStateSendSuccess) then) =
+      __$$OtpStateSendSuccessCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$OtpStateSendSuccessCopyWithImpl<$Res>
+    extends _$OtpStateCopyWithImpl<$Res>
+    implements _$$OtpStateSendSuccessCopyWith<$Res> {
+  __$$OtpStateSendSuccessCopyWithImpl(
+      _$OtpStateSendSuccess _value, $Res Function(_$OtpStateSendSuccess) _then)
+      : super(_value, (v) => _then(v as _$OtpStateSendSuccess));
+
+  @override
+  _$OtpStateSendSuccess get _value => super._value as _$OtpStateSendSuccess;
+}
+
+/// @nodoc
+
+class _$OtpStateSendSuccess implements OtpStateSendSuccess {
+  const _$OtpStateSendSuccess();
+
+  @override
+  String toString() {
+    return 'OtpState.sendSuccess()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$OtpStateSendSuccess);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(Map<String, String> data) userExisted,
+    required TResult Function() userNotExisted,
+    required TResult Function(String error) sendFailed,
+    required TResult Function(String error) verifyFailed,
+    required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
+    required TResult Function(String error) registerFailed,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
+  }) {
+    return sendSuccess();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(Map<String, String> data)? userExisted,
+    TResult Function()? userNotExisted,
+    TResult Function(String error)? sendFailed,
+    TResult Function(String error)? verifyFailed,
+    TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
+    TResult Function(String error)? registerFailed,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
+  }) {
+    return sendSuccess?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(Map<String, String> data)? userExisted,
+    TResult Function()? userNotExisted,
+    TResult Function(String error)? sendFailed,
+    TResult Function(String error)? verifyFailed,
+    TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
+    TResult Function(String error)? registerFailed,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
+    required TResult orElse(),
+  }) {
+    if (sendSuccess != null) {
+      return sendSuccess();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(OtpStateLoading value) loading,
+    required TResult Function(OtpStateUserExisted value) userExisted,
+    required TResult Function(OtpStateUserNotExisted value) userNotExisted,
+    required TResult Function(OtpStateSendFailed value) sendFailed,
+    required TResult Function(OtpStateVerifyFailed value) verifyFailed,
+    required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
+    required TResult Function(OtpStateRegisterFailed value) registerFailed,
+    required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
+  }) {
+    return sendSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(OtpStateLoading value)? loading,
+    TResult Function(OtpStateUserExisted value)? userExisted,
+    TResult Function(OtpStateUserNotExisted value)? userNotExisted,
+    TResult Function(OtpStateSendFailed value)? sendFailed,
+    TResult Function(OtpStateVerifyFailed value)? verifyFailed,
+    TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
+    TResult Function(OtpStateRegisterFailed value)? registerFailed,
+    TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
+  }) {
+    return sendSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(OtpStateLoading value)? loading,
+    TResult Function(OtpStateUserExisted value)? userExisted,
+    TResult Function(OtpStateUserNotExisted value)? userNotExisted,
+    TResult Function(OtpStateSendFailed value)? sendFailed,
+    TResult Function(OtpStateVerifyFailed value)? verifyFailed,
+    TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
+    TResult Function(OtpStateRegisterFailed value)? registerFailed,
+    TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
+    required TResult orElse(),
+  }) {
+    if (sendSuccess != null) {
+      return sendSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class OtpStateSendSuccess implements OtpState {
+  const factory OtpStateSendSuccess() = _$OtpStateSendSuccess;
 }
 
 /// @nodoc
@@ -1310,10 +1358,11 @@ class _$OtpStateRegisterFailed implements OtpStateRegisterFailed {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return registerFailed(error);
   }
@@ -1326,10 +1375,11 @@ class _$OtpStateRegisterFailed implements OtpStateRegisterFailed {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return registerFailed?.call(error);
   }
@@ -1342,10 +1392,11 @@ class _$OtpStateRegisterFailed implements OtpStateRegisterFailed {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (registerFailed != null) {
@@ -1362,10 +1413,11 @@ class _$OtpStateRegisterFailed implements OtpStateRegisterFailed {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return registerFailed(this);
   }
@@ -1378,10 +1430,11 @@ class _$OtpStateRegisterFailed implements OtpStateRegisterFailed {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return registerFailed?.call(this);
   }
@@ -1394,10 +1447,11 @@ class _$OtpStateRegisterFailed implements OtpStateRegisterFailed {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (registerFailed != null) {
@@ -1422,7 +1476,7 @@ abstract class _$$OtpStateRegisterSuccessCopyWith<$Res> {
   factory _$$OtpStateRegisterSuccessCopyWith(_$OtpStateRegisterSuccess value,
           $Res Function(_$OtpStateRegisterSuccess) then) =
       __$$OtpStateRegisterSuccessCopyWithImpl<$Res>;
-  $Res call({User user, String password});
+  $Res call({u.User user, String password});
 }
 
 /// @nodoc
@@ -1446,7 +1500,7 @@ class __$$OtpStateRegisterSuccessCopyWithImpl<$Res>
       user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as User,
+              as u.User,
       password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
@@ -1461,7 +1515,7 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
   const _$OtpStateRegisterSuccess(this.user, this.password);
 
   @override
-  final User user;
+  final u.User user;
   @override
   final String password;
 
@@ -1499,10 +1553,11 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
     required TResult Function() userNotExisted,
     required TResult Function(String error) sendFailed,
     required TResult Function(String error) verifyFailed,
-    required TResult Function() sendSuccess,
     required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
     required TResult Function(String error) registerFailed,
-    required TResult Function(User user, String password) registerSuccess,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
   }) {
     return registerSuccess(user, password);
   }
@@ -1515,10 +1570,11 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
   }) {
     return registerSuccess?.call(user, password);
   }
@@ -1531,10 +1587,11 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
     TResult Function()? userNotExisted,
     TResult Function(String error)? sendFailed,
     TResult Function(String error)? verifyFailed,
-    TResult Function()? sendSuccess,
     TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
     TResult Function(String error)? registerFailed,
-    TResult Function(User user, String password)? registerSuccess,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
     required TResult orElse(),
   }) {
     if (registerSuccess != null) {
@@ -1551,10 +1608,11 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
     required TResult Function(OtpStateUserNotExisted value) userNotExisted,
     required TResult Function(OtpStateSendFailed value) sendFailed,
     required TResult Function(OtpStateVerifyFailed value) verifyFailed,
-    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
     required TResult Function(OtpStateRegisterFailed value) registerFailed,
     required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
   }) {
     return registerSuccess(this);
   }
@@ -1567,10 +1625,11 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
   }) {
     return registerSuccess?.call(this);
   }
@@ -1583,10 +1642,11 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
     TResult Function(OtpStateUserNotExisted value)? userNotExisted,
     TResult Function(OtpStateSendFailed value)? sendFailed,
     TResult Function(OtpStateVerifyFailed value)? verifyFailed,
-    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
     TResult Function(OtpStateRegisterFailed value)? registerFailed,
     TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
     required TResult orElse(),
   }) {
     if (registerSuccess != null) {
@@ -1598,11 +1658,165 @@ class _$OtpStateRegisterSuccess implements OtpStateRegisterSuccess {
 
 abstract class OtpStateRegisterSuccess implements OtpState {
   const factory OtpStateRegisterSuccess(
-      final User user, final String password) = _$OtpStateRegisterSuccess;
+      final u.User user, final String password) = _$OtpStateRegisterSuccess;
 
-  User get user;
+  u.User get user;
   String get password;
   @JsonKey(ignore: true)
   _$$OtpStateRegisterSuccessCopyWith<_$OtpStateRegisterSuccess> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$OtpStateRequestTimeOutCopyWith<$Res> {
+  factory _$$OtpStateRequestTimeOutCopyWith(_$OtpStateRequestTimeOut value,
+          $Res Function(_$OtpStateRequestTimeOut) then) =
+      __$$OtpStateRequestTimeOutCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$OtpStateRequestTimeOutCopyWithImpl<$Res>
+    extends _$OtpStateCopyWithImpl<$Res>
+    implements _$$OtpStateRequestTimeOutCopyWith<$Res> {
+  __$$OtpStateRequestTimeOutCopyWithImpl(_$OtpStateRequestTimeOut _value,
+      $Res Function(_$OtpStateRequestTimeOut) _then)
+      : super(_value, (v) => _then(v as _$OtpStateRequestTimeOut));
+
+  @override
+  _$OtpStateRequestTimeOut get _value =>
+      super._value as _$OtpStateRequestTimeOut;
+}
+
+/// @nodoc
+
+class _$OtpStateRequestTimeOut implements OtpStateRequestTimeOut {
+  const _$OtpStateRequestTimeOut();
+
+  @override
+  String toString() {
+    return 'OtpState.requestTimeOut()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$OtpStateRequestTimeOut);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(Map<String, String> data) userExisted,
+    required TResult Function() userNotExisted,
+    required TResult Function(String error) sendFailed,
+    required TResult Function(String error) verifyFailed,
+    required TResult Function() verifySuccess,
+    required TResult Function() sendSuccess,
+    required TResult Function(String error) registerFailed,
+    required TResult Function(u.User user, String password) registerSuccess,
+    required TResult Function() requestTimeOut,
+  }) {
+    return requestTimeOut();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(Map<String, String> data)? userExisted,
+    TResult Function()? userNotExisted,
+    TResult Function(String error)? sendFailed,
+    TResult Function(String error)? verifyFailed,
+    TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
+    TResult Function(String error)? registerFailed,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
+  }) {
+    return requestTimeOut?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(Map<String, String> data)? userExisted,
+    TResult Function()? userNotExisted,
+    TResult Function(String error)? sendFailed,
+    TResult Function(String error)? verifyFailed,
+    TResult Function()? verifySuccess,
+    TResult Function()? sendSuccess,
+    TResult Function(String error)? registerFailed,
+    TResult Function(u.User user, String password)? registerSuccess,
+    TResult Function()? requestTimeOut,
+    required TResult orElse(),
+  }) {
+    if (requestTimeOut != null) {
+      return requestTimeOut();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(OtpStateLoading value) loading,
+    required TResult Function(OtpStateUserExisted value) userExisted,
+    required TResult Function(OtpStateUserNotExisted value) userNotExisted,
+    required TResult Function(OtpStateSendFailed value) sendFailed,
+    required TResult Function(OtpStateVerifyFailed value) verifyFailed,
+    required TResult Function(OtpStateVerifySuccess value) verifySuccess,
+    required TResult Function(OtpStateSendSuccess value) sendSuccess,
+    required TResult Function(OtpStateRegisterFailed value) registerFailed,
+    required TResult Function(OtpStateRegisterSuccess value) registerSuccess,
+    required TResult Function(OtpStateRequestTimeOut value) requestTimeOut,
+  }) {
+    return requestTimeOut(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(OtpStateLoading value)? loading,
+    TResult Function(OtpStateUserExisted value)? userExisted,
+    TResult Function(OtpStateUserNotExisted value)? userNotExisted,
+    TResult Function(OtpStateSendFailed value)? sendFailed,
+    TResult Function(OtpStateVerifyFailed value)? verifyFailed,
+    TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
+    TResult Function(OtpStateRegisterFailed value)? registerFailed,
+    TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
+  }) {
+    return requestTimeOut?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(OtpStateLoading value)? loading,
+    TResult Function(OtpStateUserExisted value)? userExisted,
+    TResult Function(OtpStateUserNotExisted value)? userNotExisted,
+    TResult Function(OtpStateSendFailed value)? sendFailed,
+    TResult Function(OtpStateVerifyFailed value)? verifyFailed,
+    TResult Function(OtpStateVerifySuccess value)? verifySuccess,
+    TResult Function(OtpStateSendSuccess value)? sendSuccess,
+    TResult Function(OtpStateRegisterFailed value)? registerFailed,
+    TResult Function(OtpStateRegisterSuccess value)? registerSuccess,
+    TResult Function(OtpStateRequestTimeOut value)? requestTimeOut,
+    required TResult orElse(),
+  }) {
+    if (requestTimeOut != null) {
+      return requestTimeOut(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class OtpStateRequestTimeOut implements OtpState {
+  const factory OtpStateRequestTimeOut() = _$OtpStateRequestTimeOut;
 }

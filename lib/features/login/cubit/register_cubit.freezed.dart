@@ -19,18 +19,24 @@ mixin _$RegisterState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function() successful,
     required TResult Function(Map<String, dynamic> data) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
     TResult Function(Map<String, dynamic> data)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
     TResult Function(Map<String, dynamic> data)? loaded,
     required TResult orElse(),
   }) =>
@@ -38,18 +44,24 @@ mixin _$RegisterState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(RegisterStateLoading value) loading,
+    required TResult Function(RegisterStateFailed value) failed,
+    required TResult Function(RegisterStateSuccessful value) successful,
     required TResult Function(RegisterStateLoaded value) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
     TResult Function(RegisterStateLoaded value)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
     TResult Function(RegisterStateLoaded value)? loaded,
     required TResult orElse(),
   }) =>
@@ -115,6 +127,8 @@ class _$RegisterStateLoading implements RegisterStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function() successful,
     required TResult Function(Map<String, dynamic> data) loaded,
   }) {
     return loading();
@@ -124,6 +138,8 @@ class _$RegisterStateLoading implements RegisterStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
     TResult Function(Map<String, dynamic> data)? loaded,
   }) {
     return loading?.call();
@@ -133,6 +149,8 @@ class _$RegisterStateLoading implements RegisterStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
     TResult Function(Map<String, dynamic> data)? loaded,
     required TResult orElse(),
   }) {
@@ -146,6 +164,8 @@ class _$RegisterStateLoading implements RegisterStateLoading {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(RegisterStateLoading value) loading,
+    required TResult Function(RegisterStateFailed value) failed,
+    required TResult Function(RegisterStateSuccessful value) successful,
     required TResult Function(RegisterStateLoaded value) loaded,
   }) {
     return loading(this);
@@ -155,6 +175,8 @@ class _$RegisterStateLoading implements RegisterStateLoading {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
     TResult Function(RegisterStateLoaded value)? loaded,
   }) {
     return loading?.call(this);
@@ -164,6 +186,8 @@ class _$RegisterStateLoading implements RegisterStateLoading {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
     TResult Function(RegisterStateLoaded value)? loaded,
     required TResult orElse(),
   }) {
@@ -176,6 +200,272 @@ class _$RegisterStateLoading implements RegisterStateLoading {
 
 abstract class RegisterStateLoading implements RegisterState {
   const factory RegisterStateLoading() = _$RegisterStateLoading;
+}
+
+/// @nodoc
+abstract class _$$RegisterStateFailedCopyWith<$Res> {
+  factory _$$RegisterStateFailedCopyWith(_$RegisterStateFailed value,
+          $Res Function(_$RegisterStateFailed) then) =
+      __$$RegisterStateFailedCopyWithImpl<$Res>;
+  $Res call({String error});
+}
+
+/// @nodoc
+class __$$RegisterStateFailedCopyWithImpl<$Res>
+    extends _$RegisterStateCopyWithImpl<$Res>
+    implements _$$RegisterStateFailedCopyWith<$Res> {
+  __$$RegisterStateFailedCopyWithImpl(
+      _$RegisterStateFailed _value, $Res Function(_$RegisterStateFailed) _then)
+      : super(_value, (v) => _then(v as _$RegisterStateFailed));
+
+  @override
+  _$RegisterStateFailed get _value => super._value as _$RegisterStateFailed;
+
+  @override
+  $Res call({
+    Object? error = freezed,
+  }) {
+    return _then(_$RegisterStateFailed(
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$RegisterStateFailed implements RegisterStateFailed {
+  const _$RegisterStateFailed(this.error);
+
+  @override
+  final String error;
+
+  @override
+  String toString() {
+    return 'RegisterState.failed(error: $error)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegisterStateFailed &&
+            const DeepCollectionEquality().equals(other.error, error));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$RegisterStateFailedCopyWith<_$RegisterStateFailed> get copyWith =>
+      __$$RegisterStateFailedCopyWithImpl<_$RegisterStateFailed>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function() successful,
+    required TResult Function(Map<String, dynamic> data) loaded,
+  }) {
+    return failed(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
+    TResult Function(Map<String, dynamic> data)? loaded,
+  }) {
+    return failed?.call(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
+    TResult Function(Map<String, dynamic> data)? loaded,
+    required TResult orElse(),
+  }) {
+    if (failed != null) {
+      return failed(error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(RegisterStateLoading value) loading,
+    required TResult Function(RegisterStateFailed value) failed,
+    required TResult Function(RegisterStateSuccessful value) successful,
+    required TResult Function(RegisterStateLoaded value) loaded,
+  }) {
+    return failed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
+    TResult Function(RegisterStateLoaded value)? loaded,
+  }) {
+    return failed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
+    TResult Function(RegisterStateLoaded value)? loaded,
+    required TResult orElse(),
+  }) {
+    if (failed != null) {
+      return failed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RegisterStateFailed implements RegisterState {
+  const factory RegisterStateFailed(final String error) = _$RegisterStateFailed;
+
+  String get error;
+  @JsonKey(ignore: true)
+  _$$RegisterStateFailedCopyWith<_$RegisterStateFailed> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$RegisterStateSuccessfulCopyWith<$Res> {
+  factory _$$RegisterStateSuccessfulCopyWith(_$RegisterStateSuccessful value,
+          $Res Function(_$RegisterStateSuccessful) then) =
+      __$$RegisterStateSuccessfulCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$RegisterStateSuccessfulCopyWithImpl<$Res>
+    extends _$RegisterStateCopyWithImpl<$Res>
+    implements _$$RegisterStateSuccessfulCopyWith<$Res> {
+  __$$RegisterStateSuccessfulCopyWithImpl(_$RegisterStateSuccessful _value,
+      $Res Function(_$RegisterStateSuccessful) _then)
+      : super(_value, (v) => _then(v as _$RegisterStateSuccessful));
+
+  @override
+  _$RegisterStateSuccessful get _value =>
+      super._value as _$RegisterStateSuccessful;
+}
+
+/// @nodoc
+
+class _$RegisterStateSuccessful implements RegisterStateSuccessful {
+  const _$RegisterStateSuccessful();
+
+  @override
+  String toString() {
+    return 'RegisterState.successful()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegisterStateSuccessful);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function() successful,
+    required TResult Function(Map<String, dynamic> data) loaded,
+  }) {
+    return successful();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
+    TResult Function(Map<String, dynamic> data)? loaded,
+  }) {
+    return successful?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
+    TResult Function(Map<String, dynamic> data)? loaded,
+    required TResult orElse(),
+  }) {
+    if (successful != null) {
+      return successful();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(RegisterStateLoading value) loading,
+    required TResult Function(RegisterStateFailed value) failed,
+    required TResult Function(RegisterStateSuccessful value) successful,
+    required TResult Function(RegisterStateLoaded value) loaded,
+  }) {
+    return successful(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
+    TResult Function(RegisterStateLoaded value)? loaded,
+  }) {
+    return successful?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
+    TResult Function(RegisterStateLoaded value)? loaded,
+    required TResult orElse(),
+  }) {
+    if (successful != null) {
+      return successful(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RegisterStateSuccessful implements RegisterState {
+  const factory RegisterStateSuccessful() = _$RegisterStateSuccessful;
 }
 
 /// @nodoc
@@ -249,6 +539,8 @@ class _$RegisterStateLoaded implements RegisterStateLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function() successful,
     required TResult Function(Map<String, dynamic> data) loaded,
   }) {
     return loaded(data);
@@ -258,6 +550,8 @@ class _$RegisterStateLoaded implements RegisterStateLoaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
     TResult Function(Map<String, dynamic> data)? loaded,
   }) {
     return loaded?.call(data);
@@ -267,6 +561,8 @@ class _$RegisterStateLoaded implements RegisterStateLoaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? successful,
     TResult Function(Map<String, dynamic> data)? loaded,
     required TResult orElse(),
   }) {
@@ -280,6 +576,8 @@ class _$RegisterStateLoaded implements RegisterStateLoaded {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(RegisterStateLoading value) loading,
+    required TResult Function(RegisterStateFailed value) failed,
+    required TResult Function(RegisterStateSuccessful value) successful,
     required TResult Function(RegisterStateLoaded value) loaded,
   }) {
     return loaded(this);
@@ -289,6 +587,8 @@ class _$RegisterStateLoaded implements RegisterStateLoaded {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
     TResult Function(RegisterStateLoaded value)? loaded,
   }) {
     return loaded?.call(this);
@@ -298,6 +598,8 @@ class _$RegisterStateLoaded implements RegisterStateLoaded {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(RegisterStateLoading value)? loading,
+    TResult Function(RegisterStateFailed value)? failed,
+    TResult Function(RegisterStateSuccessful value)? successful,
     TResult Function(RegisterStateLoaded value)? loaded,
     required TResult orElse(),
   }) {

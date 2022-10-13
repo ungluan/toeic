@@ -12,10 +12,9 @@ part 'rest_client.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  // @POST("/auth/register")
-  // Future<DataResponse<UserResponse>> register(
-  //     @Body() Map<String, dynamic> data);
-  //
+  @POST("/user/register")
+  Future<String> register(@Body() Map<String, dynamic> data);
+
   @POST("/login")
   Future<UserResponse> login(@Body() Map<String, dynamic> data);
 

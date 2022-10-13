@@ -18,6 +18,11 @@ String trimStart(String? value) {
   return '0$nineNumberPhone';
 }
 
+String trimStartPhone(String? value) {
+  final String phone = value ?? '';
+  final nineNumberPhone = phone.replaceFirst(RegExp(r"^0+(?!$)"), "");
+  return '+84$nineNumberPhone';
+}
 
 String? validatorPassword(String? password) {
   RegExp regex =

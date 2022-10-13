@@ -9,26 +9,28 @@ import '../../../ui_kits/colors.dart';
 import '../../../ui_kits/widgets/cubits/loading_cubit.dart';
 import '../../../ui_kits/widgets/views/sbox_button.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
+import '../../../utils/air_18_notification_dialog.dart';
 import '../../../utils/utils.dart';
+import '../cubit/otp_cubit.dart';
 
 
 class OtpPage extends StatefulWidget {
   const OtpPage(
-      {Key? key, required this.isRegister, this.data/*, required this.otpCubit*/})
+      {Key? key, required this.isRegister, this.data, required this.otpCubit})
       : super(key: key);
   final bool isRegister;
-  // final OtpCubit otpCubit;
+  final OtpCubit otpCubit;
   final Map<String, dynamic>? data;
 
   static Route route(
           {required bool isRegister,
           Map<String, dynamic>? data,
-          /*required OtpCubit otpCubit*/}) =>
+          required OtpCubit otpCubit}) =>
       MaterialPageRoute(
         builder: (context) => OtpPage(
           isRegister: isRegister,
           data: data,
-          /*otpCubit: otpCubit,*/
+          otpCubit: otpCubit,
         ),
       );
 
@@ -72,46 +74,46 @@ class _OtpPageState extends State<OtpPage> {
         });
 
     phone = widget.data?['phone'] ?? '';
-    // otpCubit = widget.otpCubit;
-    // otpCubit.stream.listen((state) async {
-    //   if (state is OtpStateLoading) {
-    //     loadingCubit.showLoading();
-    //   } else if (state is OtpStateSendSuccess) {
-    //     loadingCubit.hideLoading();
-    //     setState(() {
-    //       isTimeOut = false;
-    //       countdownController.value =
-    //           const Duration(seconds: 60).inMilliseconds;
-    //       countdownController.start();
-    //     });
-    //   } else if (state is OtpStateVerifyFailed) {
-    //     loadingCubit.hideLoading();
-    //     setState(() {
-    //       isVerifyFailed = false;
-    //     });
-    //   } else if (state is OtpStateVerifySuccess) {
-    //     loadingCubit.hideLoading();
-    //     if (widget.isRegister) {
-    //       Navigator.pop(context);
-    //     } else {
-    //       Navigator.pushReplacement(
-    //           context, ResetPasswordPage.route(phone: phone));
-    //     }
-    //   }
-    //   else if (state is OtpStateSendFailed) {
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //         context: context,
-    //         builder: (context) => Air18NotificationDialog(
-    //               title: 'Send Otp Error',
-    //               content: 'Can not send otp, please try again later.',
-    //               positive: "OK",
-    //               onPositiveTap: () => Navigator.pop(context),
-    //               onNegativeTap: () {},
-    //               isShowNegative: false,
-    //             ));
-    //   }
-    // });
+    widget.otpCubit.stream.listen((state) async {
+      if (state is OtpStateLoading) {
+        loadingCubit.showLoading();
+      } else if (state is OtpStateSendSuccess) {
+        loadingCubit.hideLoading();
+        setState(() {
+          isTimeOut = false;
+          countdownController.value =
+              const Duration(seconds: 60).inMilliseconds;
+          countdownController.start();
+        });
+      } else if (state is OtpStateVerifyFailed) {
+        loadingCubit.hideLoading();
+        setState(() {
+          isVerifyFailed = false;
+        });
+      } else if (state is OtpStateVerifySuccess) {
+        loadingCubit.hideLoading();
+        if (widget.isRegister) {
+          Navigator.pop(context);
+        } else {
+          // Navigator.pushReplacement(
+          //     context, ResetPasswordPage.route(phone: phone));
+        }
+      }
+      else if (state is OtpStateSendFailed) {
+        loadingCubit.hideLoading();
+        showDialog(
+            context: context,
+            builder: (context) => Air18NotificationDialog(
+                  title: 'Thông báo',
+                  content: 'Gửi OTP thất bại, vui lòng thử lại sau.',
+                  positive: "OK",
+                  onPositiveTap: () => Navigator.pop(context),
+                  onNegativeTap: () {},
+                  isShowNegative: false,
+                ),
+        );
+      }
+    });
   }
 
   @override
@@ -154,7 +156,7 @@ class _OtpPageState extends State<OtpPage> {
                             Row(
                               children: [
                                 Text(
-                                  'OTP VERIFICATION',
+                                  'Xác thực OTP',
                                   style: GoogleFonts.openSans(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
@@ -170,7 +172,7 @@ class _OtpPageState extends State<OtpPage> {
                             ),
                             const SizedBox(height: 24),
                             Text(
-                              'Please enter the OTP code in the message to',
+                              'Vui lòng nhập mã OTP được gửi về điện thoại',
                               style: GoogleFonts.openSans(
                                 fontWeight: FontWeight.w500,
                               ),
@@ -181,7 +183,8 @@ class _OtpPageState extends State<OtpPage> {
                               style: GoogleFonts.openSans(
                                   fontSize: 18,
                                   color: blueColor,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(height: 12),
                             Column(
@@ -197,7 +200,7 @@ class _OtpPageState extends State<OtpPage> {
                                             color: darkRedColor,
                                           ),
                                           Text(
-                                            'Incorrect OTP Code',
+                                            'Mã OTP không chính xác',
                                             style: GoogleFonts.openSans(
                                                 color: darkRedColor,
                                                 fontWeight: FontWeight.w700),
@@ -214,7 +217,7 @@ class _OtpPageState extends State<OtpPage> {
                                     builder: (_, Duration time) {
                                       if (time.inSeconds == 0) {
                                         return Text(
-                                          'Time out!',
+                                          'Hết giờ!',
                                           style: GoogleFonts.openSans(
                                               color: darkRedColor,
                                               fontSize: 18,
@@ -228,7 +231,7 @@ class _OtpPageState extends State<OtpPage> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'Authentication will be expired in ',
+                                            'OTP code còn hiệu lực trong ',
                                             style: GoogleFonts.openSans(
                                                 fontWeight: FontWeight.w500),
                                           ),
@@ -289,7 +292,7 @@ class _OtpPageState extends State<OtpPage> {
                                 ),
                                 const SizedBox(height: 32),
                                 Text(
-                                  'Did not receive OTP code?',
+                                  'Bạn vẫn chưa nhận được OTP code?',
                                   style: GoogleFonts.openSans(
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -298,11 +301,12 @@ class _OtpPageState extends State<OtpPage> {
                                     onPressed: !isTimeOut
                                         ? null
                                         : () async {
-                                            // otpCubit.sendOtp(
-                                            //     "+84" + phone.substring(1));
+                                            widget.otpCubit.sendOTP(
+                                              phoneNumber: trimStartPhone(phone),
+                                            );
                                           },
                                     child: Text(
-                                      'Resend OTP Code',
+                                      'Gửi lại OTP Code',
                                       style: GoogleFonts.openSans(
                                           color: isTimeOut
                                               ? orangeColor
@@ -312,8 +316,8 @@ class _OtpPageState extends State<OtpPage> {
                                 const SizedBox(height: 32),
                                 makeSBoxButton(
                                     isVerifyFailed
-                                        ? 'Verify & proceed'
-                                        : 'Retry',
+                                        ? 'Xác thực'
+                                        : 'Gửi lại',
                                     isEnable: isFillOtp && !isTimeOut,
                                     onTap: !(isFillOtp && !isTimeOut)
                                         ? null
@@ -325,14 +329,16 @@ class _OtpPageState extends State<OtpPage> {
                                                 pinCodeFocusNode.requestFocus();
                                               });
                                             } else {
-                                              // otpCubit.verifyOtp(
-                                              //     otpController.text);
+                                              widget.otpCubit.verifyOtp(
+                                                  smsCode: otpController.text,
+                                              );
                                             }
                                           },
-                                    height: 60),
+                                    height: 50),
                                 const SizedBox(height: 24),
                                 Image.asset(
                                   'assets/images/character-vector.png',
+                                  width: 256,
                                 )
                               ],
                             ),

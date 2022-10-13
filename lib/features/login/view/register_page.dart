@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toeic/features/login/cubit/authentication_cubit.dart';
+import 'package:toeic/features/login/cubit/register_cubit.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/widgets/views/sbox_text_field.dart';
 
@@ -12,8 +13,10 @@ import '../../../ui_kits/widgets/views/password_text_field.dart';
 import '../../../ui_kits/widgets/views/phone_number_text_field.dart';
 import '../../../ui_kits/widgets/views/sbox_button.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
+import '../../../utils/air_18_notification_dialog.dart';
 import '../../../utils/utils.dart';
 import '../cubit/otp_cubit.dart';
+import 'otp_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -54,13 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
   FocusNode repeatPasswordFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
 
-  // late RegisterService registerService = RegisterService();
-  // late RegisterRepository registerRepository =
-  //     RegisterRepository(registerService: registerService);
-  // late RegisterCubit registerCubit =
-  //     RegisterCubit(repository: registerRepository);
-  //
-
+  late RegisterCubit registerCubit = getIt<RegisterCubit>();
   late OtpCubit otpCubit = getIt<OtpCubit>();
 
   late AuthenticationCubit authenticationCubit = getIt<AuthenticationCubit>();
@@ -110,70 +107,95 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     });
 
-    otpCubit.stream.listen((state) {
-      state.maybeWhen(
-        userExisted: (data) => {
-          handleEmailAndPassword(
-              email: data['email'] != '', phone: data['phoneNumber'] != '')
-        },
-        userNotExisted: () => {
-          // Send Otp
-          logger("userNotExisted")
-        },
-        orElse: () => {logger("logger")},
-      );
-      // if (state is OtpStateSendSuccess) {
-      //   loadingCubit.hideLoading();
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //       builder: (context) =>
-      //           OtpPage(isRegister: true, data: data, otpCubit: otpCubit)));
-      // } else if (state is OtpStateSendFailed) {
-      //   print("Send Otp Failed");
-      //   loadingCubit.hideLoading();
-      //   showDialog(
-      //     context: context,
-      //     builder: (context) => Air18NotificationDialog(
-      //       title: "Notification",
-      //       content: "Send Otp Failed. Please try again.",
-      //       positive: "Ok",
-      //       onPositiveTap: () => Navigator.pop(context),
-      //       onNegativeTap: () {},
-      //       isShowNegative: false,
-      //     ),
-      //   );
-      // } else if (state is OtpStateVerifySuccess) {
-      //   loadingCubit.showLoading();
-      //   registerCubit.register(data);
-      // } else if (state is OtpStateLoading) {
-      //   loadingCubit.showLoading();
-      // } else {
-      //   loadingCubit.hideLoading();
-      // }
+    otpCubit.stream.listen((state) async {
+      if (state is OtpStateUserExisted) {
+        loadingCubit.hideLoading();
+        handleEmailAndPassword(
+            email: data['email'] != '', phone: data['phoneNumber'] != '');
+      } else if (state is OtpStateUserNotExisted) {
+        // logger(phoneNumberController.text);
+        // logger(trimStartPhone(phoneNumberController.text));
+        await otpCubit.sendOTP(phoneNumber: trimStartPhone(phoneNumberController.text));
+        loadingCubit.hideLoading();
+      } else if (state is OtpStateSendSuccess) {
+        loadingCubit.hideLoading();
+        Navigator.push(
+          context,
+          OtpPage.route(
+              isRegister: true,
+              data: {},
+              otpCubit: otpCubit
+          ));
+      } else if( state is OtpStateSendFailed){
+        loadingCubit.hideLoading();
+        showDialog(
+                context: context,
+                builder: (context) => Air18NotificationDialog(
+                  title: "Thông báo",
+                  content: "Gửi OTP thất bại, vui lòng thử lại sau.",
+                  positive: "Ok",
+                  onPositiveTap: () => Navigator.pop(context),
+                  onNegativeTap: () {},
+                  isShowNegative: false,
+                ),
+              );
+      } else if (state is OtpStateVerifySuccess) {
+        loadingCubit.showLoading();
+        logger("Thực hiện đăng ký user");
+        await registerCubit.register({
+          "email": "1@gmail.com",
+          "password": "string",
+          "first_name": "string",
+          "last_name": "string",
+          "phone_number": "0123456789"
+        });
+      } else if (state is OtpStateLoading) {
+        loadingCubit.showLoading();
+      } else {
+        loadingCubit.hideLoading();
+      }
     });
 
-    // registerCubit.stream.listen((state) {
-    //   if (state is RegisterStateSuccessful && isTheFirst) {
-    //     isTheFirst = false;
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => Air18NotificationDialog(
-    //         title: "Notification",
-    //         content:
-    //             "You registered account successfully. Let's login and enjoy my app.",
-    //         positive: "Let's go",
-    //         onPositiveTap: () {
-    //           Navigator.pop(context);
-    //           // registerCubit.completed();
-    //         },
-    //         onNegativeTap: () {},
-    //         isShowNegative: false,
-    //       ),
-    //     );
-    //   } else if (state is RegisterStateCompleted) {
-    //     Navigator.pop(context);
-    //   }
-    // });
+    registerCubit.stream.listen((state) {
+      if (state is RegisterStateSuccessful/* && isTheFirst*/) {
+        /*isTheFirst = false;*/
+        loadingCubit.hideLoading();
+        showDialog(
+          context: context,
+          builder: (context) => Air18NotificationDialog(
+            title: "Notification",
+            content:
+                "You registered account successfully. Let's login and enjoy my app.",
+            positive: "Let's go",
+            onPositiveTap: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              // registerCubit.completed();
+            },
+            onNegativeTap: () {},
+            isShowNegative: false,
+          ),
+        );
+      } else if (state is RegisterStateFailed) {
+        loadingCubit.hideLoading();
+        showDialog(
+          context: context,
+          builder: (context) => Air18NotificationDialog(
+            title: "Notification",
+            content:
+            "You registered account successfully. Let's login and enjoy my app.",
+            positive: "Let's go",
+            onPositiveTap: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              // registerCubit.completed();
+            },
+            onNegativeTap: () {},
+            isShowNegative: false,
+          ),
+        );
+      }
+    });
     super.initState();
   }
 
@@ -191,12 +213,12 @@ class _RegisterPageState extends State<RegisterPage> {
     emailExistedNotifier.value = email;
     phoneExistedNotifier.value = phone;
   }
-
+  // 0968147002
   void mock() {
     firstNameController.text = 'a';
     lastNameController.text = 'a';
-    emailController.text = 'luan@gmail.com';
-    phoneNumberController.text = '0382916020';
+    emailController.text = 'luan1@gmail.com';
+    phoneNumberController.text = '0915837119';
     passwordController.text = 'Passlagi123';
     repeatPasswordController.text = 'Passlagi123';
     // dateController.text = "08-10-2000";
@@ -290,15 +312,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(height: 24),
                             ValueListenableBuilder<bool>(
                               valueListenable: emailExistedNotifier,
-                              builder: (_, value, __) => SBoxTextField(
-                                validator: validateEmail,
-                                validNotifier: emailNotifier,
-                                controller: emailController,
-                                labelText: 'Email',
-                                focusNode: emailFocusNode,
-                                nextFocusNode: passwordFocusNode,
-                                validateModeAlways: value,
-                              ),
+                              builder: (_, value, __) =>
+                                  SBoxTextField(
+                                    validator: validateEmail,
+                                    validNotifier: emailNotifier,
+                                    controller: emailController,
+                                    labelText: 'Email',
+                                    focusNode: emailFocusNode,
+                                    nextFocusNode: passwordFocusNode,
+                                    validateModeAlways: value,
+                                  ),
                             ),
                             const SizedBox(height: 24),
                             PasswordTextField(
@@ -314,53 +337,40 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(height: 24),
                             ValueListenableBuilder<bool>(
                               valueListenable: repeatPasswordNotifier,
-                              builder: (context, value, _) => PasswordTextField(
-                                validator: (String? value) {
-                                  if (passwordController.text == value &&
-                                      value != null) {
-                                    return null;
-                                  } else {
-                                    return 'Mật khẩu phải trùng khớp';
-                                  }
-                                },
-                                validNotifier: repeatPasswordNotifier,
-                                controller: repeatPasswordController,
-                                labelText: 'Nhập lại mật khẩu',
-                                textInputAction: TextInputAction.next,
-                                focusNode: repeatPasswordFocusNode,
-                                nextFocusNode: phoneFocusNode,
-                                isRepeat: true,
-                                image: 'assets/images/password.svg',
-                              ),
+                              builder: (context, value, _) =>
+                                  PasswordTextField(
+                                    validator: (String? value) {
+                                      if (passwordController.text == value &&
+                                          value != null) {
+                                        return null;
+                                      } else {
+                                        return 'Mật khẩu phải trùng khớp';
+                                      }
+                                    },
+                                    validNotifier: repeatPasswordNotifier,
+                                    controller: repeatPasswordController,
+                                    labelText: 'Nhập lại mật khẩu',
+                                    textInputAction: TextInputAction.next,
+                                    focusNode: repeatPasswordFocusNode,
+                                    nextFocusNode: phoneFocusNode,
+                                    isRepeat: true,
+                                    image: 'assets/images/password.svg',
+                                  ),
                             ),
                             const SizedBox(height: 24),
                             ValueListenableBuilder<bool>(
                               valueListenable: phoneExistedNotifier,
                               builder: (context, value, _) =>
                                   PhoneNumberTextField(
-                                validator: validatePhone,
-                                controller: phoneNumberController,
-                                labelText: 'Số điện thoại',
-                                validNotifier: phoneNotifier,
-                                focusNode: phoneFocusNode,
-                                textInputAction: TextInputAction.done,
-                                validateModeAlways: value,
-                              ),
+                                    validator: validatePhone,
+                                    controller: phoneNumberController,
+                                    labelText: 'Số điện thoại',
+                                    validNotifier: phoneNotifier,
+                                    focusNode: phoneFocusNode,
+                                    textInputAction: TextInputAction.done,
+                                    validateModeAlways: value,
+                                  ),
                             ),
-                            // const SizedBox(
-                            //   height: 12,
-                            // ),
-                            // ValueListenableBuilder<bool>(
-                            //   valueListenable: dateNotifier,
-                            //   builder: (context, isBlue, _) => Air18DateTime(
-                            //     currentDateTime: DateTime.now(),
-                            //     isBirthDate: true,
-                            //     isBlueColor: isBlue,
-                            //     validNotifier: dateNotifier,
-                            //     labelText: 'Birthday',
-                            //     controller: dateController,
-                            //   ),
-                            // ),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -404,23 +414,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                 builder: (context, bool value, widget) {
                                   return value
                                       ? Row(
-                                          children: [
-                                            const SizedBox(
-                                              width: 24,
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                'Vui lòng chấp nhận điều khoản',
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .errorColor,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
+                                    children: [
+                                      const SizedBox(
+                                        width: 24,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          'Vui lòng chấp nhận điều khoản',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            color: Theme
+                                                .of(context)
+                                                .errorColor,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                       : const SizedBox();
                                 }),
                             const SizedBox(height: 24),
@@ -438,27 +449,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 const SizedBox(
                                   height: 16,
                                 ),
-                                // TextButton(
-                                //     onPressed: () {
-                                //       Navigator.pop(context);
-                                //     },
-                                //     child: RichText(
-                                //       text: TextSpan(
-                                //         text: '${labels.registerText08} ',
-                                //         style: GoogleFonts.openSans(
-                                //             fontWeight: FontWeight.w600,
-                                //             fontSize: 14,
-                                //             color: Colors.black),
-                                //         children: <TextSpan>[
-                                //           TextSpan(
-                                //               text: labels.registerChoose03,
-                                //               style: GoogleFonts.openSans(
-                                //                   fontWeight: FontWeight.w600,
-                                //                   color: orangeColor,
-                                //                   fontSize: 14)),
-                                //         ],
-                                //       ),
-                                //     )),
                                 SvgPicture.asset(
                                   'assets/images/character-illustration.svg',
                                   width: double.infinity,
@@ -493,7 +483,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return validatorPhoneNumber(phone);
   }
 
-  String? validateEmail(String? email){
+  String? validateEmail(String? email) {
     if (phoneExistedNotifier.value) {
       if (email == emailExisted) return "Email đã tồn tại";
       return null;

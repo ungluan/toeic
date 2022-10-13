@@ -164,6 +164,11 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     };
     return _restClient.checkUserExists(data);
   }
+
+  @override
+  Future<String> register(Map<String, dynamic> data) {
+    return _restClient.register(data);
+  }
   //
   // @override
   // Future<String> getDeviceId() async {

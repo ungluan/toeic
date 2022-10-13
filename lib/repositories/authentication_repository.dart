@@ -13,7 +13,7 @@ abstract class AuthenticationRepository {
 
   Future<void> login(Map<String, dynamic> data);
 
-  // Future<DataResponse<UserResponse>> register(Map<String, dynamic> data);
+  Future<String> register(Map<String, dynamic> data);
 
   // Future<void> logout();
 
