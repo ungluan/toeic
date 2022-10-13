@@ -476,17 +476,15 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   String? validatePhone(String? phone) {
-    if (phoneExistedNotifier.value) {
-      if (phone == phoneExisted) return "Số điện thoại đã tồn tại";
-      return null;
+    if (phoneExistedNotifier.value && phone == phoneExisted) {
+      return "Số điện thoại đã tồn tại";
     }
     return validatorPhoneNumber(phone);
   }
 
   String? validateEmail(String? email) {
-    if (phoneExistedNotifier.value) {
-      if (email == emailExisted) return "Email đã tồn tại";
-      return null;
+    if (phoneExistedNotifier.value && email == emailExisted) {
+      return "Email đã tồn tại";
     }
     return validatorEmail(email);
   }
