@@ -169,6 +169,16 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<String> register(Map<String, dynamic> data) {
     return _restClient.register(data);
   }
+
+  @override
+  Future<String> checkPhoneNumber(Map<String, dynamic> data) {
+    return _restClient.checkPhoneNumber(data);
+  }
+
+  @override
+  Future<String> checkPassword(Map<String, dynamic> data) {
+    return _restClient.checkPassword(data);
+  }
   //
   // @override
   // Future<String> getDeviceId() async {

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toeic/features/login/cubit/otp_cubit.dart';
+import 'package:toeic/injection/injection.dart';
 import '../../../ui_kits/colors.dart';
 import '../../../ui_kits/widgets/cubits/loading_cubit.dart';
 import '../../../ui_kits/widgets/views/air_18_button.dart';
 import '../../../ui_kits/widgets/views/phone_number_text_field.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
+import '../../../utils/air_18_notification_dialog.dart';
 import '../../../utils/utils.dart';
+import 'otp_page.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -22,62 +26,56 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final phoneNumberController = TextEditingController();
   ValueNotifier<bool> phoneNotifier = ValueNotifier(false);
+  late String phoneNotExisted;
+  ValueNotifier<bool> phoneNotExistedNotifier = ValueNotifier(false);
+
   // late OTPService otpService = OTPService();
   // late OTPRepository otpRepository = OTPRepository(otpService: otpService);
   // late OtpCubit otpCubit = OtpCubit(otpRepository);
+  late OtpCubit otpCubit = getIt<OtpCubit>();
 
   late LoadingCubit loadingCubit = LoadingCubit();
 
   @override
   void initState() {
-    // otpCubit.stream.listen((state) {
-    //   if (state is OtpStateValidPhone) {
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => Air18NotificationDialog(
-    //         title: "Forgot Password Error",
-    //         content: "Phone number is not registered.",
-    //         onPositiveTap: () {
-    //           Navigator.pop(context);
-    //         },
-    //         onNegativeTap: () {},
-    //         positive: "Ok",
-    //         isShowNegative: false,
-    //       ),
-    //     );
-    //   } else if (state is OtpStateInValidPhone) {
-    //     loadingCubit.hideLoading();
-    //     otpCubit.sendOtp("+84" + phoneNumberController.text.substring(1));
-    //   } else if (state is OtpStateSendSuccess) {
-    //     loadingCubit.hideLoading();
-    //     Navigator.push(
-    //         context,
-    //         OtpPage.route(
-    //             isRegister: false,
-    //             otpCubit: otpCubit,
-    //             data: {"phone": phoneNumberController.text}));
-    //   } else if (state is OtpStateSendFailed) {
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => Air18NotificationDialog(
-    //         title: "Forgot Password Error",
-    //         content: state.error,
-    //         onPositiveTap: () {
-    //           Navigator.pop(context);
-    //         },
-    //         onNegativeTap: () {},
-    //         positive: "Ok",
-    //         isShowNegative: false,
-    //       ),
-    //     );
-    //   } else if (state is OtpStateLoading) {
-    //     loadingCubit.showLoading();
-    //   } else {
-    //     loadingCubit.hideLoading();
-    //   }
-    // });
+    otpCubit.stream.listen((state) async {
+      if (state is OtpStateUserNotExisted) {
+        loadingCubit.hideLoading();
+        // Handle Số điện thoại không tồn tại
+        phoneNotExisted = phoneNumberController.text;
+        phoneNotExistedNotifier.value = true;
+      } else if (state is OtpStateUserExisted) {
+        await otpCubit.sendOTP(
+            phoneNumber: trimStartPhone(phoneNumberController.text));
+        loadingCubit.hideLoading();
+      } else if (state is OtpStateSendSuccess) {
+        loadingCubit.hideLoading();
+        Navigator.push(
+          context,
+          OtpPage.route(
+              isRegister: false,
+              data: {"phone": trimStart(phoneNumberController.text)},
+              otpCubit: otpCubit),
+        );
+      } else if (state is OtpStateSendFailed) {
+        loadingCubit.hideLoading();
+        showDialog(
+          context: context,
+          builder: (context) => Air18NotificationDialog(
+            title: "Thông báo",
+            content: "Gửi OTP thất bại, vui lòng thử lại sau.",
+            positive: "Ok",
+            onPositiveTap: () => Navigator.pop(context),
+            onNegativeTap: () {},
+            isShowNegative: false,
+          ),
+        );
+      } else if (state is OtpStateLoading) {
+        loadingCubit.showLoading();
+      } else {
+        loadingCubit.hideLoading();
+      }
+    });
     /*otpCubit.stream.listen((state) {
       if (state is OtpStateSendFailed) {
         if(state.error=="You have reached the limit of receiving OTP codes. Please try again in 30 minutes.") {
@@ -154,7 +152,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        'Forgot password?',
+                                        'Quên mật khẩu?',
                                         maxLines: 2,
                                         style: GoogleFonts.openSans(
                                           fontSize: 24,
@@ -172,7 +170,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                                 const SizedBox(height: 24),
                                 Text(
-                                  'Enter your registered phone number, a message with OTP code will be sent to you',
+                                  'Nhập số điện thoại bạn đã đăng ký, chúng tôi sẽ gửi OTP code về điện thoại của bạn.',
                                   style: GoogleFonts.openSans(
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -185,35 +183,46 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     Form(
                                       child: Column(
                                         children: [
-                                          PhoneNumberTextField(
-                                            validator: validatorPhoneNumber,
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            controller: phoneNumberController,
-                                            labelText: 'Phone number',
-                                            validNotifier: phoneNotifier,
+                                          ValueListenableBuilder<bool>(
+                                            valueListenable:
+                                                phoneNotExistedNotifier,
+                                            builder: (_, value, __) =>
+                                                PhoneNumberTextField(
+                                              validator: validatePhone,
+                                              textInputAction:
+                                                  TextInputAction.done,
+                                              controller: phoneNumberController,
+                                              labelText: 'Số điện thoại',
+                                              validNotifier: phoneNotifier,
+                                              validateModeAlways: value,
+                                            ),
                                           ),
                                           const SizedBox(
                                             height: 160,
                                           ),
                                           ValueListenableBuilder(
-                                              valueListenable: phoneNotifier,
-                                              builder: (context, bool value,
-                                                  widget) {
-                                                return makeAir18Button(
-                                                    'Send Otp',
-                                                    isEnable: value,
-                                                    onTap: () async {
-                                                  // otpCubit.checkPhone(
-                                                  //     phoneNumberController
-                                                  //         .text,
-                                                  // );
-                                                }, height: 50,);
-                                              },
+                                            valueListenable: phoneNotifier,
+                                            builder:
+                                                (context, bool value, widget) {
+                                              return makeAir18Button(
+                                                'Gửi OTP',
+                                                isEnable: value,
+                                                onTap: () async {
+                                                  await otpCubit
+                                                      .checkPhoneNumber(
+                                                          phoneNumber:
+                                                              trimStart(
+                                                    phoneNumberController.text,
+                                                  ));
+                                                },
+                                                height: 50,
+                                              );
+                                            },
                                           ),
                                           const SizedBox(height: 24),
                                           Image.asset(
                                             'assets/images/character-vector.png',
+                                            width: 256,
                                           )
                                         ],
                                       ),
@@ -235,5 +244,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       ],
     );
+  }
+
+  String? validatePhone(String? value) {
+    if (phoneNotExistedNotifier.value && phoneNotExisted == value ) {
+      return "Số điện thoại không tồn tại";
+    }
+    return validatorPhoneNumber(value);
   }
 }

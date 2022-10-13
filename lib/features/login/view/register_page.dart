@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
           context,
           OtpPage.route(
               isRegister: true,
-              data: {},
+              data: {"phone": trimStart(phoneNumberController.text)},
               otpCubit: otpCubit
           ));
       } else if( state is OtpStateSendFailed){
@@ -163,10 +163,10 @@ class _RegisterPageState extends State<RegisterPage> {
         showDialog(
           context: context,
           builder: (context) => Air18NotificationDialog(
-            title: "Notification",
+            title: "Thông báo",
             content:
-                "You registered account successfully. Let's login and enjoy my app.",
-            positive: "Let's go",
+                "Đăng ký tài khoản thành công. Hãy tận hưởng ứng dụng thôi.",
+            positive: "Ok",
             onPositiveTap: () {
               Navigator.pop(context);
               Navigator.pop(context);
@@ -181,10 +181,10 @@ class _RegisterPageState extends State<RegisterPage> {
         showDialog(
           context: context,
           builder: (context) => Air18NotificationDialog(
-            title: "Notification",
+            title: "Thông báo",
             content:
-            "You registered account successfully. Let's login and enjoy my app.",
-            positive: "Let's go",
+            "Đăng ký tài khoản thất bại. Lỗi: ${state.error}",
+            positive: "Ok",
             onPositiveTap: () {
               Navigator.pop(context);
               Navigator.pop(context);

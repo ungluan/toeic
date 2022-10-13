@@ -15,6 +15,9 @@ abstract class AuthenticationRepository {
 
   Future<String> register(Map<String, dynamic> data);
 
+  Future<String> checkPhoneNumber(Map<String, dynamic> data);
+
+  Future<String> checkPassword(Map<String, dynamic> data);
   // Future<void> logout();
 
   Future<void> dispatch();

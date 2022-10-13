@@ -12,6 +12,7 @@ import '../../../ui_kits/widgets/views/sbox_button.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
 import '../../../utils/utils.dart';
 import '../cubit/login_cubit.dart';
+import 'forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -178,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             TextButton(
                               onPressed: () {
-                                // Navigator.push(context, ForgotPasswordPage.route());
+                                Navigator.push(context, ForgotPasswordPage.route());
                               },
                               child: Text(
                                 'Quên mật khẩu',

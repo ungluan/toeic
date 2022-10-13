@@ -21,6 +21,7 @@ class OtpCubit extends Cubit<OtpState> {
   Future<void> checkUserExist(
       {required String phoneNumber, required String email}) async {
     try {
+      emit(const OtpState.loading());
       await repository.checkUserExists(phoneNumber, email);
       emit(const OtpState.userNotExisted());
     } on DioError catch (e) {
@@ -60,6 +61,29 @@ class OtpCubit extends Cubit<OtpState> {
     );
   }
 
+  Future<void> checkPhoneNumber({required String phoneNumber}) async {
+    try{
+      emit(const OtpState.loading());
+      await repository.checkPhoneNumber({  "phone_number": trimStart(phoneNumber)});
+      emit(const OtpState.userExisted({}));
+    }on DioError catch(e){
+      emit(const OtpState.userNotExisted());
+    }
+  }
+
+  Future<void> checkPassword({required String phoneNumber ,
+    required String password}) async {
+    try{
+      emit(const OtpState.loading());
+      await repository.checkPhoneNumber({
+        "phone_number": trimStart(phoneNumber),
+        "password": password
+      });
+      emit(const OtpState.userExisted({}));
+    }on DioError catch(e){
+      emit(const OtpState.userNotExisted());
+    }
+  }
 // Future<void> checkAndSendOtp(BuildContext context, String username,
 //     String email, String phone, String password) async {
 //   try {
@@ -108,25 +132,6 @@ class OtpCubit extends Cubit<OtpState> {
       emit(OtpState.verifyFailed(e.toString()));
     }
   }
-//
-// Future<void> register(Map<String, dynamic> data) async {
-//   try {
-//     emit(OtpState.loading());
-//     final response = await repository.register(data);
-//     if (response.error == false) {
-//       emit(OtpState.registerSuccess(response.data.user, data['password']));
-//     } else {
-//       emit(OtpState.registerFailed(response.message));
-//     }
-//   } catch (e) {
-//     if (e is DioError && e.response?.statusCode != 500) {
-//       DataResponse dataResponse = DataResponse.fromJson(e.response?.data);
-//       emit(OtpState.registerFailed(dataResponse.message.toString()));
-//     } else {
-//       emit(OtpState.registerFailed(e.toString()));
-//     }
-//   }
-// }
 }
 
 @freezed

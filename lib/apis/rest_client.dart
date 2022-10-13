@@ -24,9 +24,11 @@ abstract class RestClient {
   // @POST("/otp/send")
   // Future<DataResponse<String>> sendOtp(@Body() Map<String, dynamic> data);
   //
-  // @POST("/otp/check")
-  // Future<DataResponse<String>> verifyOtp(@Body() Map<String, dynamic> data);
-  //
+  @POST("/user/check")
+  Future<String> checkPhoneNumber(@Body() Map<String, dynamic> data);
+
+  @POST("/user/check_password")
+  Future<String> checkPassword(@Body() Map<String, dynamic> data);
   // @PUT("/auth/reset-password")
   // Future<DataResponse<Object>> resetPassword(@Body() Map<String, dynamic> data);
 
