@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toeic/features/login/cubit/reset_password_cubit.dart';
+import 'package:toeic/features/login/view/login_page.dart';
+import 'package:toeic/injection/injection.dart';
 
 import '../../../ui_kits/colors.dart';
 import '../../../ui_kits/widgets/cubits/loading_cubit.dart';
 import '../../../ui_kits/widgets/views/air_18_button.dart';
 import '../../../ui_kits/widgets/views/air_18_password_text_field.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
+import '../../../utils/air_18_notification_dialog.dart';
 import '../../../utils/utils.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -30,12 +34,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   ValueNotifier<bool> passwordNotifier = ValueNotifier(false);
   ValueNotifier<bool> repeatPasswordNotifier = ValueNotifier(false);
   ValueNotifier<bool> actionNotifier = ValueNotifier(false);
-
-  // ResetPasswordCubit cubit = getIt<ResetPasswordCubit>();
-  // late ForgotPasswordService forgotPasswordService = ForgotPasswordService();
-  // late ForgotPasswordRepository forgotPasswordRepository =
-  //     ForgotPasswordRepository(forgotPasswordService: forgotPasswordService);
-  // late ResetPasswordCubit cubit = ResetPasswordCubit(forgotPasswordRepository);
+  ValueNotifier<bool> duplicate = ValueNotifier(false);
+  late String oldPass;
+  late ResetPasswordCubit cubit = getIt<ResetPasswordCubit>();
   late LoadingCubit loadingCubit = LoadingCubit();
 
   @override
@@ -58,45 +59,47 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       actionNotifier.value =
           passwordNotifier.value && repeatPasswordNotifier.value;
     });
-    // cubit.stream.listen((state) {
-    //   if (state is ResetPasswordStateFailed) {
-    //     // dialogUtil.showToast(state.error);
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //         context: context,
-    //         builder: (context) => Air18NotificationDialog(
-    //               title: "Notification",
-    //               content: "Reset password failed, please try again.",
-    //               onPositiveTap: () {
-    //                 Navigator.pop(context);
-    //               },
-    //               onNegativeTap: () {},
-    //               isShowNegative: false,
-    //               positive: "Ok",
-    //             ));
-    //   } else if (state is ResetPasswordStateSuccess) {
-    //     loadingCubit.hideLoading();
-    //     showDialog(
-    //         context: context,
-    //         builder: (context) => Air18NotificationDialog(
-    //               title: "Notification",
-    //               content: "Reset password successfully, please login again.",
-    //               onPositiveTap: () {
-    //                 cubit.completed();
-    //                 Navigator.pop(context);
-    //               },
-    //               onNegativeTap: () {},
-    //               isShowNegative: false,
-    //               positive: "Let's go",
-    //             ));
-    //   } else if (state is ResetPasswordStateLoading) {
-    //     loadingCubit.showLoading();
-    //   } else if (state is ResetPasswordStateCompleted) {
-    //     loadingCubit.hideLoading();
-    //     Navigator.pop(context);
-    //     Navigator.pop(context);
-    //   }
-    // });
+    cubit.stream.listen((state) async {
+      if (state is ResetPasswordStateFailed) {
+        loadingCubit.hideLoading();
+        showDialog(
+            context: context,
+            builder: (context) => Air18NotificationDialog(
+                  title: "Thông báo",
+                  content: "Đổi mật khẩu thất bại, vui lòng thử lại.",
+                  onPositiveTap: () {
+                    Navigator.pop(context);
+                  },
+                  onNegativeTap: () {},
+                  isShowNegative: false,
+                  positive: "Ok",
+                ));
+      } else if (state is ResetPasswordStateSuccess) {
+        loadingCubit.hideLoading();
+        showDialog(
+            context: context,
+            builder: (context) => Air18NotificationDialog(
+                  title: "Thông báo",
+                  content: "Đổi mật khẩu thành công, hãy đăng nhập lại.",
+                  onPositiveTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      LoginPage.route(),
+                      (route) => false,
+                    );
+                  },
+                  onNegativeTap: () {},
+                  isShowNegative: false,
+                  positive: "Let's go",
+                ));
+      } else if (state is ResetPasswordStateLoading) {
+        loadingCubit.showLoading();
+      } else if (state is ResetPasswordStateDuplicate) {
+        duplicate.value = true;
+        oldPass = passwordController.text;
+        loadingCubit.hideLoading();
+      }
+    });
     super.initState();
   }
 
@@ -136,11 +139,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      'Reset password',
+                                      'Đổi mật khẩu',
                                       style: GoogleFonts.openSans(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          color: darkBlueColor,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: darkBlueColor,
                                       ),
                                     ),
                                     const SizedBox(width: 8),
@@ -152,7 +155,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 ),
                                 const SizedBox(height: 24),
                                 Text(
-                                  'Your new password must be different from previous used password',
+                                  'Mật khẩu mới phải khác với mật khẩu cũ.',
                                   style: GoogleFonts.openSans(
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -165,17 +168,23 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                     Form(
                                       child: Column(
                                         children: [
-                                          Air18PasswordTextField(
-                                            validator: validatorPassword,
-                                            focusNode: passwordFocusNode,
-                                            nextFocusNode:
-                                                repeatPasswordFocusNode,
-                                            controller: passwordController,
-                                            labelText: 'Password',
-                                            validNotifier: passwordNotifier,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            image: '',
+                                          ValueListenableBuilder<bool>(
+                                            valueListenable: duplicate,
+                                            builder: (_, value, __) =>
+                                                Air18PasswordTextField(
+                                              validator: validatePassword,
+                                              focusNode: passwordFocusNode,
+                                              nextFocusNode:
+                                                  repeatPasswordFocusNode,
+                                              controller: passwordController,
+                                              labelText: 'Mật khẩu',
+                                              validNotifier: passwordNotifier,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              image:
+                                                  'assets/images/password.svg',
+                                              validateModeAlways: value,
+                                            ),
                                           ),
                                           const SizedBox(height: 24),
                                           Air18PasswordTextField(
@@ -186,14 +195,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                                   value.isNotEmpty)
                                                 return null;
                                               else {
-                                                return 'Must be same password above.';
+                                                return 'Mật khẩu phải trùng khớp.';
                                               }
                                             },
                                             validNotifier:
                                                 repeatPasswordNotifier,
                                             controller:
                                                 repeatPasswordController,
-                                            labelText: 'Repeat password',
+                                            labelText: 'Nhập lại mật khẩu',
                                             textInputAction:
                                                 TextInputAction.done,
                                             focusNode: repeatPasswordFocusNode,
@@ -207,8 +216,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                             valueListenable: actionNotifier,
                                             builder:
                                                 (context, bool value, widget) {
-                                              return makeAir18Button(
-                                                  'UPDATE PASSWORD',
+                                              return makeAir18Button('Cập nhật',
                                                   isEnable: value,
                                                   onTap: _onPressed,
                                                   height: 50);
@@ -242,7 +250,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
+  String? validatePassword(String? value) {
+    if (duplicate.value && value == oldPass) {
+      return "Mật khẩu phải khác với mật khẩu cũ";
+    }
+    return validatorPassword(value);
+  }
+
   Future<void> _onPressed() async {
-    // cubit.resetPassword(widget.phone, passwordController.text);
+    FocusScope.of(context).unfocus();
+    cubit.resetPassword(password: passwordController.text, phone: widget.phone);
   }
 }

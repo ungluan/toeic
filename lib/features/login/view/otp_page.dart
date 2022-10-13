@@ -4,6 +4,7 @@ import 'package:flutter_countdown_timer/countdown_controller.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:toeic/features/login/view/reset_password_page.dart';
 
 import '../../../ui_kits/colors.dart';
 import '../../../ui_kits/widgets/cubits/loading_cubit.dart';
@@ -95,8 +96,8 @@ class _OtpPageState extends State<OtpPage> {
         if (widget.isRegister) {
           Navigator.pop(context);
         } else {
-          // Navigator.pushReplacement(
-          //     context, ResetPasswordPage.route(phone: phone));
+          Navigator.pushReplacement(
+              context, ResetPasswordPage.route(phone: phone));
         }
       }
       else if (state is OtpStateSendFailed) {

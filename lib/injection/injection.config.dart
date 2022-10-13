@@ -9,10 +9,11 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
 import '../apis/rest_client_factory.dart' as _i5;
-import '../features/login/cubit/authentication_cubit.dart' as _i11;
+import '../features/login/cubit/authentication_cubit.dart' as _i12;
 import '../features/login/cubit/login_cubit.dart' as _i8;
 import '../features/login/cubit/otp_cubit.dart' as _i9;
 import '../features/login/cubit/register_cubit.dart' as _i10;
+import '../features/login/cubit/reset_password_cubit.dart' as _i11;
 import '../hive/hive_service.dart' as _i3;
 import '../repositories/authentication_repository.dart' as _i6;
 import '../repositories/impl/authentication_repository.dart' as _i7;
@@ -45,7 +46,9 @@ _i1.GetIt $initGetIt(
       () => _i9.OtpCubit(get<_i6.AuthenticationRepository>()));
   gh.factory<_i10.RegisterCubit>(() =>
       _i10.RegisterCubit(authRepository: get<_i6.AuthenticationRepository>()));
-  gh.factory<_i11.AuthenticationCubit>(
-      () => _i11.AuthenticationCubit(get<_i6.AuthenticationRepository>()));
+  gh.factory<_i11.ResetPasswordCubit>(
+      () => _i11.ResetPasswordCubit(get<_i6.AuthenticationRepository>()));
+  gh.factory<_i12.AuthenticationCubit>(
+      () => _i12.AuthenticationCubit(get<_i6.AuthenticationRepository>()));
   return get;
 }

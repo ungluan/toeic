@@ -26,7 +26,7 @@ abstract class AuthenticationRepository {
   //
   // Future<DataResponse<String>> verifyOtp(String otp, String phone);
   //
-  // Future<DataResponse<Object>> resetPassword(String password, String phone);
+  Future<String> resetPassword(Map<String, dynamic> data);
   //
   // Future<DataResponse<User>> getUserInfo();
 

@@ -208,6 +208,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                                 'Gửi OTP',
                                                 isEnable: value,
                                                 onTap: () async {
+                                                  FocusScope.of(context).unfocus();
                                                   await otpCubit
                                                       .checkPhoneNumber(
                                                           phoneNumber:

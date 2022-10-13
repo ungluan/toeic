@@ -16,8 +16,9 @@ class Air18PasswordTextField extends StatefulWidget {
   final bool isRepeat;
   final ValueNotifier<bool>? validNotifier;
   final String image;
+  final bool validateModeAlways;
 
-   const Air18PasswordTextField({Key? key,
+  const Air18PasswordTextField({Key? key,
     this.focusNode,
     this.nextFocusNode,
     this.labelText,
@@ -27,6 +28,7 @@ class Air18PasswordTextField extends StatefulWidget {
     this.isRepeat = false,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
+    this.validateModeAlways = false,
     required this.image,
   }) : super(key: key);
 
@@ -45,7 +47,9 @@ class _Air18PasswordTextFieldState extends State<Air18PasswordTextField> {
       if (widget.validator != null && mounted) {
         setState(() {
           isValid =
-          !(widget.validator!(widget.controller?.text)?.isNotEmpty == true);
+          !(widget
+              .validator!(widget.controller?.text)
+              ?.isNotEmpty == true);
           if (widget.validNotifier != null) {
             widget.validNotifier!.value = isValid;
           }
@@ -66,7 +70,9 @@ class _Air18PasswordTextFieldState extends State<Air18PasswordTextField> {
         widget.nextFocusNode?.requestFocus();
       },
       validator: widget.validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: widget.validateModeAlways
+          ? AutovalidateMode.always
+          : AutovalidateMode.onUserInteraction,
       obscureText: !showPassword,
       decoration: InputDecoration(
         hintText: widget.labelText,

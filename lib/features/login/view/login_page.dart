@@ -10,6 +10,7 @@ import '../../../ui_kits/widgets/views/password_text_field.dart';
 import '../../../ui_kits/widgets/views/phone_number_text_field.dart';
 import '../../../ui_kits/widgets/views/sbox_button.dart';
 import '../../../ui_kits/widgets/views/sbox_loading.dart';
+import '../../../utils/air_18_notification_dialog.dart';
 import '../../../utils/utils.dart';
 import '../cubit/login_cubit.dart';
 import 'forgot_password_page.dart';
@@ -42,26 +43,26 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // cubit.stream.listen((state) {
-    //   if (state is LoginStateFailed) {
-    //     // showOkToast(state.message);
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => NotificationDialog(
-    //         title: labels.loginErrorTitle,
-    //         content: labels.loginErrorText,
-    //         onPositiveTap: () {
-    //           Navigator.pop(context);
-    //         },
-    //         onNegativeTap: () {},
-    //         positive: labels.loginChoose02,
-    //         isShowNegative: false,
-    //       ),
-    //     );
-    //   } else if (state is LoginStateSuccess) {
-    //     if (mounted) if (Navigator.canPop(context)) Navigator.pop(context);
-    //   }
-    // });
+    cubit.stream.listen((state) {
+      if (state is LoginStateFailed) {
+        // showOkToast(state.message);
+        showDialog(
+          context: context,
+          builder: (context) => Air18NotificationDialog(
+            title: "Thông báo",
+            content: "Tài khoản hoặc mật khẩu không chính xác, vui lòng thử lại.",
+            onPositiveTap: () {
+              Navigator.pop(context);
+            },
+            onNegativeTap: () {},
+            positive: "Ok",
+            isShowNegative: false,
+          ),
+        );
+      } /*else if (state is LoginStateSuccess) {
+        if (mounted) if (Navigator.canPop(context)) Navigator.pop(context);
+      }*/
+    });
     // registerCubit.stream.listen((state) {
     //   if (state is RegisterStateLoaded) {
     //     userNameController.text =

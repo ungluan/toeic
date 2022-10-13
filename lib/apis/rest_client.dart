@@ -29,8 +29,10 @@ abstract class RestClient {
 
   @POST("/user/check_password")
   Future<String> checkPassword(@Body() Map<String, dynamic> data);
-  // @PUT("/auth/reset-password")
-  // Future<DataResponse<Object>> resetPassword(@Body() Map<String, dynamic> data);
+
+
+  @PUT("/user/reset_password")
+  Future<String> resetPassword(@Body() Map<String, dynamic> data);
 
   @POST('/user/check_exist')
   Future<VerifyResponse> checkUserExists(@Body() Map<String, dynamic> data);
