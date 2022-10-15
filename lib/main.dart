@@ -8,6 +8,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:toeic/features/blank_page.dart';
 import 'package:toeic/features/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:toeic/features/update_profile_lv1/update_profile_page.dart';
 import 'features/login/cubit/authentication_cubit.dart';
 import 'features/login/view/login_page.dart';
 import 'hive/hive_service.dart';
@@ -29,6 +30,7 @@ void main() async {
   // setupNotification();
   configureInjection();
   AuthenticationCubit cubit = getIt<AuthenticationCubit>();
+
   await cubit.dispatch();
 
   runApp(MyApp(cubit: cubit));
@@ -63,8 +65,9 @@ class _MyAppState extends State<MyApp> {
         child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
           bloc: widget.cubit,
           builder: (BuildContext context, state) => state.maybeWhen(
-            authenticated: () => HomePage(),
-            unauthenticated: () => LoginPage(),
+            authenticated: () => const HomePage(),
+            level1: ()=> const UpdateProfilePage(),
+            unauthenticated: () => const LoginPage(),
             orElse: () => const BlankPage(),
           ),
         ),

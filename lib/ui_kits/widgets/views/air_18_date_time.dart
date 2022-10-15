@@ -54,9 +54,9 @@ class _Air18DateTimeState extends State<Air18DateTime> {
       lastDate: DateTime.now(),
       dateFormat: "dd-MMMM-yyyy",
       locale: DateTimePickerLocale.en_us,
-      titleText: 'Choose BirthDate',
-      confirmText: 'Ok',
-      cancelText: 'Cancel',
+      titleText: 'Chọn ngày sinh',
+      confirmText: 'Chọn',
+      cancelText: 'Hủy',
       looping: true,
     );
     debugPrint('PICKED: '+picked.toString());
@@ -70,10 +70,10 @@ class _Air18DateTimeState extends State<Air18DateTime> {
     if(picked!=null){
       final DateFormat _monthFormat = DateFormat("dd/MM/yyyy");
       widget.controller!.text = _monthFormat.format(currentDateTime);
-      validate = validatorAge(_monthFormat.format(currentDateTime)) ?? '';
-      if (widget.handleSubmit != null) {
-        widget.handleSubmit!();
-      }
+      // validate = validatorAge(_monthFormat.format(currentDateTime)) ?? '';
+      // if (widget.handleSubmit != null) {
+      //   widget.handleSubmit!();
+      // }
     }
   }
 
@@ -148,7 +148,7 @@ class _Air18DateTimeState extends State<Air18DateTime> {
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(color: blueColor, width: 2)),
-              contentPadding: EdgeInsets.only(top: 12, bottom: 12, left: 24),
+              contentPadding: const EdgeInsets.only(top: 12, bottom: 12, left: 24),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(color: lightPurpleColor, width: 2)),

@@ -50,7 +50,8 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (context) => Air18NotificationDialog(
             title: "Thông báo",
-            content: "Tài khoản hoặc mật khẩu không chính xác, vui lòng thử lại.",
+            content:
+                "Tài khoản hoặc mật khẩu không chính xác, vui lòng thử lại.",
             onPositiveTap: () {
               Navigator.pop(context);
             },
@@ -84,7 +85,6 @@ class _LoginPageState extends State<LoginPage> {
     userNameController.text = '387370149';
     passwordController.text = 'Passlagi@123';
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +180,8 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             TextButton(
                               onPressed: () {
-                                Navigator.push(context, ForgotPasswordPage.route());
+                                Navigator.push(
+                                    context, ForgotPasswordPage.route());
                               },
                               child: Text(
                                 'Quên mật khẩu',

@@ -14,7 +14,6 @@ import '../../hive/hive_service.dart';
 import '../../utils/utils.dart';
 import '../authentication_repository.dart';
 
-
 @LazySingleton(as: AuthenticationRepository)
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
   AuthenticationRepositoryImpl(RestClientFactory factory, this.hiveService)
@@ -24,11 +23,13 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final TokenRestClient _tokenRestClient;
   final RestClient _restClient;
   final HiveService hiveService;
+
   // final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final BehaviorSubject<AuthenticationState> authenticationStateSubject =
-  BehaviorSubject();
+      BehaviorSubject();
   final BehaviorSubject<Map<String, dynamic>> dataSubject = BehaviorSubject();
   final BehaviorSubject<User> userSubject = BehaviorSubject();
+
   @override
   Stream<Map<String, dynamic>> get dataStream => dataSubject.stream;
 
@@ -42,14 +43,18 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   Future<void> dispatch() async {
     if (hiveService.token.isNotEmpty) {
-      // final userInfo = await getUserInfo();
-      // if (userInfo.updatedAt == null) {
-      //   authenticationStateSubject.add(AuthenticationState.level1());
-      // } else {
-          authenticationStateSubject.add(AuthenticationState.authenticated());
-      // }
+      try{
+        final userInfo = await getUserInfo();
+        if (userInfo.updatedAt == null) {
+          authenticationStateSubject.add(const AuthenticationState.level1());
+        } else {
+          authenticationStateSubject.add(const AuthenticationState.authenticated());
+        }
+      }on DioError catch(e){
+        authenticationStateSubject.add(const AuthenticationState.unauthenticated());
+      }
     } else {
-      authenticationStateSubject.add(AuthenticationState.unauthenticated());
+      authenticationStateSubject.add(const AuthenticationState.unauthenticated());
     }
   }
 
@@ -149,7 +154,6 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   User? get user => userSubject.value;
 
-
   // @override
   // void updateOnboarding(bool value) {
   //   hiveService.updateOnBoarding(value);
@@ -158,10 +162,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   Future<VerifyResponse> checkUserExists(
       String phoneNumber, String email) async {
-    Map<String, dynamic> data = {
-      "phone_number": phoneNumber,
-      "email": email
-    };
+    Map<String, dynamic> data = {"phone_number": phoneNumber, "email": email};
     return _restClient.checkUserExists(data);
   }
 
@@ -184,43 +185,50 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<String> resetPassword(Map<String, dynamic> data) {
     return _restClient.resetPassword(data);
   }
-  //
-  // @override
-  // Future<String> getDeviceId() async {
-  //   try {
-  //     if (Platform.isAndroid) {
-  //       final response = await deviceInfoPlugin.androidInfo;
-  //       return response.androidId ?? '';
-  //     } else if (Platform.isIOS) {
-  //       final response = await deviceInfoPlugin.iosInfo;
-  //       return response.identifierForVendor ?? '';
-  //     }
-  //   } catch (e) {
-  //     fowLog(e);
-  //   }
-  //   return '';
-  // }
-  //
-  // @override
-  // Future<DataResponse<User>> saveToken() async {
-  //   final deviceId = await getDeviceId();
-  //   Map<String, dynamic> data = {
-  //     'firebase_token': hiveService.firebaseToken,
-  //     'device_id': deviceId
-  //   };
-  //   final response = await _tokenRestClient.saveToken(data);
-  //   return response;
-  // }
-  //
-  // @override
-  // Future<DataResponse<Object>> deleteUserPhone(String phone) {
-  //   return _tokenRestClient.deleteUserPhone(phone);
-  // }
-  //
-  // @override
-  // Future<DataResponse<Object>> changeNotificationSetting() async {
-  //   final response = await _tokenRestClient.changeNotificationSetting();
-  //   await getUserInfo();
-  //   return response;
-  // }
+
+  @override
+  Future<User> getUserInfo() async {
+    final response = await _tokenRestClient.getUserInfo();
+    userSubject.add(response);
+    return response;
+  }
+//
+// @override
+// Future<String> getDeviceId() async {
+//   try {
+//     if (Platform.isAndroid) {
+//       final response = await deviceInfoPlugin.androidInfo;
+//       return response.androidId ?? '';
+//     } else if (Platform.isIOS) {
+//       final response = await deviceInfoPlugin.iosInfo;
+//       return response.identifierForVendor ?? '';
+//     }
+//   } catch (e) {
+//     fowLog(e);
+//   }
+//   return '';
+// }
+//
+// @override
+// Future<DataResponse<User>> saveToken() async {
+//   final deviceId = await getDeviceId();
+//   Map<String, dynamic> data = {
+//     'firebase_token': hiveService.firebaseToken,
+//     'device_id': deviceId
+//   };
+//   final response = await _tokenRestClient.saveToken(data);
+//   return response;
+// }
+//
+// @override
+// Future<DataResponse<Object>> deleteUserPhone(String phone) {
+//   return _tokenRestClient.deleteUserPhone(phone);
+// }
+//
+// @override
+// Future<DataResponse<Object>> changeNotificationSetting() async {
+//   final response = await _tokenRestClient.changeNotificationSetting();
+//   await getUserInfo();
+//   return response;
+// }
 }

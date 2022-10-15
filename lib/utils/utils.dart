@@ -1,6 +1,11 @@
+import 'dart:core';
+import 'dart:core';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
+
+import '../apis/models/gender.dart';
 
 DateTime convertStringToDateTime(String val){
   var token = val.split('/');
@@ -75,5 +80,31 @@ void logger(dynamic data) {
     print('/////');
     print(data);
     print('/////');
+  }
+}
+
+List<Gender> get genders => [Gender(id: 1, name: "Nam"), Gender(id: 2 ,name: "Nữ")];
+List<Gender> get targets => [Gender(id: 1, name: "500"), Gender(id: 2 ,name: "700"), Gender(id: 3 ,name: "900")];
+
+extension MapX on List<Gender> {
+  Map<int, String> getMap() {
+    final map = <int, String>{};
+    forEach((element) {
+      map[element.id!] = element.name!;
+    });
+    return map;
+  }
+
+  Map<int, String> getImages() {
+    final map = <int, String>{};
+    final images = [
+      'assets/images/male.svg',
+      'assets/images/female.svg',
+    ];
+    for (int i = 0; i < length; i++) {
+      final element = this[i];
+      if (i < images.length) map[element.id!] = images[i];
+    }
+    return map;
   }
 }
