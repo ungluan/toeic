@@ -22,6 +22,7 @@ mixin _$UpdateProfileState {
     required TResult Function(String error) failed,
     required TResult Function() loaded,
     required TResult Function() success,
+    required TResult Function(String error) uploadFileFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -30,6 +31,7 @@ mixin _$UpdateProfileState {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,6 +40,7 @@ mixin _$UpdateProfileState {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -47,6 +50,8 @@ mixin _$UpdateProfileState {
     required TResult Function(UpdateProfileStateFailed value) failed,
     required TResult Function(UpdateProfileStateLoaded value) loaded,
     required TResult Function(UpdateProfileStateSuccess value) success,
+    required TResult Function(UpdateProfileStateUploadFileFailed value)
+        uploadFileFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +60,8 @@ mixin _$UpdateProfileState {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +70,8 @@ mixin _$UpdateProfileState {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -133,6 +142,7 @@ class _$UpdateProfileStateLoading implements UpdateProfileStateLoading {
     required TResult Function(String error) failed,
     required TResult Function() loaded,
     required TResult Function() success,
+    required TResult Function(String error) uploadFileFailed,
   }) {
     return loading();
   }
@@ -144,6 +154,7 @@ class _$UpdateProfileStateLoading implements UpdateProfileStateLoading {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
   }) {
     return loading?.call();
   }
@@ -155,6 +166,7 @@ class _$UpdateProfileStateLoading implements UpdateProfileStateLoading {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -170,6 +182,8 @@ class _$UpdateProfileStateLoading implements UpdateProfileStateLoading {
     required TResult Function(UpdateProfileStateFailed value) failed,
     required TResult Function(UpdateProfileStateLoaded value) loaded,
     required TResult Function(UpdateProfileStateSuccess value) success,
+    required TResult Function(UpdateProfileStateUploadFileFailed value)
+        uploadFileFailed,
   }) {
     return loading(this);
   }
@@ -181,6 +195,8 @@ class _$UpdateProfileStateLoading implements UpdateProfileStateLoading {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
   }) {
     return loading?.call(this);
   }
@@ -192,6 +208,8 @@ class _$UpdateProfileStateLoading implements UpdateProfileStateLoading {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -277,6 +295,7 @@ class _$UpdateProfileStateFailed implements UpdateProfileStateFailed {
     required TResult Function(String error) failed,
     required TResult Function() loaded,
     required TResult Function() success,
+    required TResult Function(String error) uploadFileFailed,
   }) {
     return failed(error);
   }
@@ -288,6 +307,7 @@ class _$UpdateProfileStateFailed implements UpdateProfileStateFailed {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
   }) {
     return failed?.call(error);
   }
@@ -299,6 +319,7 @@ class _$UpdateProfileStateFailed implements UpdateProfileStateFailed {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -314,6 +335,8 @@ class _$UpdateProfileStateFailed implements UpdateProfileStateFailed {
     required TResult Function(UpdateProfileStateFailed value) failed,
     required TResult Function(UpdateProfileStateLoaded value) loaded,
     required TResult Function(UpdateProfileStateSuccess value) success,
+    required TResult Function(UpdateProfileStateUploadFileFailed value)
+        uploadFileFailed,
   }) {
     return failed(this);
   }
@@ -325,6 +348,8 @@ class _$UpdateProfileStateFailed implements UpdateProfileStateFailed {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
   }) {
     return failed?.call(this);
   }
@@ -336,6 +361,8 @@ class _$UpdateProfileStateFailed implements UpdateProfileStateFailed {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -402,6 +429,7 @@ class _$UpdateProfileStateLoaded implements UpdateProfileStateLoaded {
     required TResult Function(String error) failed,
     required TResult Function() loaded,
     required TResult Function() success,
+    required TResult Function(String error) uploadFileFailed,
   }) {
     return loaded();
   }
@@ -413,6 +441,7 @@ class _$UpdateProfileStateLoaded implements UpdateProfileStateLoaded {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
   }) {
     return loaded?.call();
   }
@@ -424,6 +453,7 @@ class _$UpdateProfileStateLoaded implements UpdateProfileStateLoaded {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -439,6 +469,8 @@ class _$UpdateProfileStateLoaded implements UpdateProfileStateLoaded {
     required TResult Function(UpdateProfileStateFailed value) failed,
     required TResult Function(UpdateProfileStateLoaded value) loaded,
     required TResult Function(UpdateProfileStateSuccess value) success,
+    required TResult Function(UpdateProfileStateUploadFileFailed value)
+        uploadFileFailed,
   }) {
     return loaded(this);
   }
@@ -450,6 +482,8 @@ class _$UpdateProfileStateLoaded implements UpdateProfileStateLoaded {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
   }) {
     return loaded?.call(this);
   }
@@ -461,6 +495,8 @@ class _$UpdateProfileStateLoaded implements UpdateProfileStateLoaded {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -522,6 +558,7 @@ class _$UpdateProfileStateSuccess implements UpdateProfileStateSuccess {
     required TResult Function(String error) failed,
     required TResult Function() loaded,
     required TResult Function() success,
+    required TResult Function(String error) uploadFileFailed,
   }) {
     return success();
   }
@@ -533,6 +570,7 @@ class _$UpdateProfileStateSuccess implements UpdateProfileStateSuccess {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
   }) {
     return success?.call();
   }
@@ -544,6 +582,7 @@ class _$UpdateProfileStateSuccess implements UpdateProfileStateSuccess {
     TResult Function(String error)? failed,
     TResult Function()? loaded,
     TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -559,6 +598,8 @@ class _$UpdateProfileStateSuccess implements UpdateProfileStateSuccess {
     required TResult Function(UpdateProfileStateFailed value) failed,
     required TResult Function(UpdateProfileStateLoaded value) loaded,
     required TResult Function(UpdateProfileStateSuccess value) success,
+    required TResult Function(UpdateProfileStateUploadFileFailed value)
+        uploadFileFailed,
   }) {
     return success(this);
   }
@@ -570,6 +611,8 @@ class _$UpdateProfileStateSuccess implements UpdateProfileStateSuccess {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
   }) {
     return success?.call(this);
   }
@@ -581,6 +624,8 @@ class _$UpdateProfileStateSuccess implements UpdateProfileStateSuccess {
     TResult Function(UpdateProfileStateFailed value)? failed,
     TResult Function(UpdateProfileStateLoaded value)? loaded,
     TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -592,4 +637,168 @@ class _$UpdateProfileStateSuccess implements UpdateProfileStateSuccess {
 
 abstract class UpdateProfileStateSuccess implements UpdateProfileState {
   const factory UpdateProfileStateSuccess() = _$UpdateProfileStateSuccess;
+}
+
+/// @nodoc
+abstract class _$$UpdateProfileStateUploadFileFailedCopyWith<$Res> {
+  factory _$$UpdateProfileStateUploadFileFailedCopyWith(
+          _$UpdateProfileStateUploadFileFailed value,
+          $Res Function(_$UpdateProfileStateUploadFileFailed) then) =
+      __$$UpdateProfileStateUploadFileFailedCopyWithImpl<$Res>;
+  $Res call({String error});
+}
+
+/// @nodoc
+class __$$UpdateProfileStateUploadFileFailedCopyWithImpl<$Res>
+    extends _$UpdateProfileStateCopyWithImpl<$Res>
+    implements _$$UpdateProfileStateUploadFileFailedCopyWith<$Res> {
+  __$$UpdateProfileStateUploadFileFailedCopyWithImpl(
+      _$UpdateProfileStateUploadFileFailed _value,
+      $Res Function(_$UpdateProfileStateUploadFileFailed) _then)
+      : super(_value, (v) => _then(v as _$UpdateProfileStateUploadFileFailed));
+
+  @override
+  _$UpdateProfileStateUploadFileFailed get _value =>
+      super._value as _$UpdateProfileStateUploadFileFailed;
+
+  @override
+  $Res call({
+    Object? error = freezed,
+  }) {
+    return _then(_$UpdateProfileStateUploadFileFailed(
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UpdateProfileStateUploadFileFailed
+    implements UpdateProfileStateUploadFileFailed {
+  const _$UpdateProfileStateUploadFileFailed(this.error);
+
+  @override
+  final String error;
+
+  @override
+  String toString() {
+    return 'UpdateProfileState.uploadFileFailed(error: $error)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateProfileStateUploadFileFailed &&
+            const DeepCollectionEquality().equals(other.error, error));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$UpdateProfileStateUploadFileFailedCopyWith<
+          _$UpdateProfileStateUploadFileFailed>
+      get copyWith => __$$UpdateProfileStateUploadFileFailedCopyWithImpl<
+          _$UpdateProfileStateUploadFileFailed>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function() loaded,
+    required TResult Function() success,
+    required TResult Function(String error) uploadFileFailed,
+  }) {
+    return uploadFileFailed(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? loaded,
+    TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
+  }) {
+    return uploadFileFailed?.call(error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function()? loaded,
+    TResult Function()? success,
+    TResult Function(String error)? uploadFileFailed,
+    required TResult orElse(),
+  }) {
+    if (uploadFileFailed != null) {
+      return uploadFileFailed(error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UpdateProfileStateLoading value) loading,
+    required TResult Function(UpdateProfileStateFailed value) failed,
+    required TResult Function(UpdateProfileStateLoaded value) loaded,
+    required TResult Function(UpdateProfileStateSuccess value) success,
+    required TResult Function(UpdateProfileStateUploadFileFailed value)
+        uploadFileFailed,
+  }) {
+    return uploadFileFailed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(UpdateProfileStateLoading value)? loading,
+    TResult Function(UpdateProfileStateFailed value)? failed,
+    TResult Function(UpdateProfileStateLoaded value)? loaded,
+    TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
+  }) {
+    return uploadFileFailed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UpdateProfileStateLoading value)? loading,
+    TResult Function(UpdateProfileStateFailed value)? failed,
+    TResult Function(UpdateProfileStateLoaded value)? loaded,
+    TResult Function(UpdateProfileStateSuccess value)? success,
+    TResult Function(UpdateProfileStateUploadFileFailed value)?
+        uploadFileFailed,
+    required TResult orElse(),
+  }) {
+    if (uploadFileFailed != null) {
+      return uploadFileFailed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UpdateProfileStateUploadFileFailed
+    implements UpdateProfileState {
+  const factory UpdateProfileStateUploadFileFailed(final String error) =
+      _$UpdateProfileStateUploadFileFailed;
+
+  String get error;
+  @JsonKey(ignore: true)
+  _$$UpdateProfileStateUploadFileFailedCopyWith<
+          _$UpdateProfileStateUploadFileFailed>
+      get copyWith => throw _privateConstructorUsedError;
 }

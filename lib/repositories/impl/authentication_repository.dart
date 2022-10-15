@@ -63,7 +63,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     try {
       final response = await _restClient.login(data);
       hiveService.updateToken(response.accessToken ?? '');
-      authenticationStateSubject.add(const AuthenticationState.authenticated());
+      dispatch();
       // if (response.error == false) {
       //
       // } else {

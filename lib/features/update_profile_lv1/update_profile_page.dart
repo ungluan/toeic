@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +14,7 @@ import '../../injection/injection.dart';
 import '../../ui_kits/styles.dart';
 import '../../ui_kits/widgets/views/fow_image_picker.dart';
 import '../../ui_kits/widgets/views/one_state_switch.dart';
+import '../../utils/air_18_notification_dialog.dart';
 import '../../utils/utils.dart';
 
 class UpdateProfilePage extends StatefulWidget {
@@ -36,7 +38,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   int genderSelected = 1;
   int targetSelected = 1;
-  HiveService hiveService = getIt<HiveService>();
   LoadingCubit loadingCubit = LoadingCubit();
 
   @override
@@ -47,8 +48,39 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     profileNotifier.addListener(() {
       handleSubmit();
     });
-    //mock();
-    // fullNameController.text = userCubit.user?.username ?? '';
+    updateProfileCubit.stream.listen((state) {
+      if(state is UpdateProfileStateFailed){
+        showDialog(
+          context: context,
+          builder: (context) => Air18NotificationDialog(
+            title: "Thông báo",
+            content:
+            "Cập nhật thông tin thất bại, vui lòng thử lại sau.",
+            onPositiveTap: () {
+              Navigator.pop(context);
+            },
+            onNegativeTap: () {},
+            positive: "Ok",
+            isShowNegative: false,
+          ),
+        );
+      }else if(state is UpdateProfileStateUploadFileFailed){
+        showDialog(
+          context: context,
+          builder: (context) => Air18NotificationDialog(
+            title: "Thông báo",
+            content:
+            "Upload file thất bại, vui lòng thử lại sau.",
+            onPositiveTap: () {
+              Navigator.pop(context);
+            },
+            onNegativeTap: () {},
+            positive: "Ok",
+            isShowNegative: false,
+          ),
+        );
+      }
+    });
     updateProfileCubit.reset();
     init();
     super.initState();
@@ -202,16 +234,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                         color: orangeColor,
                       ),
                     ),
-                    BlocBuilder<UpdateProfileCubit, UpdateProfileState>(
-                      bloc: updateProfileCubit,
-                      builder: (context, state) => state.maybeWhen(
-                        orElse: () => Container(),
-                        loaded: () => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: buildBody(),
-                        ),
-                      ),
-                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: buildBody(),
+                    )
                   ],
                 ),
               ),
@@ -224,30 +250,16 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   }
 
   Future<void> _onPressed() async {
-
     var data = {
-      "birth_date": "2022-10-15",
-      "address": dateController.text,
-      "gender": genders[genderSelected],
-      "avatar": "url",
-      "updated_at": "2022-10-15"
+      "birth_date": dateController.text.convertToDate(),
+      "address": addressController.text,
+      "gender": genders.value(genderSelected),
+      "target": int.parse(targets.value(targetSelected)!),
     };
     final avatar = profileNotifier.value;
-    // final File file = File(avatar);
-    // //final code = languageCubit.language?.code;
-    // final Map<String, dynamic> data = {
-    //   'full_name': fullNameController.text,
-    //   'birthday': dateController.text,
-    //   'gender': gender,
-    //   'sexuals[]': /*sexualCubit.items*/ [1],
-    //   'show_me': showGenderCubit.item,
-    //   //if (code != null) 'app_lang': code,
-    //   'app_lang': 'en',
-    //   'short_caption': captionController.text,
-    //   'marital': maritalStatusCubit.item,
-    //   // '_method': 'PUT'
-    // };
-    // if (dataLocation.isNotEmpty) data.addAll(dataLocation);
-    // await updateProfileCubit.updateProfileLevel1(file, data);
+    loadingCubit.showLoading();
+    final File file = File(avatar);
+    await updateProfileCubit.updateLv1(data, file);
+    loadingCubit.hideLoading();
   }
 }

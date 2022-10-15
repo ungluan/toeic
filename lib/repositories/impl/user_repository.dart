@@ -19,6 +19,6 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<User> updateLv1(Map<String, dynamic> data) {
-    return _tokenRestClient.getUserInfo();
+    return _tokenRestClient.updateLv1(data);
   }
 }

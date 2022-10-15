@@ -107,4 +107,13 @@ extension MapX on List<Gender> {
     }
     return map;
   }
+
+  String? value(int id) => firstWhere((element) => element.id == id).name ;
+}
+
+extension Date on String{
+  String convertToDate(){
+    var token = split('/');
+    return '${token[2]}-${token[1]}-${token[0]}';
+  }
 }
