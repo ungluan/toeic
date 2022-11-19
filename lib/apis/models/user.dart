@@ -6,7 +6,6 @@ import 'rule.dart';
 /// last_name : "string"
 /// phone_number : "string"
 /// is_active : true
-/// phone_verified : true
 /// created_at : "2022-10-10"
 /// birth_date : "2022-10-10"
 /// address : "string"
@@ -23,13 +22,13 @@ class User {
       String? lastName, 
       String? phoneNumber, 
       bool? isActive, 
-      bool? phoneVerified, 
-      String? createdAt, 
+      String? createdAt,
       String? birthDate, 
       String? address, 
       String? gender, 
       String? avatar, 
-      String? updatedAt, 
+      String? updatedAt,
+      int? target,
       Rule? rule,}){
     _id = id;
     _email = email;
@@ -37,13 +36,13 @@ class User {
     _lastName = lastName;
     _phoneNumber = phoneNumber;
     _isActive = isActive;
-    _phoneVerified = phoneVerified;
     _createdAt = createdAt;
     _birthDate = birthDate;
     _address = address;
     _gender = gender;
     _avatar = avatar;
     _updatedAt = updatedAt;
+    _target = target;
     _rule = rule;
 }
 
@@ -54,13 +53,13 @@ class User {
     _lastName = json['last_name'];
     _phoneNumber = json['phone_number'];
     _isActive = json['is_active'];
-    _phoneVerified = json['phone_verified'];
     _createdAt = json['created_at'];
     _birthDate = json['birth_date'];
     _address = json['address'];
     _gender = json['gender'];
     _avatar = json['avatar'];
     _updatedAt = json['updated_at'];
+    _target = json['target'];
     _rule = json['rule'] != null ? Rule.fromJson(json['rule']) : null;
   }
   int? _id;
@@ -69,13 +68,13 @@ class User {
   String? _lastName;
   String? _phoneNumber;
   bool? _isActive;
-  bool? _phoneVerified;
   String? _createdAt;
   String? _birthDate;
   String? _address;
   String? _gender;
   String? _avatar;
   String? _updatedAt;
+  int? _target;
   Rule? _rule;
 
   int? get id => _id;
@@ -84,13 +83,13 @@ class User {
   String? get lastName => _lastName;
   String? get phoneNumber => _phoneNumber;
   bool? get isActive => _isActive;
-  bool? get phoneVerified => _phoneVerified;
   String? get createdAt => _createdAt;
   String? get birthDate => _birthDate;
   String? get address => _address;
   String? get gender => _gender;
   String? get avatar => _avatar;
   String? get updatedAt => _updatedAt;
+  int? get target => _target;
   Rule? get rule => _rule;
 
   Map<String, dynamic> toJson() {
@@ -101,12 +100,12 @@ class User {
     map['last_name'] = _lastName;
     map['phone_number'] = _phoneNumber;
     map['is_active'] = _isActive;
-    map['phone_verified'] = _phoneVerified;
     map['created_at'] = _createdAt;
     map['birth_date'] = _birthDate;
     map['address'] = _address;
     map['gender'] = _gender;
     map['avatar'] = _avatar;
+    map['target'] = _target;
     map['updated_at'] = _updatedAt;
     if (_rule != null) {
       map['rule'] = _rule?.toJson();

@@ -6,8 +6,11 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 
 import '../apis/models/gender.dart';
+import '../features/practice/practice_page.dart';
 
-DateTime convertStringToDateTime(String val){
+const String FIREBASE_URL = "https://firebasestorage.googleapis.com/v0/b/toeic-bc79c.appspot.com/o";
+
+DateTime convertStringToDateTime(String val) {
   var token = val.split('/');
   // var date = token[2] + "-" + token[1] + "-" + token[0];
   return DateTime.parse("${token[2]}-${token[1]}-${token[0]}");
@@ -31,7 +34,7 @@ String trimStartPhone(String? value) {
 
 String? validatorPassword(String? password) {
   RegExp regex =
-  RegExp(r'^((?=.*[A-Z])|(?=.*[@$!%*#?&]))[A-Za-z\d@$!%*#?&]{8,20}$');
+      RegExp(r'^((?=.*[A-Z])|(?=.*[@$!%*#?&]))[A-Za-z\d@$!%*#?&]{8,20}$');
   if (password != null && regex.hasMatch(password)) {
     return null;
   } else {
@@ -41,7 +44,8 @@ String? validatorPassword(String? password) {
 
 String? validatorPhoneNumber(String? phoneNumber) {
   // final nineNumberPhone = trimStart(phoneNumber);
-  if ((phoneNumber?.length == 9 || (phoneNumber?.length==10 && phoneNumber![0] =='0') ) &&
+  if ((phoneNumber?.length == 9 ||
+          (phoneNumber?.length == 10 && phoneNumber![0] == '0')) &&
       RegExp(r'^[0-9]*$').hasMatch(phoneNumber!)) {
     return null;
   } else {
@@ -62,12 +66,16 @@ String? validatorEmail(String? email) {
 }
 
 String? validatorFirstName(String? name) {
-  return (name != null && name.isNotEmpty) == true ? null : 'Họ không được để trống';
-}
-String? validatorLastName(String? name) {
-  return (name != null && name.isNotEmpty) == true ? null : 'Tên không được để trống';
+  return (name != null && name.isNotEmpty) == true
+      ? null
+      : 'Họ không được để trống';
 }
 
+String? validatorLastName(String? name) {
+  return (name != null && name.isNotEmpty) == true
+      ? null
+      : 'Tên không được để trống';
+}
 
 String digitFormat(int? number) {
   if (number == null) return '00';
@@ -83,8 +91,14 @@ void logger(dynamic data) {
   }
 }
 
-List<Gender> get genders => [Gender(id: 1, name: "Nam"), Gender(id: 2 ,name: "Nữ")];
-List<Gender> get targets => [Gender(id: 1, name: "500"), Gender(id: 2 ,name: "700"), Gender(id: 3 ,name: "900")];
+List<Gender> get genders =>
+    [Gender(id: 1, name: "Nam"), Gender(id: 2, name: "Nữ")];
+
+List<Gender> get targets => [
+      Gender(id: 1, name: "500"),
+      Gender(id: 2, name: "700"),
+      Gender(id: 3, name: "900")
+    ];
 
 extension MapX on List<Gender> {
   Map<int, String> getMap() {
@@ -108,12 +122,64 @@ extension MapX on List<Gender> {
     return map;
   }
 
-  String? value(int id) => firstWhere((element) => element.id == id).name ;
+  String? value(int id) => firstWhere((element) => element.id == id).name;
 }
 
-extension Date on String{
-  String convertToDate(){
+extension Date on String {
+  String convertToDate() {
     var token = split('/');
     return '${token[2]}-${token[1]}-${token[0]}';
+  }
+}
+
+List<PartItem> parts = [
+  PartItem(
+    imagePath: 'assets/images/picture.png',
+    part: "Part 1",
+    description: 'Mô tả hình ảnh',
+  ),
+  PartItem(
+    imagePath: 'assets/images/question.png',
+    part: "Part 2",
+    description: 'Hỏi & đáp',
+  ),
+  PartItem(
+    imagePath: 'assets/images/conversation.png',
+    part: "Part 3",
+    description: 'Đoạn hội thoại',
+  ),
+  PartItem(
+    imagePath: 'assets/images/speech.png',
+    part: "Part 4",
+    description: 'Bài nói chuyện',
+  ),
+  PartItem(
+    imagePath: 'assets/images/checklist.png',
+    part: "Part 5",
+    description: 'Điền vào câu',
+  ),
+  PartItem(
+    imagePath: 'assets/images/copywriting.png',
+    part: "Part 6",
+    description: 'Điền vào đoạn',
+  ),
+  PartItem(
+    imagePath: 'assets/images/article.png',
+    part: "Part 7",
+    description: 'Đọc hiểu',
+  ),
+];
+
+String formatTime(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
+  final hours = twoDigits(duration.inHours);
+  final minutes = twoDigits(duration.inMinutes.remainder(60)).toString();
+  final seconds = twoDigits(duration.inSeconds.remainder(60)).toString();
+  return [if (duration.inHours > 0) hours, minutes, seconds].join(':');
+}
+
+extension EqualD on double{
+  bool equalWithIntNumber({int? value}){
+    return this/(value??toInt()) == 1.0;
   }
 }

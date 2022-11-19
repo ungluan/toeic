@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
+import 'package:toeic/utils/utils.dart';
 
 import '../../../repositories/authentication_repository.dart';
 import 'authentication_cubit.dart';
@@ -30,6 +31,7 @@ class LoginCubit extends Cubit<LoginState> {
       {required String username, required String password}) async {
     emit(const LoginState.loading());
     final data = {'phone_number': username, 'password': password};
+    logger(data);
     return repository.login(data);
   }
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -111,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (state is OtpStateUserExisted) {
         loadingCubit.hideLoading();
         handleEmailAndPassword(
-            email: data['email'] != '', phone: data['phoneNumber'] != '');
+            email: data['email'] != '', phone: data['phone_number'] != '');
       } else if (state is OtpStateUserNotExisted) {
         // logger(phoneNumberController.text);
         // logger(trimStartPhone(phoneNumberController.text));
@@ -142,13 +144,8 @@ class _RegisterPageState extends State<RegisterPage> {
       } else if (state is OtpStateVerifySuccess) {
         loadingCubit.showLoading();
         logger("Thực hiện đăng ký user");
-        await registerCubit.register({
-          "email": "1@gmail.com",
-          "password": "string",
-          "first_name": "string",
-          "last_name": "string",
-          "phone_number": "0123456789"
-        });
+        logger(data);
+        await registerCubit.register(data);
       } else if (state is OtpStateLoading) {
         loadingCubit.showLoading();
       } else {
@@ -497,12 +494,11 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     if (_formKey.currentState!.validate() && checkNotifier.value) {
       data = {
-        "firstName": firstNameController.text,
-        "lastName": lastNameController.text,
-        "phoneNumber": phoneNumberController.text,
         "email": emailController.text,
         "password": passwordController.text,
-        // "birthDay": dateController.text
+        "first_name": firstNameController.text,
+        "last_name": lastNameController.text,
+        "phone_number": phoneNumberController.text,
       };
       logger(data);
       loadingCubit.showLoading();

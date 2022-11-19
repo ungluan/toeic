@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
         child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
           bloc: widget.cubit,
           builder: (BuildContext context, state) => state.maybeWhen(
-            authenticated: () => const HomePage(),
+            authenticated: () => MainPage(),
             level1: ()=> const UpdateProfilePage(),
             unauthenticated: () => const LoginPage(),
             orElse: () => const BlankPage(),

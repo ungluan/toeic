@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import 'models/Examination.dart';
+import 'models/Test.dart';
 import 'models/user.dart';
 
 
@@ -15,4 +17,16 @@ abstract class TokenRestClient {
 
   @PUT('/user/update_lv1')
   Future<User> updateLv1(@Body() Map<String, dynamic> data);
+
+  @GET('/test/')
+  Future<List<Test>> getListTestByTypeTest(@Query("target") int target, @Query("type_test_id") int typeTestId);
+
+  @POST('/examination/by-test-id')
+  Future<List<Examination?>> getListExaminationByTestsId(@Body() List<int> testsId);
+
+  @POST('/examination/start-examination')
+  Future<Examination> startExamination(@Query('test_id') int testId);
+
+  @POST('examination/submit-examination/{examination_id}')
+  Future<Examination> submitExamination(@Path('examination_id') int examinationId, @Body() Map<String, dynamic> data);
 }

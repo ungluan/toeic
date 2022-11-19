@@ -106,7 +106,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 ),
               ),
             ],
-          )),
+          ),
+      ),
     );
   }
 }

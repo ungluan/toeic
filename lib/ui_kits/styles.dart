@@ -57,6 +57,10 @@ TextStyle get aBeeZeeStyle => GoogleFonts.aBeeZee(
   textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
 );
 
+TextStyle get questionStyle => GoogleFonts.aBeeZee(
+  textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+);
+
 ButtonStyle get miniButtonStyle => TextButton.styleFrom(
     minimumSize: Size(100, 30),
     padding: EdgeInsets.symmetric(horizontal: 12.0),

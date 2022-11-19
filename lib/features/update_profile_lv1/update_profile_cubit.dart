@@ -46,7 +46,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
     // Create a child reference
     // imagesRef now points to "images"
     int timestamp = DateTime.now().microsecondsSinceEpoch;
-    final avatarRef = storageRef.child("images/avatars/$timestamp");
+    final avatarRef = storageRef.child("$timestamp");
     try {
       await avatarRef.putFile(
         file,

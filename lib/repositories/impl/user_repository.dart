@@ -1,4 +1,6 @@
+import 'package:dio/src/form_data.dart';
 import 'package:injectable/injectable.dart';
+import 'package:toeic/apis/models/Test.dart';
 import 'package:toeic/apis/rest_client_factory.dart';
 import '../../apis/models/user.dart';
 import '../../apis/token_rest_client.dart';
@@ -21,4 +23,9 @@ class UserRepositoryImpl extends UserRepository {
   Future<User> updateLv1(Map<String, dynamic> data) {
     return _tokenRestClient.updateLv1(data);
   }
+
+  // @override
+  // Future<Test> getTestByType(int typeId) {
+  //   return _tokenRestClient.getTestByType(typeId)
+  // }
 }

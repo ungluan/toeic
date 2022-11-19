@@ -12,6 +12,7 @@ import 'package:toeic/ui_kits/widgets/views/sbox_text_field.dart';
 import '../../hive/hive_service.dart';
 import '../../injection/injection.dart';
 import '../../ui_kits/styles.dart';
+import '../../ui_kits/ui_kit.dart';
 import '../../ui_kits/widgets/views/fow_image_picker.dart';
 import '../../ui_kits/widgets/views/one_state_switch.dart';
 import '../../utils/air_18_notification_dialog.dart';
@@ -100,29 +101,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   Future<void> init() async {
     updateProfileCubit.setup();
-  }
-
-  Widget buildTitle(String title, {bool isAsterisk = true}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 4),
-      child: Row(
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.left,
-            style: textTitleStyle.copyWith(fontWeight: FontWeight.bold),
-          ),
-          isAsterisk
-              ? Text(
-                  '*',
-                  textAlign: TextAlign.left,
-                  style: textTitleStyle.copyWith(
-                      color: Colors.red, fontWeight: FontWeight.bold),
-                )
-              : const SizedBox(),
-        ],
-      ),
-    );
   }
 
   Widget buildBody() {

@@ -47,8 +47,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         final userInfo = await getUserInfo();
         if (userInfo.updatedAt == null) {
           authenticationStateSubject.add(const AuthenticationState.level1());
-        } else {
-          authenticationStateSubject.add(const AuthenticationState.authenticated());
+        } else {authenticationStateSubject.add(const AuthenticationState.authenticated());
         }
       }on DioError catch(e){
         authenticationStateSubject.add(const AuthenticationState.unauthenticated());
