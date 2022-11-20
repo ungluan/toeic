@@ -31,12 +31,19 @@ class ExaminationCubit extends Cubit<ExaminationState> {
 
   Examination? get examination => _examination;
 
-  Map<String, String> convertQuestionToMap(Questions question) {
+  Map<String, String> convertQuestionToMap(Questions question, {bool hasD = true}) {
+    if(hasD){
+      return {
+        "a": question.a!,
+        "b": question.b!,
+        "c": question.c!,
+        "d": question.d!,
+      };
+    }
     return {
       "a": question.a!,
       "b": question.b!,
       "c": question.c!,
-      "d": question.d!,
     };
   }
 
@@ -68,14 +75,14 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     }
   }
 
-  void setupReadExamination(int examinationId) async {
+  Future<void> setupReadExamination(int examinationId) async {
     if (_examination?.id != examinationId) {
       // getExamination
       _examination = await examinationRepository.getExamination(examinationId);
       examinationRepository.examination = _examination;
     }
     try {
-      // emit(const ExaminationState.loading());
+      emit(const ExaminationState.loading());
       List<Exams>? exams = examination!.test!.exams;
       logger(examination);
       for (int i = 0; i < exams!.length; i++) {
@@ -86,8 +93,8 @@ class ExaminationCubit extends Cubit<ExaminationState> {
               .selection!;
           _choices?.add(Choice(id: questions[j].id!, selected: selected));
         }
-        // emit(ExaminationState.loaded(test, choices!));
       }
+      emit(ExaminationState.loaded(examination!.test!, choices!));
     } on DioError catch (e) {
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }

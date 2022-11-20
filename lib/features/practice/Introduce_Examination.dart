@@ -209,7 +209,7 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                   flex: 2,
                   child: SvgPicture.asset(
                     'assets/images/character-illustration.svg',
-                    height: 354,
+                    height: 256,
                   ),
                 ),
               ],

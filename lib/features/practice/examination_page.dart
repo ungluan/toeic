@@ -62,8 +62,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
   void initState() {
     super.initState();
     if(widget.examinationId != -1){
+      // loadingCubit.showLoading();
       examinationCubit.setupReadExamination(widget.examinationId);
     }else{
+      // loadingCubit.showLoading();
       examinationCubit.setupTest(widget.test);
     }
 
@@ -76,6 +78,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
     });
     examinationCubit.stream.listen((state) {
       if (state is ExaminationStateLoaded) {
+        // loadingCubit.hideLoading();
         pages = state.data.exams!.length;
         print(state.data);
       }
@@ -250,11 +253,139 @@ class _ExaminationPageState extends State<ExaminationPage> {
     );
   }
 
-  Widget _buildPart2() {
-    return Center(
-      child: Text("Part 2"),
+  Widget _buildPart2(Exams exam) {
+    if (exam.audio != null || exam.audio!.isNotEmpty) {
+      initPlayer(exam.audio!);
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          flex: 16,
+          child: ListView.builder(
+              itemCount: exam.questions!.length,
+              itemBuilder: (context, index) {
+                var selected = examinationCubit.choices
+                    ?.firstWhere(
+                        (element) => element.id == exam.questions![index].id)
+                    .selected;
+                return OneChoice(
+                  data: examinationCubit
+                      .convertQuestionToMap(exam.questions![index], hasD: false),
+                  onChanged: (nVal) => examinationCubit.chooseAnswer(
+                      nVal, exam.questions![index].id!),
+                  questionNumber: examinationCubit
+                      .getSelectionNumber(exam.questions![index].id!),
+                  questionContent: exam.questions![index].content!,
+                  kind:
+                  exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
+                  selected: selected!,
+                  isEnable: widget.examinationId == -1,
+                  explain:  exam.questions![index].explain ?? '',
+                );
+              }),
+        ),
+        Expanded(
+          flex: 4,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                ValueListenableBuilder<Duration>(
+                  valueListenable: position,
+                  builder: (_, data, __) => Slider(
+                    value: data.inSeconds.toDouble(),
+                    min: 0,
+                    max: duration.value.inSeconds.toDouble(),
+                    onChanged: (value) async {
+                      position.value = Duration(seconds: value.toInt());
+                      await player.seek(position.value);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ValueListenableBuilder<Duration>(
+                    valueListenable: position,
+                    builder: (_, value, __) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(formatTime(value)),
+                        Text(formatTime(duration.value - position.value))
+                      ],
+                    ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            var nVal = position.value.inSeconds + 5;
+                            if (nVal <= duration.value.inSeconds) {
+                              position.value = Duration(
+                                  seconds: position.value.inSeconds + 5);
+                              await player.seek(position.value);
+                            } else {
+                              position.value = duration.value;
+                              await player.seek(position.value);
+                            }
+                          },
+                          icon: const Icon(Icons.forward_5),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 8, right: 8),
+                          child: IconButton(
+                            onPressed: () async {
+                              if (isPlaying.value) {
+                                isPlaying.value = false;
+                                await player.pause();
+                              } else {
+                                if (isCompleted) {
+                                  initPlayer(exam.audio!);
+                                } else {
+                                  isPlaying.value = true;
+                                  await player.resume();
+                                }
+                              }
+                            },
+                            icon: ValueListenableBuilder<bool>(
+                              valueListenable: isPlaying,
+                              builder: (_, value, __) => Icon(
+                                value
+                                    ? Icons.pause_circle_outline
+                                    : Icons.play_circle_outline,
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            var nVal = position.value.inSeconds - 5;
+                            if (nVal >= 0) {
+                              position.value = Duration(seconds: nVal);
+                              await player.seek(position.value);
+                            } else {
+                              position.value = Duration.zero;
+                              await player.seek(position.value);
+                            }
+                          },
+                          icon: const Icon(Icons.replay_5),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
+
 
   Widget _buildPart3() {
     return Center(
@@ -411,8 +542,17 @@ class _ExaminationPageState extends State<ExaminationPage> {
               physics: const ClampingScrollPhysics(),
               itemCount: examinationCubit.choices?.length ?? 0,
               controller: pageController,
-              itemBuilder: (context, index) => _buildPart1(
-                  examinationCubit.examination!.test!.exams![index]),
+              itemBuilder: (context, index){
+                if(widget.test.typeTest!.id == 1){
+                  return _buildPart1(
+                      examinationCubit.examination!.test!.exams![index]);
+                }else if(widget.test.typeTest!.id == 2){
+                  return _buildPart2(
+                      examinationCubit.examination!.test!.exams![index]);
+                }else{
+                  return Container();
+                }
+              },
               onPageChanged: (index) {
                 curIndexNotifier.value = index;
               },

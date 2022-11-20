@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toeic/apis/models/Test.dart';
 import 'package:toeic/features/practice/Introduce_Examination.dart';
+import 'package:toeic/features/practice/cubit/examination_cubit.dart';
 import 'package:toeic/features/practice/cubit/test_cubit.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/widgets/cubits/loading_cubit.dart';
@@ -32,7 +33,7 @@ class ListTestPage extends StatefulWidget {
 class _ListTestPageState extends State<ListTestPage> {
   final testCubit = getIt<TestCubit>();
   final loadingCubit = getIt<LoadingCubit>();
-
+  final examinationCubit = getIt<ExaminationCubit>();
   @override
   void initState() {
     super.initState();
@@ -142,9 +143,15 @@ class _ListTestPageState extends State<ListTestPage> {
                                 )
                               : const SizedBox(),
                           InkWell(
-                            onTap: () => Navigator.of(context).push(
-                                ExaminationPage.route(test,
-                                    examinationId: examination?.id ?? -1)),
+                            onTap: () async {
+                              if(examination != null){
+                                await examinationCubit.setupReadExamination(examination.id!);
+                              }
+                              if(mounted){
+                                Navigator.of(context).push(ExaminationPage.route( test,
+                                    examinationId: examination?.id ?? -1));
+                              }
+                            },
                             child: Chip(
                               elevation: 0,
                               backgroundColor: Colors.green.withOpacity(0.8),
