@@ -21,14 +21,15 @@ class _FowRadioState extends State<FowRadio> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        icon: !widget.isEnable ? SvgPicture.asset('assets/images/radio_blur.svg') :
-        widget.isCheck
+        icon: widget.isCheck
             ? SvgPicture.asset('assets/images/icon.svg')
             : SvgPicture.asset('assets/images/icon-uncheck.svg'),
         onPressed: () {
-          setState(() {
-            widget.onCheckChange();
-          });
+          if(widget.isEnable){
+            setState(() {
+              widget.onCheckChange();
+            });
+          }
         });
   }
 }

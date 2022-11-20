@@ -18,7 +18,7 @@ abstract class TokenRestClient {
   @PUT('/user/update_lv1')
   Future<User> updateLv1(@Body() Map<String, dynamic> data);
 
-  @GET('/test/')
+  @GET('/test/by-part-id-and-target')
   Future<List<Test>> getListTestByTypeTest(@Query("target") int target, @Query("type_test_id") int typeTestId);
 
   @POST('/examination/by-test-id')
@@ -29,4 +29,7 @@ abstract class TokenRestClient {
 
   @POST('examination/submit-examination/{examination_id}')
   Future<Examination> submitExamination(@Path('examination_id') int examinationId, @Body() Map<String, dynamic> data);
+
+  @GET('/examination/{examination_id}')
+  Future<Examination> getExamination(@Path('examination_id') int examinationId);
 }

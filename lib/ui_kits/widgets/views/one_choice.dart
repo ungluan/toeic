@@ -18,7 +18,8 @@ class OneChoice extends StatefulWidget {
     this.isEnable = true,
     required this.questionNumber,
     required this.questionContent,
-    required this.kind
+    required this.kind,
+    required this.explain,
   }) : super(key: key);
   final int questionNumber;
   final String questionContent;
@@ -27,6 +28,7 @@ class OneChoice extends StatefulWidget {
   final String selected;
   final bool isEnable;
   final KindDisplay kind;
+  final String explain;
   @override
   State<OneChoice> createState() => _OneChoiceState();
 }
@@ -47,10 +49,12 @@ class _OneChoiceState extends State<OneChoice> {
         key,
         InkWell(
           onTap: () {
-            setState(() {
-              selected = key;
-              widget.onChanged(selected);
-            });
+            if(widget.isEnable){
+              setState(() {
+                selected = key;
+                widget.onChanged(selected);
+              });
+            }
           },
           child: Padding(
             padding: const EdgeInsets.all(4),
@@ -113,6 +117,29 @@ class _OneChoiceState extends State<OneChoice> {
           ),
         ),
         ...widgets.values.toList(),
+        !widget.isEnable ?
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 18),
+            child: RichText(
+              text: TextSpan(
+                text: widget.explain.isNotEmpty ? 'Giải thích:\n' : '',
+                style: questionStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: darkBlueColor,
+                ),
+                children: [
+                  TextSpan(
+                    text: widget.explain,
+                    style: questionStyle.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ) : const SizedBox()
       ],
     );
   }

@@ -26,4 +26,9 @@ class ExaminationRepositoryImpl extends ExaminationRepository {
   Future<Examination> submitExamination(int examinationId, Map<String, dynamic> data) {
     return _tokenRestClient.submitExamination(examinationId, data);
   }
+
+  @override
+  Future<Examination> getExamination(int examinationId) {
+    return _tokenRestClient.getExamination(examinationId);
+  }
 }

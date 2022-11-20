@@ -19,12 +19,12 @@ import '../exam_comment/ExamComment.dart';
 import 'cubit/examination_cubit.dart';
 
 class ExaminationPage extends StatefulWidget {
-  const ExaminationPage({Key? key, required this.test}) : super(key: key);
+  const ExaminationPage({Key? key, required this.test, required this.examinationId}) : super(key: key);
   final Test test;
-
-  static Route route(Test test) {
+  final int examinationId;
+  static Route route(Test test, {int examinationId = -1}) {
     return MaterialPageRoute(
-      builder: (_) => ExaminationPage(test: test),
+      builder: (_) => ExaminationPage(test: test,examinationId: examinationId),
     );
   }
 
@@ -61,24 +61,11 @@ class _ExaminationPageState extends State<ExaminationPage> {
   @override
   void initState() {
     super.initState();
-    // initPlayer();
-    examinationCubit.setupTest(widget.test);
-
-    // pageController.addListener(() async {
-    //   var index = pageController.page;
-    //   if (index!.equalWithIntNumber() == true &&
-    //       index < 58.0 &&
-    //       index.equalWithIntNumber(value: 0) == false &&
-    //       index.equalWithIntNumber(value: 7) == false &&
-    //       index.equalWithIntNumber(value: 33) == false &&
-    //       index.equalWithIntNumber(value: 47) == false) {
-    //     preIndex = index.toInt();
-    //     // initPlayer();
-    //   } else if (index.equalWithIntNumber() == true && preIndex != index) {
-    //     await player.stop();
-    //     isPlaying.value = false;
-    //   }
-    // });
+    if(widget.examinationId != -1){
+      examinationCubit.setupReadExamination(widget.examinationId);
+    }else{
+      examinationCubit.setupTest(widget.test);
+    }
 
     player.onPositionChanged.listen((newPosition) {
       position.value = newPosition;
@@ -142,7 +129,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
           child: ListView.builder(
               itemCount: exam.questions!.length,
               itemBuilder: (context, index) {
-                var selected = examinationCubit.choices?.firstWhere((element) => element.id == exam.questions![index].id).selected;
+                var selected = examinationCubit.choices
+                    ?.firstWhere(
+                        (element) => element.id == exam.questions![index].id)
+                    .selected;
                 return OneChoice(
                   data: examinationCubit
                       .convertQuestionToMap(exam.questions![index]),
@@ -154,6 +144,8 @@ class _ExaminationPageState extends State<ExaminationPage> {
                   kind:
                       exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
                   selected: selected!,
+                  isEnable: widget.examinationId == -1,
+                  explain:  exam.questions![index].explain ?? '',
                 );
               }),
         ),
@@ -367,7 +359,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                 height: 24,
               ),
             ),
-            GestureDetector(
+            widget.examinationId == -1 ? GestureDetector(
               onTap: () => showDialog(
                 context: context,
                 builder: (context) => NotificationDialog(
@@ -389,9 +381,9 @@ class _ExaminationPageState extends State<ExaminationPage> {
                 width: 32,
                 height: 32,
               ),
-            ),
+            ) : const SizedBox(),
             Text(
-              "1:55:37",
+              widget.examinationId == -1 ? "1:55:37" : "",
               style: textTitleStyle.copyWith(
                 color: lightTextColor,
                 fontSize: 16,

@@ -84,7 +84,8 @@ class _ListTestPageState extends State<ListTestPage> {
                 style: GoogleFonts.openSans(
                     fontSize: 16,
                     color: darkBlueColor,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Container(
@@ -102,7 +103,7 @@ class _ListTestPageState extends State<ListTestPage> {
                       child: Row(
                         children: [
                           Text(
-                            'Câu hỏi: $numberOfCorrect',
+                            'Câu hỏi: $numberOfQuestions',
                             style: GoogleFonts.openSans(
                               fontSize: 14,
                               color: lightPurpleColor,
@@ -124,26 +125,33 @@ class _ListTestPageState extends State<ListTestPage> {
                       child: Row(
                         children: [
                           Spacer(),
-                          examination != null ? InkWell(
-                            onTap: () => {},
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              child: Chip(
-                                backgroundColor: primaryColor.withOpacity(0.5),
-                                elevation: 0,
-                                padding: const EdgeInsets.all(8),
-                                label:
-                                    Text('$numberOfCorrect/$numberOfQuestions'),
-                              ),
-                            ),
-                          ) : const SizedBox(),
+                          examination != null
+                              ? InkWell(
+                                  onTap: () => {},
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    child: Chip(
+                                      backgroundColor:
+                                          primaryColor.withOpacity(0.5),
+                                      elevation: 0,
+                                      padding: const EdgeInsets.all(8),
+                                      label: Text(
+                                          '$numberOfCorrect/$numberOfQuestions'),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
                           InkWell(
-                            onTap: () => {},
+                            onTap: () => Navigator.of(context).push(
+                                ExaminationPage.route(test,
+                                    examinationId: examination?.id ?? -1)),
                             child: Chip(
                               elevation: 0,
                               backgroundColor: Colors.green.withOpacity(0.8),
                               padding: const EdgeInsets.all(8),
-                              label: Text(examination != null ? 'Làm lại' : 'Làm bài'),
+                              label: Text(examination != null
+                                  ? 'Xem chi tiết'
+                                  : 'Làm bài'),
                             ),
                           ),
                         ],

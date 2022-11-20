@@ -6,4 +6,6 @@ abstract class ExaminationRepository {
   Future<Examination> startExamination(int testId);
 
   Future<Examination> submitExamination(int examinationId, Map<String, dynamic> data);
+
+  Future<Examination> getExamination(int examinationId);
 }

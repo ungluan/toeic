@@ -99,7 +99,11 @@ class _PracticePageState extends State<PracticePage> {
                   flex: 1,
                   child: _buildItem(
                     partItem: parts[1],
-                    onTap: () => {},
+                    onTap: () => {
+                    Navigator.of(context).push(
+                    ListTestPage.route(2),
+                    )
+                    },
                   ),
                 ),
               ],
@@ -110,14 +114,18 @@ class _PracticePageState extends State<PracticePage> {
                 Expanded(
                   child: _buildItem(
                     partItem: parts[2],
-                    onTap: () =>{},
+                    onTap: () => Navigator.of(context).push(
+                      ListTestPage.route(3),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildItem(
                     partItem: parts[3],
-                    onTap: () => {},
+                    onTap: () => Navigator.of(context).push(
+                      ListTestPage.route(4),
+                    ),
                   ),
                 ),
               ],
@@ -135,14 +143,18 @@ class _PracticePageState extends State<PracticePage> {
                 Expanded(
                   child: _buildItem(
                     partItem: parts[4],
-                    onTap: () => {},
+                    onTap: () => Navigator.of(context).push(
+                      ListTestPage.route(5),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildItem(
                     partItem: parts[5],
-                    onTap: () => {},
+                    onTap: () => Navigator.of(context).push(
+                      ListTestPage.route(6),
+                    ),
                   ),
                 ),
               ],
@@ -153,7 +165,9 @@ class _PracticePageState extends State<PracticePage> {
                 Expanded(
                   child: _buildItem(
                     partItem: parts[6],
-                    onTap: () => {},
+                    onTap: () => Navigator.of(context).push(
+                      ListTestPage.route(7),
+                    ),
                   ),
                 ),
               ],
