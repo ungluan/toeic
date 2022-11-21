@@ -75,7 +75,7 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          title[key],
+          title[key-1],
           style: GoogleFonts.openSans(
               fontSize: 18, color: darkBlueColor, fontWeight: FontWeight.bold),
         ),

@@ -97,7 +97,7 @@ class _FowImagePickerViewState extends State<FowImagePickerView> {
               widget.title,
               textAlign: TextAlign.center,
               style: widget.style ??
-                  GoogleFonts.poppins(
+                  GoogleFonts.openSans(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       color: Colors.black),

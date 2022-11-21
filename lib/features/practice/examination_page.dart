@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/countdown_controller.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:toeic/apis/models/Exams.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/colors.dart';
@@ -19,12 +20,15 @@ import '../exam_comment/ExamComment.dart';
 import 'cubit/examination_cubit.dart';
 
 class ExaminationPage extends StatefulWidget {
-  const ExaminationPage({Key? key, required this.test, required this.examinationId}) : super(key: key);
+  const ExaminationPage(
+      {Key? key, required this.test, required this.examinationId})
+      : super(key: key);
   final Test test;
   final int examinationId;
+
   static Route route(Test test, {int examinationId = -1}) {
     return MaterialPageRoute(
-      builder: (_) => ExaminationPage(test: test,examinationId: examinationId),
+      builder: (_) => ExaminationPage(test: test, examinationId: examinationId),
     );
   }
 
@@ -61,10 +65,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
   @override
   void initState() {
     super.initState();
-    if(widget.examinationId != -1){
+    if (widget.examinationId != -1) {
       // loadingCubit.showLoading();
       examinationCubit.setupReadExamination(widget.examinationId);
-    }else{
+    } else {
       // loadingCubit.showLoading();
       examinationCubit.setupTest(widget.test);
     }
@@ -148,7 +152,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                       exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
                   selected: selected!,
                   isEnable: widget.examinationId == -1,
-                  explain:  exam.questions![index].explain ?? '',
+                  explain: exam.questions![index].explain ?? '',
                 );
               }),
         ),
@@ -270,18 +274,19 @@ class _ExaminationPageState extends State<ExaminationPage> {
                         (element) => element.id == exam.questions![index].id)
                     .selected;
                 return OneChoice(
-                  data: examinationCubit
-                      .convertQuestionToMap(exam.questions![index], hasD: false),
+                  data: examinationCubit.convertQuestionToMap(
+                      exam.questions![index],
+                      hasD: false),
                   onChanged: (nVal) => examinationCubit.chooseAnswer(
                       nVal, exam.questions![index].id!),
                   questionNumber: examinationCubit
                       .getSelectionNumber(exam.questions![index].id!),
                   questionContent: exam.questions![index].content!,
                   kind:
-                  exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
+                      exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
                   selected: selected!,
                   isEnable: widget.examinationId == -1,
-                  explain:  exam.questions![index].explain ?? '',
+                  explain: exam.questions![index].explain ?? '',
                 );
               }),
         ),
@@ -386,7 +391,6 @@ class _ExaminationPageState extends State<ExaminationPage> {
     );
   }
 
-
   Widget _buildPart3(Exams exam) {
     if (exam.audio != null || exam.audio!.isNotEmpty) {
       initPlayer(exam.audio!);
@@ -395,23 +399,25 @@ class _ExaminationPageState extends State<ExaminationPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        hasImage ? Expanded(
-          flex: 6,
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(width: 3, color: lightTextColor),
-            ),
-            child: ListView.builder(
-              itemCount: exam.images!.length,
-              itemBuilder: (context, index) => CachedNetworkImage(
-                  imageUrl:
-                  "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
-            ),
-          ),
-        ) : const SizedBox(),
+        hasImage
+            ? Expanded(
+                flex: 6,
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(width: 3, color: lightTextColor),
+                  ),
+                  child: ListView.builder(
+                    itemCount: exam.images!.length,
+                    itemBuilder: (context, index) => CachedNetworkImage(
+                        imageUrl:
+                            "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+                  ),
+                ),
+              )
+            : const SizedBox(),
         Expanded(
           flex: hasImage ? 10 : 16,
           child: ListView.builder(
@@ -430,10 +436,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
                       .getSelectionNumber(exam.questions![index].id!),
                   questionContent: exam.questions![index].content!,
                   kind:
-                  exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
+                      exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
                   selected: selected!,
                   isEnable: widget.examinationId == -1,
-                  explain:  exam.questions![index].explain ?? '',
+                  explain: exam.questions![index].explain ?? '',
                 );
               }),
         ),
@@ -538,21 +544,125 @@ class _ExaminationPageState extends State<ExaminationPage> {
     );
   }
 
-  Widget _buildPart4() {
-    return Center(
-      child: Text("Part 4"),
+  Widget _buildPart5(Exams exam) {
+    var hasImage = exam.images?.isNotEmpty ?? false;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        hasImage
+            ? Expanded(
+                flex: 6,
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(width: 3, color: lightTextColor),
+                  ),
+                  child: ListView.builder(
+                    itemCount: exam.images!.length,
+                    itemBuilder: (context, index) => CachedNetworkImage(
+                        imageUrl:
+                            "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+                  ),
+                ),
+              )
+            : const SizedBox(),
+        Text(
+          exam.paragraph ?? '',
+          style: GoogleFonts.openSans(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.black,
+          ),
+        ),
+        Expanded(
+          flex: 10,
+          child: ListView.builder(
+            itemCount: exam.questions!.length,
+            itemBuilder: (context, index) {
+              var selected = examinationCubit.choices
+                  ?.firstWhere(
+                      (element) => element.id == exam.questions![index].id)
+                  .selected;
+              return OneChoice(
+                data: examinationCubit
+                    .convertQuestionToMap(exam.questions![index]),
+                onChanged: (nVal) => examinationCubit.chooseAnswer(
+                    nVal, exam.questions![index].id!),
+                questionNumber: examinationCubit
+                    .getSelectionNumber(exam.questions![index].id!),
+                questionContent: exam.questions![index].content!,
+                kind: exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
+                selected: selected!,
+                isEnable: widget.examinationId == -1,
+                explain: exam.questions![index].explain ?? '',
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildPart5() {
-    return Center(
-      child: Text("Part 5"),
-    );
-  }
-
-  Widget _buildPart6() {
-    return Center(
-      child: Text("Part 6"),
+  Widget _buildPart6(Exams exam) {
+    var hasImage = exam.images?.isNotEmpty ?? false;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        hasImage
+            ? Expanded(
+          flex: 6,
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(width: 3, color: lightTextColor),
+            ),
+            child: ListView.builder(
+              itemCount: exam.images!.length,
+              itemBuilder: (context, index) => CachedNetworkImage(
+                  imageUrl:
+                  "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+            ),
+          ),
+        )
+            : const SizedBox(),
+        Text(
+          exam.paragraph ?? '',
+          style: GoogleFonts.openSans(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.black,
+          ),
+        ),
+        Expanded(
+          flex: 10,
+          child: ListView.builder(
+            itemCount: exam.questions!.length,
+            itemBuilder: (context, index) {
+              var selected = examinationCubit.choices
+                  ?.firstWhere(
+                      (element) => element.id == exam.questions![index].id)
+                  .selected;
+              return OneChoice(
+                data: examinationCubit
+                    .convertQuestionToMap(exam.questions![index]),
+                onChanged: (nVal) => examinationCubit.chooseAnswer(
+                    nVal, exam.questions![index].id!),
+                questionNumber: examinationCubit
+                    .getSelectionNumber(exam.questions![index].id!),
+                questionContent: exam.questions![index].content!,
+                kind: exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
+                selected: selected!,
+                isEnable: widget.examinationId == -1,
+                explain: exam.questions![index].explain ?? '',
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -635,29 +745,31 @@ class _ExaminationPageState extends State<ExaminationPage> {
                 height: 24,
               ),
             ),
-            widget.examinationId == -1 ? GestureDetector(
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => NotificationDialog(
-                  title: 'Thông báo',
-                  content: 'Bạn có chắc chắn muốn nộp bài.',
-                  onPositiveTap: () {
-                    // Call API nộp bài -> Xong
-                    Navigator.pop(context);
-                    loadingCubit.showLoading();
-                    examinationCubit.submitExamination();
-                  },
-                  onNegativeTap: () => Navigator.pop(context),
-                  positive: 'Nộp bài',
-                  negative: 'Hủy',
-                ),
-              ),
-              child: Image.asset(
-                'assets/images/submit.png',
-                width: 32,
-                height: 32,
-              ),
-            ) : const SizedBox(),
+            widget.examinationId == -1
+                ? GestureDetector(
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => NotificationDialog(
+                        title: 'Thông báo',
+                        content: 'Bạn có chắc chắn muốn nộp bài.',
+                        onPositiveTap: () {
+                          // Call API nộp bài -> Xong
+                          Navigator.pop(context);
+                          loadingCubit.showLoading();
+                          examinationCubit.submitExamination();
+                        },
+                        onNegativeTap: () => Navigator.pop(context),
+                        positive: 'Nộp bài',
+                        negative: 'Hủy',
+                      ),
+                    ),
+                    child: Image.asset(
+                      'assets/images/submit.png',
+                      width: 32,
+                      height: 32,
+                    ),
+                  )
+                : const SizedBox(),
             Text(
               widget.examinationId == -1 ? "1:55:37" : "",
               style: textTitleStyle.copyWith(
@@ -685,22 +797,23 @@ class _ExaminationPageState extends State<ExaminationPage> {
             PageView.builder(
               reverse: false,
               physics: const ClampingScrollPhysics(),
-              itemCount: examinationCubit.choices?.length ?? 0,
+              itemCount: examinationCubit.examination?.test?.exams?.length ?? 0,
               controller: pageController,
-              itemBuilder: (context, index){
-                if(widget.test.typeTest!.id == 1){
+              itemBuilder: (context, index) {
+                if (widget.test.typeTest!.id == 1) {
                   return _buildPart1(
                       examinationCubit.examination!.test!.exams![index]);
-                }else if(widget.test.typeTest!.id == 2){
+                } else if (widget.test.typeTest!.id == 2) {
                   return _buildPart2(
                       examinationCubit.examination!.test!.exams![index]);
-                } else if(widget.test.typeTest!.id == 3){
+                } else if (widget.test.typeTest!.id == 3 ||
+                    widget.test.typeTest!.id == 4) {
                   return _buildPart3(
                       examinationCubit.examination!.test!.exams![index]);
-                }
-
-                else{
-                  return Container();
+                } else if (widget.test.typeTest!.id == 5) {
+                  return _buildPart5(examinationCubit.examination!.test!.exams![index]);
+                } else {
+                  return _buildPart6(examinationCubit.examination!.test!.exams![index]);
                 }
               },
               onPageChanged: (index) {
