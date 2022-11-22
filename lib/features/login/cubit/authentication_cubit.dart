@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:toeic/repositories/user_repository.dart';
 
 import '../../../hive/hive_service.dart';
 import '../../../repositories/authentication_repository.dart';
@@ -10,11 +11,10 @@ part 'authentication_cubit.freezed.dart';
 @injectable
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationRepository authenticationRepository;
-  // final DatabaseManager _databaseManager;
-  // GainCoinRepository gainCoinRepository;
+  UserRepository userRepository;
   HiveService hive = HiveService();
-  AuthenticationCubit(this.authenticationRepository,/* this.gainCoinRepository,
-      this._databaseManager*/)
+  AuthenticationCubit(this.authenticationRepository, this.userRepository,
+      /*this._databaseManager*/)
       : super(const AuthenticationState.unauthenticated()) {
     authenticationRepository.authenticationStateStream.listen((state) {
       emit(state);
@@ -25,52 +25,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     return authenticationRepository.dispatch();
   }
 
-  // Future<void> changeNotificationSetting() {
-  //   return authenticationRepository.changeNotificationSetting();
-  // }
-
-  // Future<void> saveToken() async {
-  //   try {
-  //     await authenticationRepository.saveToken();
-  //   } catch (e) {
-  //     fowLog(e);
-  //   }
-  // }
-
-  // void showLevel1Page() {
-  //   hive.updateLevel('level1');
-  //   dispatch();
-  // }
-  //
-  // void showLevel2Page() {
-  //   hive.updateLevel('level2');
-  //   dispatch();
-  // }
-  //
-  // void showIdealPartnerPage() {
-  //   hive.updateLevel('ideal-partner');
-  //   dispatch();
-  // }
-  //
-  // void showMainPage() {
-  //   hive.updateLevel('');
-  //   dispatch();
-  // }
-  //
-  // void showPurposePage() {
-  //   hive.updateLevel("purpose");
-  //   dispatch();
-  // }
-
-  // Future<void> logout() async {
-  //   await _databaseManager.messageDao.deleteTable();
-  //   await _databaseManager.conversationDao.deleteTable();
-  //   return authenticationRepository.logout();
-  // }
-
-  // void updateOnBoarding(bool value) {
-  //   authenticationRepository.updateOnboarding(value);
-  // }
 }
 
 @freezed

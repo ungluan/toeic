@@ -56,6 +56,7 @@ _i1.GetIt $initGetIt(
       () => _i11.AuthenticationRepositoryImpl(
             get<_i5.RestClientFactory>(),
             get<_i3.HiveService>(),
+            get<_i8.UserRepository>(),
           ));
   gh.lazySingleton<_i12.ExaminationRepository>(
       () => _i13.ExaminationRepositoryImpl(
@@ -80,8 +81,10 @@ _i1.GetIt $initGetIt(
         get<_i8.UserRepository>(),
         get<_i10.AuthenticationRepository>(),
       ));
-  gh.factory<_i20.AuthenticationCubit>(
-      () => _i20.AuthenticationCubit(get<_i10.AuthenticationRepository>()));
+  gh.factory<_i20.AuthenticationCubit>(() => _i20.AuthenticationCubit(
+        get<_i10.AuthenticationRepository>(),
+        get<_i8.UserRepository>(),
+      ));
   gh.factory<_i21.ExaminationCubit>(() => _i21.ExaminationCubit(
         get<_i10.AuthenticationRepository>(),
         get<_i12.ExaminationRepository>(),

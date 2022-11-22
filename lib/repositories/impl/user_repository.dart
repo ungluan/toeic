@@ -24,8 +24,8 @@ class UserRepositoryImpl extends UserRepository {
     return _tokenRestClient.updateLv1(data);
   }
 
-  // @override
-  // Future<Test> getTestByType(int typeId) {
-  //   return _tokenRestClient.getTestByType(typeId)
-  // }
+  @override
+  Future<User> saveActivityInApp() {
+    return _tokenRestClient.saveActivityInApp();
+  }
 }

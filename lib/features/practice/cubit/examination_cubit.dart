@@ -112,8 +112,9 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     }
   }
 
-  Future<void> submitExamination() async {
+  Future<void> submitExamination(int totalTime) async {
     Map<String, dynamic> data = {};
+    data['total_time'] = totalTime;
     for (var selected in choices ?? []) {
       data['${selected.id}'] = selected.selected;
     }

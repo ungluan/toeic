@@ -243,7 +243,7 @@ class _ListTestPageState extends State<ListTestPage> {
           style: GoogleFonts.openSans(
               fontSize: 18, color: darkBlueColor, fontWeight: FontWeight.bold),
         ),
-        leading: Container(
+        leading: widget.typeTestId != 8 ? Container(
           width: 24,
           height: 24,
           padding: const EdgeInsets.all(8),
@@ -253,7 +253,7 @@ class _ListTestPageState extends State<ListTestPage> {
             height: 24,
             color: orangeColor,
           ),
-        ),
+        ) : null,
       ),
       body: SafeArea(
         child: Stack(

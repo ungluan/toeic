@@ -32,4 +32,7 @@ abstract class TokenRestClient {
 
   @GET('/examination/{examination_id}')
   Future<Examination> getExamination(@Path('examination_id') int examinationId);
+
+  @PUT('user/save-activity-in-app')
+  Future<User> saveActivityInApp();
 }

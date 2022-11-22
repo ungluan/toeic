@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -48,10 +50,11 @@ class _ExaminationPageState extends State<ExaminationPage> {
   int preIndex = 0;
   ValueNotifier<int> curIndexNotifier = ValueNotifier(0);
   int pages = 0;
+  ValueNotifier<int> totalTime = ValueNotifier(0);
 
   LoadingCubit loadingCubit = LoadingCubit();
   late CountdownController countdownController;
-  bool isTimeOut = false;
+  late Timer timer ;
 
   void initPlayer(String audioUrl) async {
     await player.stop();
@@ -62,15 +65,37 @@ class _ExaminationPageState extends State<ExaminationPage> {
     duration.value = await player.getDuration() ?? Duration.zero;
   }
 
+  String convertTotalTimeToString(int totalTime){
+    int hour = totalTime ~/ 3600;
+    int minute = (totalTime - hour*3600)~/60;
+    int second = totalTime - hour*3600 - minute*60;
+    logger(hour);
+    logger(minute);
+    logger(second);
+
+    return "${convertNumberToString(hour)}:${convertNumberToString(minute)}:${convertNumberToString(second)}";
+  }
+
+  String convertNumberToString(int number){
+    if(number < 10) return '0$number';
+    return '$number';
+  }
+
   @override
   void initState() {
     super.initState();
     if (widget.examinationId != -1) {
       // loadingCubit.showLoading();
       examinationCubit.setupReadExamination(widget.examinationId);
+
     } else {
       // loadingCubit.showLoading();
       examinationCubit.setupTest(widget.test);
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+
+        totalTime.value+=1;
+        logger(totalTime.value);
+      });
     }
 
     player.onPositionChanged.listen((newPosition) {
@@ -105,6 +130,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
     super.dispose();
     await player.dispose();
     pageController.dispose();
+    timer.cancel();
   }
 
   Widget _buildPart1(Exams exam) {
@@ -612,22 +638,22 @@ class _ExaminationPageState extends State<ExaminationPage> {
       children: [
         hasImage
             ? Expanded(
-          flex: 6,
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(width: 3, color: lightTextColor),
-            ),
-            child: ListView.builder(
-              itemCount: exam.images!.length,
-              itemBuilder: (context, index) => CachedNetworkImage(
-                  imageUrl:
-                  "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
-            ),
-          ),
-        )
+                flex: 6,
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(width: 3, color: lightTextColor),
+                  ),
+                  child: ListView.builder(
+                    itemCount: exam.images!.length,
+                    itemBuilder: (context, index) => CachedNetworkImage(
+                        imageUrl:
+                            "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+                  ),
+                ),
+              )
             : const SizedBox(),
         Text(
           exam.paragraph ?? '',
@@ -666,10 +692,18 @@ class _ExaminationPageState extends State<ExaminationPage> {
     );
   }
 
-  Widget _buildPart7() {
-    return Center(
-      child: Text("Part 7"),
-    );
+  Widget _buildPart(Exams exam) {
+    if (exam.part!.id == 1) {
+      return _buildPart1(exam);
+    } else if (exam.part!.id == 2) {
+      return _buildPart2(exam);
+    } else if (exam.part!.id == 3 || exam.part!.id == 4) {
+      return _buildPart3(exam);
+    } else if (exam.part!.id == 5) {
+      return _buildPart5(exam);
+    } else {
+      return _buildPart6(exam);
+    }
   }
 
   _buildDescription() {
@@ -677,25 +711,6 @@ class _ExaminationPageState extends State<ExaminationPage> {
       child: Text("Desctiption"),
     );
   }
-
-  // Widget _buildPart(int index) {
-  //   if (index == 0 ||
-  //       index == 7 ||
-  //       index == 33 ||
-  //       index == 47 ||
-  //       index == 58 ||
-  //       index == 89 ||
-  //       index == 94) {
-  //     return _buildDescription();
-  //   }
-  //   if (index < 7) return _buildPart1();
-  //   if (index < 33) return _buildPart2();
-  //   if (index < 47) return _buildPart3();
-  //   if (index < 58) return _buildPart4();
-  //   if (index < 89) return _buildPart5();
-  //   if (index < 94) return _buildPart6();
-  //   return _buildPart7();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -756,7 +771,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                           // Call API nộp bài -> Xong
                           Navigator.pop(context);
                           loadingCubit.showLoading();
-                          examinationCubit.submitExamination();
+                          examinationCubit.submitExamination(totalTime.value);
                         },
                         onNegativeTap: () => Navigator.pop(context),
                         positive: 'Nộp bài',
@@ -770,13 +785,18 @@ class _ExaminationPageState extends State<ExaminationPage> {
                     ),
                   )
                 : const SizedBox(),
-            Text(
-              widget.examinationId == -1 ? "1:55:37" : "",
-              style: textTitleStyle.copyWith(
-                color: lightTextColor,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+            ValueListenableBuilder<int>(
+              valueListenable: totalTime,
+              builder: (context, value, _){
+                var time = convertTotalTimeToString(value);
+                return Text(
+                  widget.examinationId == -1 ? time : "",
+                  style: textTitleStyle.copyWith(
+                    color: lightTextColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),);
+              },
             ),
           ],
         ),
@@ -800,21 +820,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
               itemCount: examinationCubit.examination?.test?.exams?.length ?? 0,
               controller: pageController,
               itemBuilder: (context, index) {
-                if (widget.test.typeTest!.id == 1) {
-                  return _buildPart1(
-                      examinationCubit.examination!.test!.exams![index]);
-                } else if (widget.test.typeTest!.id == 2) {
-                  return _buildPart2(
-                      examinationCubit.examination!.test!.exams![index]);
-                } else if (widget.test.typeTest!.id == 3 ||
-                    widget.test.typeTest!.id == 4) {
-                  return _buildPart3(
-                      examinationCubit.examination!.test!.exams![index]);
-                } else if (widget.test.typeTest!.id == 5) {
-                  return _buildPart5(examinationCubit.examination!.test!.exams![index]);
-                } else {
-                  return _buildPart6(examinationCubit.examination!.test!.exams![index]);
-                }
+                return _buildPart(widget.test.exams![index]);
               },
               onPageChanged: (index) {
                 curIndexNotifier.value = index;

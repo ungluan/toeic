@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:toeic/apis/models/Verify_response.dart';
+import 'package:toeic/repositories/user_repository.dart';
 
 import '../../apis/models/user.dart';
 import '../../apis/rest_client.dart';
@@ -16,11 +17,12 @@ import '../authentication_repository.dart';
 
 @LazySingleton(as: AuthenticationRepository)
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
-  AuthenticationRepositoryImpl(RestClientFactory factory, this.hiveService)
+  AuthenticationRepositoryImpl(RestClientFactory factory, this.hiveService, this._userRepository)
       : _tokenRestClient = factory.obtainTokenRestClient(),
         _restClient = factory.obtainRestClient();
 
   final TokenRestClient _tokenRestClient;
+  final UserRepository _userRepository;
   final RestClient _restClient;
   final HiveService hiveService;
 
@@ -45,6 +47,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     if (hiveService.token.isNotEmpty) {
       try{
         final userInfo = await getUserInfo();
+        // Update Routine với thời gian??
+        await _userRepository.saveActivityInApp();
         if (userInfo.updatedAt == null) {
           authenticationStateSubject.add(const AuthenticationState.level1());
         } else {authenticationStateSubject.add(const AuthenticationState.authenticated());
@@ -83,72 +87,6 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     }
   }
 
-  // Future<void> logout() async {
-  //   try {
-  //     final deviceId = await getDeviceId();
-  //     final data = {'device_id': deviceId};
-  //     await _tokenRestClient.logout(data);
-  //     hiveService.clearToken();
-  //     authenticationStateSubject.add(AuthenticationState.unauthenticated());
-  //   } catch (e) {
-  //     logger(e);
-  //   }
-  // }
-
-  // @override
-  // Future<DataResponse<UserResponse>> register(Map<String, dynamic> data) async {
-  //   if (hiveService.inviteUserId.isNotEmpty) {
-  //     data['userId'] = hiveService.inviteUserId;
-  //     hiveService.clearInviteUserId();
-  //   }
-  //   final response = await _restClient.register(data);
-  //   dataSubject.add(data);
-  //   return response;
-  // }
-  //
-  // @override
-  // Future<DataResponse<String>> sendOtp(String phoneNumber, int register) {
-  //   final Map<String, dynamic> data = {
-  //     'phoneNumber': phoneNumber,
-  //     'is_register': register
-  //   };
-  //   // return Future.delayed(
-  //   //     Duration(milliseconds: 1000),
-  //   //     () => DataResponse(
-  //   //         error: false, data: "data", message: "sendOtp failed"));
-  //   return _restClient.sendOtp(data);
-  // }
-  //
-  // @override
-  // Future<DataResponse<String>> verifyOtp(String otp, String phoneNumber) {
-  //   final Map<String, dynamic> data = {'otp': otp, 'phone': phoneNumber};
-  //   // return Future.delayed(
-  //   //     Duration(milliseconds: 1000),
-  //   //     () => DataResponse(
-  //   //         error: false, data: "data", message: "verifyOtp failed"));
-  //   return _restClient.verifyOtp(data);
-  // }
-  //
-  // @override
-  // Future<DataResponse<Object>> resetPassword(
-  //     String password, String phone) async {
-  //   final Map<String, dynamic> data = {
-  //     'password': password,
-  //     'password_confirmation': password,
-  //     'phone': phone
-  //   };
-  //   final response = await _restClient.resetPassword(data);
-  //   dataSubject.add(data);
-  //   return response;
-  // }
-
-  // @override
-  // Future<User> getUserInfo() async {
-  //   final response = await _tokenRestClient.getUserInfo();
-  //   userSubject.add(response.data);
-  //   // hiveService.updateUserId(response.data.id ?? -1);
-  //   return response;
-  // }
 
   @override
   User? get user => userSubject.value;
