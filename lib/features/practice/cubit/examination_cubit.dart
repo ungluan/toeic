@@ -128,6 +128,16 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }
   }
+
+  Future<void> getListExaminationByUser() async{
+    try{
+      emit(const ExaminationState.loading());
+      var response = await examinationRepository.getListExaminationByUser();
+      emit(ExaminationStateHistory(response));
+    }on DioError catch(e){
+      emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
+    }
+  }
 }
 
 @freezed
@@ -142,5 +152,8 @@ class ExaminationState with _$ExaminationState {
   const factory ExaminationState.started() = ExaminationStateStarted;
 
   const factory ExaminationState.submitted() = ExaminationStateSubmitted;
+
+  const factory ExaminationState.history(List<Examination> examinations) =
+  ExaminationStateHistory;
 // const factory ExaminationState.chooseAnswer() = ExaminationStateChooseAnswer;
 }

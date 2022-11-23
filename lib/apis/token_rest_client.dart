@@ -35,4 +35,7 @@ abstract class TokenRestClient {
 
   @PUT('user/save-activity-in-app')
   Future<User> saveActivityInApp();
+
+  @GET('/examination/by-user')
+  Future<List<Examination>> getListExaminationByUser();
 }

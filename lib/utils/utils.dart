@@ -1,14 +1,20 @@
 import 'dart:core';
 import 'dart:core';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../apis/models/gender.dart';
 import '../features/practice/practice_page.dart';
+import '../ui_kits/colors.dart';
 
-const String FIREBASE_URL = "https://firebasestorage.googleapis.com/v0/b/toeic-bc79c.appspot.com/o";
+const String FIREBASE_URL =
+    "https://firebasestorage.googleapis.com/v0/b/toeic-bc79c.appspot.com/o";
 
 DateTime convertStringToDateTime(String val) {
   var token = val.split('/');
@@ -178,8 +184,87 @@ String formatTime(Duration duration) {
   return [if (duration.inHours > 0) hours, minutes, seconds].join(':');
 }
 
-extension EqualD on double{
-  bool equalWithIntNumber({int? value}){
-    return this/(value??toInt()) == 1.0;
+extension EqualD on double {
+  bool equalWithIntNumber({int? value}) {
+    return this / (value ?? toInt()) == 1.0;
   }
+}
+
+Widget makeFowImage(String? url,
+        {double size = 100, double ratio = 1, double borderRadius = 0}) =>
+    url?.isNotEmpty == true
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: CachedNetworkImage(
+              imageUrl: "$FIREBASE_URL/$url?alt=media",
+              fit: BoxFit.cover,
+              width: size,
+              height: ratio * size,
+              placeholder: (context, item) => Container(
+                color: Colors.grey,
+              ),
+            ),
+          )
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: Container(
+              width: size,
+              color: Colors.grey,
+              height: ratio * size,
+            ),
+          );
+
+Widget buildTestItem() {
+  return Card(
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    shadowColor: blueColor,
+    borderOnForeground: true,
+    elevation: 4,
+    clipBehavior: Clip.antiAliasWithSaveLayer,
+    semanticContainer: true,
+    child: Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Text 1',
+            style: GoogleFonts.openSans(
+                fontSize: 16,
+                color: darkBlueColor,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Thời gian: 120 phút | Câu hỏi: 200',
+            style: GoogleFonts.openSans(fontSize: 14, color: lightTextColor),
+          ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () => {},
+                child: Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  child: Chip(
+                    backgroundColor: primaryColor.withOpacity(0.5),
+                    elevation: 2,
+                    padding: EdgeInsets.all(8),
+                    label: Text('10/990'),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => {},
+                child: Chip(
+                  elevation: 2,
+                  backgroundColor: Colors.green.withOpacity(0.8),
+                  padding: EdgeInsets.all(8),
+                  label: Text('Làm lại'),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    ),
+  );
 }

@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toeic/features/activity/activity_page.dart';
 import 'package:toeic/features/exam/exam_page.dart';
 import 'package:toeic/features/home/home_page.dart';
 import 'package:toeic/features/practice/practice_page.dart';
@@ -29,7 +30,7 @@ class _MainPageState extends State<MainPage> {
       HomePage(),
       PracticePage(),
       ExamPage(),
-      SettingsPage(),
+      ActivityPage(),
     ];
   }
 

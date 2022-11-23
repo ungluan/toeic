@@ -23,6 +23,7 @@ mixin _$ExaminationState {
     required TResult Function(Test data, List<Choice> selections) loaded,
     required TResult Function() started,
     required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,6 +33,7 @@ mixin _$ExaminationState {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,6 +43,7 @@ mixin _$ExaminationState {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -51,6 +54,7 @@ mixin _$ExaminationState {
     required TResult Function(ExaminationStateLoaded value) loaded,
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,6 +64,7 @@ mixin _$ExaminationState {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,6 +74,7 @@ mixin _$ExaminationState {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -139,6 +145,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     required TResult Function(Test data, List<Choice> selections) loaded,
     required TResult Function() started,
     required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
   }) {
     return loading();
   }
@@ -151,6 +158,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
   }) {
     return loading?.call();
   }
@@ -163,6 +171,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -179,6 +188,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     required TResult Function(ExaminationStateLoaded value) loaded,
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
   }) {
     return loading(this);
   }
@@ -191,6 +201,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
   }) {
     return loading?.call(this);
   }
@@ -203,6 +214,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -288,6 +300,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     required TResult Function(Test data, List<Choice> selections) loaded,
     required TResult Function() started,
     required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
   }) {
     return failed(error);
   }
@@ -300,6 +313,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
   }) {
     return failed?.call(error);
   }
@@ -312,6 +326,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -328,6 +343,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     required TResult Function(ExaminationStateLoaded value) loaded,
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
   }) {
     return failed(this);
   }
@@ -340,6 +356,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
   }) {
     return failed?.call(this);
   }
@@ -352,6 +369,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -459,6 +477,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     required TResult Function(Test data, List<Choice> selections) loaded,
     required TResult Function() started,
     required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
   }) {
     return loaded(data, selections);
   }
@@ -471,6 +490,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
   }) {
     return loaded?.call(data, selections);
   }
@@ -483,6 +503,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -499,6 +520,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     required TResult Function(ExaminationStateLoaded value) loaded,
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
   }) {
     return loaded(this);
   }
@@ -511,6 +533,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
   }) {
     return loaded?.call(this);
   }
@@ -523,6 +546,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -592,6 +616,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     required TResult Function(Test data, List<Choice> selections) loaded,
     required TResult Function() started,
     required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
   }) {
     return started();
   }
@@ -604,6 +629,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
   }) {
     return started?.call();
   }
@@ -616,6 +642,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -632,6 +659,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     required TResult Function(ExaminationStateLoaded value) loaded,
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
   }) {
     return started(this);
   }
@@ -644,6 +672,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
   }) {
     return started?.call(this);
   }
@@ -656,6 +685,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -718,6 +748,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     required TResult Function(Test data, List<Choice> selections) loaded,
     required TResult Function() started,
     required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
   }) {
     return submitted();
   }
@@ -730,6 +761,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
   }) {
     return submitted?.call();
   }
@@ -742,6 +774,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function(Test data, List<Choice> selections)? loaded,
     TResult Function()? started,
     TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
     required TResult orElse(),
   }) {
     if (submitted != null) {
@@ -758,6 +791,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     required TResult Function(ExaminationStateLoaded value) loaded,
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
   }) {
     return submitted(this);
   }
@@ -770,6 +804,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
   }) {
     return submitted?.call(this);
   }
@@ -782,6 +817,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function(ExaminationStateLoaded value)? loaded,
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
     required TResult orElse(),
   }) {
     if (submitted != null) {
@@ -793,4 +829,171 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
 
 abstract class ExaminationStateSubmitted implements ExaminationState {
   const factory ExaminationStateSubmitted() = _$ExaminationStateSubmitted;
+}
+
+/// @nodoc
+abstract class _$$ExaminationStateHistoryCopyWith<$Res> {
+  factory _$$ExaminationStateHistoryCopyWith(_$ExaminationStateHistory value,
+          $Res Function(_$ExaminationStateHistory) then) =
+      __$$ExaminationStateHistoryCopyWithImpl<$Res>;
+  $Res call({List<Examination> examinations});
+}
+
+/// @nodoc
+class __$$ExaminationStateHistoryCopyWithImpl<$Res>
+    extends _$ExaminationStateCopyWithImpl<$Res>
+    implements _$$ExaminationStateHistoryCopyWith<$Res> {
+  __$$ExaminationStateHistoryCopyWithImpl(_$ExaminationStateHistory _value,
+      $Res Function(_$ExaminationStateHistory) _then)
+      : super(_value, (v) => _then(v as _$ExaminationStateHistory));
+
+  @override
+  _$ExaminationStateHistory get _value =>
+      super._value as _$ExaminationStateHistory;
+
+  @override
+  $Res call({
+    Object? examinations = freezed,
+  }) {
+    return _then(_$ExaminationStateHistory(
+      examinations == freezed
+          ? _value._examinations
+          : examinations // ignore: cast_nullable_to_non_nullable
+              as List<Examination>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ExaminationStateHistory implements ExaminationStateHistory {
+  const _$ExaminationStateHistory(final List<Examination> examinations)
+      : _examinations = examinations;
+
+  final List<Examination> _examinations;
+  @override
+  List<Examination> get examinations {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_examinations);
+  }
+
+  @override
+  String toString() {
+    return 'ExaminationState.history(examinations: $examinations)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ExaminationStateHistory &&
+            const DeepCollectionEquality()
+                .equals(other._examinations, _examinations));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_examinations));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$ExaminationStateHistoryCopyWith<_$ExaminationStateHistory> get copyWith =>
+      __$$ExaminationStateHistoryCopyWithImpl<_$ExaminationStateHistory>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function(Test data, List<Choice> selections) loaded,
+    required TResult Function() started,
+    required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
+  }) {
+    return history(examinations);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function(Test data, List<Choice> selections)? loaded,
+    TResult Function()? started,
+    TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
+  }) {
+    return history?.call(examinations);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function(Test data, List<Choice> selections)? loaded,
+    TResult Function()? started,
+    TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
+    required TResult orElse(),
+  }) {
+    if (history != null) {
+      return history(examinations);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ExaminationStateLoading value) loading,
+    required TResult Function(ExaminationStateFailed value) failed,
+    required TResult Function(ExaminationStateLoaded value) loaded,
+    required TResult Function(ExaminationStateStarted value) started,
+    required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
+  }) {
+    return history(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ExaminationStateLoading value)? loading,
+    TResult Function(ExaminationStateFailed value)? failed,
+    TResult Function(ExaminationStateLoaded value)? loaded,
+    TResult Function(ExaminationStateStarted value)? started,
+    TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
+  }) {
+    return history?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ExaminationStateLoading value)? loading,
+    TResult Function(ExaminationStateFailed value)? failed,
+    TResult Function(ExaminationStateLoaded value)? loaded,
+    TResult Function(ExaminationStateStarted value)? started,
+    TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
+    required TResult orElse(),
+  }) {
+    if (history != null) {
+      return history(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ExaminationStateHistory implements ExaminationState {
+  const factory ExaminationStateHistory(final List<Examination> examinations) =
+      _$ExaminationStateHistory;
+
+  List<Examination> get examinations;
+  @JsonKey(ignore: true)
+  _$$ExaminationStateHistoryCopyWith<_$ExaminationStateHistory> get copyWith =>
+      throw _privateConstructorUsedError;
 }

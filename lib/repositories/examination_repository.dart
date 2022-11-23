@@ -8,4 +8,6 @@ abstract class ExaminationRepository {
   Future<Examination> submitExamination(int examinationId, Map<String, dynamic> data);
 
   Future<Examination> getExamination(int examinationId);
+
+  Future<List<Examination>> getListExaminationByUser();
 }

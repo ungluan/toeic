@@ -34,6 +34,7 @@ class _ListTestPageState extends State<ListTestPage> {
   final testCubit = getIt<TestCubit>();
   final loadingCubit = getIt<LoadingCubit>();
   final examinationCubit = getIt<ExaminationCubit>();
+
   @override
   void initState() {
     super.initState();
@@ -83,9 +84,9 @@ class _ListTestPageState extends State<ListTestPage> {
                 'Bài thi ${test.id}',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.openSans(
-                    fontSize: 16,
-                    color: darkBlueColor,
-                    fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: darkBlueColor,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -125,7 +126,7 @@ class _ListTestPageState extends State<ListTestPage> {
                       margin: const EdgeInsets.only(left: 8, right: 16),
                       child: Row(
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           examination != null
                               ? InkWell(
                                   onTap: () => {},
@@ -144,21 +145,25 @@ class _ListTestPageState extends State<ListTestPage> {
                               : const SizedBox(),
                           InkWell(
                             onTap: () async {
-                              if(examination != null){
-                                await examinationCubit.setupReadExamination(examination.id!);
+                              if (examination != null) {
+                                await examinationCubit
+                                    .setupReadExamination(examination.id!);
                               }
-                              if(mounted){
-                                Navigator.of(context).push(ExaminationPage.route( test,
-                                    examinationId: examination?.id ?? -1));
+                              if (mounted) {
+                                Navigator.of(context).push(
+                                    ExaminationPage.route(test,
+                                        examinationId: examination?.id ?? -1));
                               }
                             },
                             child: Chip(
                               elevation: 0,
                               backgroundColor: Colors.green.withOpacity(0.8),
                               padding: const EdgeInsets.all(8),
-                              label: Text(examination != null
-                                  ? 'Xem chi tiết'
-                                  : 'Làm bài'),
+                              label: Text(
+                                examination != null
+                                    ? 'Xem chi tiết'
+                                    : 'Làm bài',
+                              ),
                             ),
                           ),
                         ],
@@ -243,17 +248,19 @@ class _ListTestPageState extends State<ListTestPage> {
           style: GoogleFonts.openSans(
               fontSize: 18, color: darkBlueColor, fontWeight: FontWeight.bold),
         ),
-        leading: widget.typeTestId != 8 ? Container(
-          width: 24,
-          height: 24,
-          padding: const EdgeInsets.all(8),
-          child: SvgPicture.asset(
-            'assets/images/arrow-left-icon.svg',
-            width: 24,
-            height: 24,
-            color: orangeColor,
-          ),
-        ) : null,
+        leading: widget.typeTestId != 8
+            ? Container(
+                width: 24,
+                height: 24,
+                padding: const EdgeInsets.all(8),
+                child: SvgPicture.asset(
+                  'assets/images/arrow-left-icon.svg',
+                  width: 24,
+                  height: 24,
+                  color: orangeColor,
+                ),
+              )
+            : null,
       ),
       body: SafeArea(
         child: Stack(

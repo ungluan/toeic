@@ -16,61 +16,9 @@ class ExamPage extends StatefulWidget {
   State<ExamPage> createState() => _ExamPageState();
 }
 
-class _ExamPageState extends State<ExamPage> {
+class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin {
   final testCubit = getIt<TestCubit>();
   final loadingCubit = getIt<LoadingCubit>();
-  Widget _buildTestItem() {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shadowColor: blueColor,
-      borderOnForeground: true,
-      elevation: 4,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      semanticContainer: true,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Text 1',
-              style: GoogleFonts.openSans(
-                  fontSize: 16,
-                  color: darkBlueColor,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text('Thời gian: 120 phút | Câu hỏi: 200', style: GoogleFonts.openSans(fontSize: 14, color: lightTextColor),),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: ()=>{},
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    child: Chip(
-                      backgroundColor: primaryColor.withOpacity(0.5),
-                      elevation: 2,
-                      padding: EdgeInsets.all(8),
-                      label: Text('10/990'),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: ()=>{},
-                  child: Chip(
-                    elevation: 2,
-                    backgroundColor: Colors.green.withOpacity(0.8),
-                    padding: EdgeInsets.all(8),
-                    label: Text('Làm lại'),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
 
   @override
   void initState() {
@@ -91,35 +39,10 @@ class _ExamPageState extends State<ExamPage> {
       backgroundColor: Colors.white,
       body: ListTestPage(typeTestId: 8)
     );
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Container(
-            width: double.infinity,
-            height: 60,
-            color: darkBlueColor,
-            child: const Center(
-              child: Text('Luyện thi'),
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          // child: ListView.builder(itemBuilder: ),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height - 80,
-            child: BlocBuilder<TestCubit, TestState>(
-              bloc: testCubit,
-              builder: (context, state){
-                return ListView.builder(
-                  itemBuilder: (context, index) => _buildTestItem(),
-                  itemCount: 10,
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
   }
+
+
+  @override
+  bool get wantKeepAlive => true;
 }
 

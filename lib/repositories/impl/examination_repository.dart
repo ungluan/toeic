@@ -31,4 +31,9 @@ class ExaminationRepositoryImpl extends ExaminationRepository {
   Future<Examination> getExamination(int examinationId) {
     return _tokenRestClient.getExamination(examinationId);
   }
+
+  @override
+  Future<List<Examination>> getListExaminationByUser() {
+    return _tokenRestClient.getListExaminationByUser();
+  }
 }
