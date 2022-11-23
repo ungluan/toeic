@@ -25,6 +25,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     return authenticationRepository.dispatch();
   }
 
+  Future<void> logout() async {
+    hive.updateToken('');
+    authenticationRepository.dispatch();
+  }
+
 }
 
 @freezed

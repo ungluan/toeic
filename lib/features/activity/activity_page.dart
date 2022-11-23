@@ -13,6 +13,8 @@ import '../../ui_kits/widgets/cubits/loading_cubit.dart';
 import '../../ui_kits/widgets/views/notification_dialog.dart';
 import '../../ui_kits/widgets/views/sbox_loading.dart';
 import '../../utils/utils.dart';
+import '../login/cubit/authentication_cubit.dart';
+import '../login/view/login_page.dart';
 import 'history_page.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -31,6 +33,7 @@ class _ActivityPageState extends State<ActivityPage>
   // UserCubit get userCubit => context.read();
   // UpdateProfileCubit updateCubit = getIt<UpdateProfileCubit>();
   // bool isNotification = true;
+  final authenticationCubit = getIt<AuthenticationCubit>();
   ValueNotifier<File?>? fileNotifier = ValueNotifier(null);
   LoadingCubit loadingCubit = getIt<LoadingCubit>();
 
@@ -171,7 +174,7 @@ class _ActivityPageState extends State<ActivityPage>
         onPositiveTap: () async {
           Navigator.pop(context);
           loadingCubit.showLoading();
-          // await authenCubit.logout();
+          await authenticationCubit.logout();
           loadingCubit.hideLoading();
         },
         onNegativeTap: () {
