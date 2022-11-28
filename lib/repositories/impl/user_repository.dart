@@ -28,4 +28,14 @@ class UserRepositoryImpl extends UserRepository {
   Future<User> saveActivityInApp() {
     return _tokenRestClient.saveActivityInApp();
   }
+
+  @override
+  Future<String?> updateAvatar(FormData formData) {
+    return _tokenRestClient.updateAvatar(formData);
+  }
+
+  @override
+  Future<String?> updateUserByAdmin(int userId, FormData formData) {
+    return _tokenRestClient.updateUserByAdmin(userId, formData);
+  }
 }

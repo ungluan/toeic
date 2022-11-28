@@ -6,8 +6,11 @@ import 'package:toeic/features/exam/exam_page.dart';
 import 'package:toeic/features/home/home_page.dart';
 import 'package:toeic/features/practice/practice_page.dart';
 import 'package:toeic/features/settings/settings_page.dart';
+import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/colors.dart';
+import 'package:toeic/utils/utils.dart';
 
+import '../services/notification.dart';
 import '../utils/app_color.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,6 +18,10 @@ class MainPage extends StatefulWidget {
 
   @override
   State<MainPage> createState() => _MainPageState();
+
+  static Route route(){
+    return MaterialPageRoute(builder: (_)=> MainPage());
+  }
 }
 
 class _MainPageState extends State<MainPage> {
@@ -22,6 +29,7 @@ class _MainPageState extends State<MainPage> {
   late PageController _pageController;
   late List<Widget> _widgetOptions;
   late String _title;
+  final notificationService = getIt<NotificationService>();
   @override
   void initState() {
     super.initState();
@@ -32,6 +40,13 @@ class _MainPageState extends State<MainPage> {
       ExamPage(),
       ActivityPage(),
     ];
+    notificationService.selectNotificationStream.listen((event) {
+      logger(event);
+      // if(event == 'remote'){
+        _pageController.jumpTo(1);
+      // }
+      // notificationService.showNotification(id: 1, title: "Có công mài sắt có ngày nên kim.", body: "Tới giờ ôn luyện rồi, chăm chỉ luyện tập để có một kết quả vượt qua cả sự mong đợi.", payload: "Payload");
+    });
   }
 
   @override

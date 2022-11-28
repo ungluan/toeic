@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:toeic/apis/rest_client.dart';
+import 'package:toeic/utils/utils.dart';
 
 import '../hive/hive_service.dart';
 import '../injection/injection.dart';
@@ -24,6 +25,7 @@ class RestClientFactory {
     dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       dio.interceptors.requestLock.lock();
       String accessToken = hiveService.token;
+      logger(accessToken);
       options.headers["Authorization"] = "Bearer $accessToken";
       dio.interceptors.requestLock.unlock();
       if (options.data is FormData) {

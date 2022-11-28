@@ -17,7 +17,8 @@ import '../authentication_repository.dart';
 
 @LazySingleton(as: AuthenticationRepository)
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
-  AuthenticationRepositoryImpl(RestClientFactory factory, this.hiveService, this._userRepository)
+  AuthenticationRepositoryImpl(
+      RestClientFactory factory, this.hiveService, this._userRepository)
       : _tokenRestClient = factory.obtainTokenRestClient(),
         _restClient = factory.obtainRestClient();
 
@@ -45,19 +46,24 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   Future<void> dispatch() async {
     if (hiveService.token.isNotEmpty) {
-      try{
+      try {
         final userInfo = await getUserInfo();
+        userSubject.add(userInfo);
         // Update Routine với thời gian??
         await _userRepository.saveActivityInApp();
         if (userInfo.updatedAt == null) {
           authenticationStateSubject.add(const AuthenticationState.level1());
-        } else {authenticationStateSubject.add(const AuthenticationState.authenticated());
+        } else {
+          authenticationStateSubject
+              .add(const AuthenticationState.authenticated());
         }
-      }on DioError catch(e){
-        authenticationStateSubject.add(const AuthenticationState.unauthenticated());
+      } on DioError catch (e) {
+        authenticationStateSubject
+            .add(const AuthenticationState.unauthenticated());
       }
     } else {
-      authenticationStateSubject.add(const AuthenticationState.unauthenticated());
+      authenticationStateSubject
+          .add(const AuthenticationState.unauthenticated());
     }
   }
 
@@ -86,7 +92,6 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       }
     }
   }
-
 
   @override
   User? get user => userSubject.value;

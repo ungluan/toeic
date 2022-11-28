@@ -48,6 +48,7 @@ String? validatorPassword(String? password) {
   }
 }
 
+
 String? validatorPhoneNumber(String? phoneNumber) {
   // final nineNumberPhone = trimStart(phoneNumber);
   if ((phoneNumber?.length == 9 ||
@@ -135,6 +136,10 @@ extension Date on String {
   String convertToDate() {
     var token = split('/');
     return '${token[2]}-${token[1]}-${token[0]}';
+  }
+  String convertToBirthDate(){
+    var token = split('-');
+    return '${token[2]}/${token[1]}/${token[0]}';
   }
 }
 

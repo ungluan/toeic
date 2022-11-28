@@ -38,4 +38,13 @@ abstract class TokenRestClient {
 
   @GET('/examination/by-user')
   Future<List<Examination>> getListExaminationByUser();
+
+  @PUT('/user/update-by-user')
+  Future<String> updateUserByAdmin(@Query('user_id') int userId, @Body() FormData formData);
+
+  @PATCH('/user/update-avatar')
+  Future<String?> updateAvatar(@Body() FormData formData);
+
+  @GET('/user/{user_id}')
+  Future<User> getUserById(@Path('user_id') int userId);
 }

@@ -1,20 +1,19 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:toeic/features/activity/cubit/user_cubit.dart';
+import 'package:toeic/features/edit_profile/edit_profile_page.dart';
 import '../../injection/injection.dart';
+import '../../services/notification.dart';
 import '../../ui_kits/colors.dart';
-import '../../ui_kits/ui_kit.dart';
 import '../../ui_kits/widgets/cubits/loading_cubit.dart';
 import '../../ui_kits/widgets/views/notification_dialog.dart';
 import '../../ui_kits/widgets/views/sbox_loading.dart';
 import '../../utils/utils.dart';
 import '../login/cubit/authentication_cubit.dart';
-import '../login/view/login_page.dart';
 import 'history_page.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -30,12 +29,12 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage>
     with AutomaticKeepAliveClientMixin {
-  // UserCubit get userCubit => context.read();
-  // UpdateProfileCubit updateCubit = getIt<UpdateProfileCubit>();
-  // bool isNotification = true;
+  UserCubit userCubit = getIt<UserCubit>();
   final authenticationCubit = getIt<AuthenticationCubit>();
   ValueNotifier<File?>? fileNotifier = ValueNotifier(null);
   LoadingCubit loadingCubit = getIt<LoadingCubit>();
+
+  final notificationService = getIt<NotificationService>();
 
   void _interceptTap(DrawerItem item) {
     switch (item) {
@@ -62,10 +61,20 @@ class _ActivityPageState extends State<ActivityPage>
         Navigator.of(context).push(HistoryPage.route());
         break;
       case DrawerItem.UpdateProfile:
-        // TODO: Handle this case.
+        Navigator.of(context).push(EditProfilePage.route(cubit: userCubit));
         break;
       case DrawerItem.Notification:
-        // TODO: Handle this case.
+        final time = await showPicker(context);
+        if (time != null) {
+          notificationService.scheduleNotification(
+            id: 0,
+            title: "Có công mài sắt có ngày nên kim.",
+            body:
+                "Tới giờ ôn luyện rồi, chăm chỉ luyện tập để có một kết quả vượt qua cả sự mong đợi.",
+            hour: time.hour,
+            minute: time.minute,
+          );
+        }
         break;
       case DrawerItem.Policy:
         // TODO: Handle this case.
@@ -73,10 +82,26 @@ class _ActivityPageState extends State<ActivityPage>
     }
   }
 
+  Future<TimeOfDay?> showPicker(BuildContext context) => showTimePicker(
+        initialTime: TimeOfDay.now(),
+        context: context,
+        confirmText: 'Nhắc nhở',
+        cancelText: 'Hủy',
+        helpText: 'Vui lòng chọn giờ bạn muốn được nhắc nhở',
+        hourLabelText: 'Giờ',
+        minuteLabelText: 'Phút',
+        initialEntryMode: TimePickerEntryMode.input,
+      );
+
   @override
   void initState() {
     super.initState();
     setup();
+
+    userCubit.stream.listen((state) {
+      print("OOKOKOKO");
+      logger(userCubit.user);
+    });
   }
 
   void setup() async {}
@@ -128,20 +153,11 @@ class _ActivityPageState extends State<ActivityPage>
   }
 
   Future<void> _onPressed() async {
-    // final Map<String, dynamic> data = {
-    //   'full_name': userCubit.user!.fullName,
-    //   'birthday': userCubit.user!.birthday,
-    //   'gender': userCubit.user!.gender!.id,
-    //   'sexuals[]': [1],
-    //   userCubit.user!.sexualPrientations!.map((e) => e.id).toList(),
-    // 'show_me': userCubit.user!.showGender?.id ?? 0,
-    // 'app_lang': userCubit.userRepository.getActiveLanguageCode(),
-    // 'short_caption': userCubit.user!.shortCaption,
-  }
 
-// loadingCubit.showLoading();
-// await updateCubit.updateProfileLevel1(fileNotifier!.value!, data);
-// loadingCubit.hideLoading();
+    loadingCubit.showLoading();
+    await userCubit.updateAvatar(fileNotifier!.value!);
+    loadingCubit.hideLoading();
+  }
 
   void showUpdateProfileDialog() {
     // showDialog(
@@ -228,187 +244,97 @@ class _ActivityPageState extends State<ActivityPage>
           children: [
             CustomScrollView(
               slivers: [
-                // BlocBuilder<UserCubit, UserState>(
-                //     bloc: userCubit,
-                //     buildWhen: (p, c) {
-                //       return c is UserStateInfoLoaded;
-                //     },
-                //     builder: (context, state) {
-                //       return state.maybeWhen(
-                //           orElse: () => SliverToBoxAdapter(child: Container()),
-                //           loaded: (user) {
-                //             return SliverToBoxAdapter(
-                //               child: Padding(
-                //                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                //                 child: Column(
-                //                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                //                   children: [
-                //                     const SizedBox(
-                //                       height: 25,
-                //                     ),
-                //                     const SizedBox(height: 12),
-                //                     Row(
-                //                       children: [
-                //                         Stack(
-                //                           alignment: Alignment.bottomRight,
-                //                           children: [
-                //                             makeFowImage(
-                //                               "${user.avatar}",
-                //                               size: 112,
-                //                               ratio: 1,
-                //                               borderRadius: 16,
-                //                             ),
-                //                             GestureDetector(
-                //                               onTap: () {
-                //                                 showPickImageBottomSheet();
-                //                               },
-                //                               child: SvgPicture.asset(
-                //                                   "assets/images/la-user-edit.svg"),
-                //                             ),
-                //                           ],
-                //                         ),
-                //                         const SizedBox(width: 16),
-                //                         Expanded(
-                //                           child: Column(
-                //                             crossAxisAlignment:
-                //                             CrossAxisAlignment.start,
-                //                             mainAxisAlignment:
-                //                             MainAxisAlignment.spaceAround,
-                //                             children: [
-                //                               Text(
-                //                                 user.userFullTitle,
-                //                                 textAlign: TextAlign.left,
-                //                                 style: GoogleFonts.poppins(
-                //                                     fontSize: 16,
-                //                                     fontWeight: FontWeight.w600),
-                //                               ),
-                //                             ],
-                //                           ),
-                //                         )
-                //                       ],
-                //                     ),
-                //                     const SizedBox(height: 24),
-                //                     Divider(color: blueColor),
-                //                     const SizedBox(height: 16),
-                //                     // buildTitle('1'),
-                //                     const SizedBox(height: 12),
-                //                     buildContent('assets/images/profile-icon.svg',
-                //                         'Cập nhật thông tin', onTap: () {
-                //                           _interceptTap(DrawerItem.UpdateProfile);
-                //                         }, enable: true),
-                //                     const SizedBox(height: 16),
-                //                     buildContent(
-                //                         'assets/images/partner-heart-icon.svg',
-                //                         'Lịch sử luyện tập', onTap: () {
-                //                       _interceptTap(DrawerItem.History);
-                //                     }, enable: true),
-                //                     const SizedBox(height: 16),
-                //                     buildContent('assets/images/message-text.svg',
-                //                         'Thời gian nhắc nhở', onTap: () {
-                //                           _interceptTap(DrawerItem.Notification);
-                //                         }, enable: true),
-                //                     const SizedBox(height: 16),
-                //                     buildContent('assets/images/give-coin-icon.svg',
-                //                         'Điều khoản sử dụng', onTap: () {
-                //                           _interceptTap(DrawerItem.Policy);
-                //                         }, enable: true),
-                //                     const SizedBox(height: 16),
-                //                     buildContent(
-                //                         'assets/images/logout.svg', 'Đăng xuất',
-                //                         onTap: () {
-                //                           logout();
-                //                         }, enable: true),
-                //                     const SizedBox(
-                //                       height: 32,
-                //                     ),
-                //                   ],
-                //                 ),
-                //               ),
-                //             );
-                //           });
-                //     }),
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                makeFowImage(
-                                  "${''}",
-                                  size: 112,
-                                  ratio: 1,
-                                  borderRadius: 16,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    showPickImageBottomSheet();
-                                  },
-                                  child: SvgPicture.asset(
-                                      "assets/images/la-user-edit.svg"),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                    child: BlocBuilder<UserCubit, UserState>(
+                      bloc: userCubit,
+                      builder: (context, state) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Stack(
+                                alignment: Alignment.bottomRight,
                                 children: [
-                                  Text(
-                                    'user.userFullTitle',
-                                    textAlign: TextAlign.left,
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
+                                  makeFowImage(
+                                    userCubit.user?.avatar ?? '',
+                                    size: 112,
+                                    ratio: 1,
+                                    borderRadius: 16,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showPickImageBottomSheet();
+                                    },
+                                    child: SvgPicture.asset(
+                                      "assets/images/la-user-edit.svg",
+                                    ),
                                   ),
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        Divider(color: blueColor),
-                        const SizedBox(height: 16),
-                        // buildTitle('1'),
-                        const SizedBox(height: 12),
-                        buildContent('assets/images/profile-icon.svg',
-                            'Cập nhật thông tin', onTap: () {
-                          _interceptTap(DrawerItem.UpdateProfile);
-                        }, enable: true),
-                        const SizedBox(height: 16),
-                        buildContent('assets/images/partner-heart-icon.svg',
-                            'Lịch sử luyện tập', onTap: () {
-                          _interceptTap(DrawerItem.History);
-                        }, enable: true),
-                        const SizedBox(height: 16),
-                        buildContent('assets/images/message-text.svg',
-                            'Thời gian nhắc nhở', onTap: () {
-                          _interceptTap(DrawerItem.Notification);
-                        }, enable: true),
-                        const SizedBox(height: 16),
-                        buildContent('assets/images/give-coin-icon.svg',
-                            'Điều khoản sử dụng', onTap: () {
-                          _interceptTap(DrawerItem.Policy);
-                        }, enable: true),
-                        const SizedBox(height: 16),
-                        buildContent('assets/images/logout.svg', 'Đăng xuất',
-                            onTap: () {
-                          logout();
-                        }, enable: true),
-                        const SizedBox(
-                          height: 32,
-                        ),
-                      ],
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      '${userCubit.user?.firstName} ${userCubit.user?.lastName}',
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(
+                                      'Mục tiêu: ${userCubit.user?.target ?? 0}',
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          Divider(color: blueColor),
+                          const SizedBox(height: 16),
+                          // buildTitle('1'),
+                          const SizedBox(height: 12),
+                          buildContent('assets/images/profile-icon.svg',
+                              'Cập nhật thông tin', onTap: () {
+                            _interceptTap(DrawerItem.UpdateProfile);
+                          }, enable: true),
+                          const SizedBox(height: 16),
+                          buildContent('assets/images/partner-heart-icon.svg',
+                              'Lịch sử luyện tập', onTap: () {
+                            _interceptTap(DrawerItem.History);
+                          }, enable: true),
+                          const SizedBox(height: 16),
+                          buildContent('assets/images/message-text.svg',
+                              'Thời gian nhắc nhở', onTap: () {
+                            _interceptTap(DrawerItem.Notification);
+                          }, enable: true),
+                          const SizedBox(height: 16),
+                          buildContent('assets/images/give-coin-icon.svg',
+                              'Điều khoản sử dụng', onTap: () {
+                            _interceptTap(DrawerItem.Policy);
+                          }, enable: true),
+                          const SizedBox(height: 16),
+                          buildContent('assets/images/logout.svg', 'Đăng xuất',
+                              onTap: () {
+                            logout();
+                          }, enable: true),
+                          const SizedBox(height: 32),
+                        ],
+                      ),
                     ),
                   ),
                 ),
