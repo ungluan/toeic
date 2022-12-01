@@ -10,6 +10,7 @@ import '../../../apis/models/Questions.dart';
 import '../../../apis/models/Test.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../repositories/examination_repository.dart';
+import '../../../repositories/test_repository.dart';
 import '../../../utils/utils.dart';
 
 part 'examination_cubit.freezed.dart';
@@ -18,8 +19,9 @@ part 'examination_cubit.freezed.dart';
 class ExaminationCubit extends Cubit<ExaminationState> {
   final AuthenticationRepository authenticationRepository;
   final ExaminationRepository examinationRepository;
+  final TestRepository testRepository;
 
-  ExaminationCubit(this.authenticationRepository, this.examinationRepository)
+  ExaminationCubit(this.authenticationRepository, this.examinationRepository, this.testRepository)
       : super(const ExaminationState.loading()) {
     _examination = examinationRepository.examination;
   }
@@ -63,6 +65,7 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     try {
       emit(const ExaminationState.loading());
       List<Exams>? exams = test.exams;
+      // exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
       for (int i = 0; i < exams!.length; i++) {
         var questions = exams[i].questions;
         for (int j = 0; j < questions!.length; j++) {
@@ -79,12 +82,14 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     if (_examination?.id != examinationId) {
       // getExamination
       _examination = await examinationRepository.getExamination(examinationId);
+      _examination?.test?.exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
       examinationRepository.examination = _examination;
     }
     try {
       emit(const ExaminationState.loading());
       List<Exams>? exams = examination!.test!.exams;
-      logger(examination);
+      exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
+      logger(exams);
       for (int i = 0; i < exams!.length; i++) {
         var questions = exams[i].questions;
         for (int j = 0; j < questions!.length; j++) {
@@ -104,6 +109,8 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     try {
       emit(const ExaminationState.loading());
       _examination = await examinationRepository.startExamination(testId);
+      _examination?.test?.exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
+      examination!.test!.exams!.forEach((element) {print(element.part!.id!);});
       examinationRepository.examination = _examination;
       logger(examinationRepository.examination);
       emit(const ExaminationStateStarted());
@@ -114,14 +121,14 @@ class ExaminationCubit extends Cubit<ExaminationState> {
 
   Future<void> submitExamination(int totalTime) async {
     Map<String, dynamic> data = {};
-    data['total_time'] = totalTime;
+    // data['total_time'] = totalTime;
     for (var selected in choices ?? []) {
       data['${selected.id}'] = selected.selected;
     }
     try {
       emit(const ExaminationState.loading());
       _examination =
-          await examinationRepository.submitExamination(examination!.id!, data);
+          await examinationRepository.submitExamination(examination!.id!, totalTime,data);
       examinationRepository.examination = _examination;
       emit(const ExaminationState.submitted());
     } on DioError catch (e) {

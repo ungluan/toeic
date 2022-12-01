@@ -127,7 +127,7 @@ class _ListTestPageState extends State<ListTestPage> {
                       child: Row(
                         children: [
                           const Spacer(),
-                          examination != null
+                          examination?.finishedAt != null
                               ? InkWell(
                                   onTap: () => {},
                                   child: Container(
@@ -145,24 +145,25 @@ class _ListTestPageState extends State<ListTestPage> {
                               : const SizedBox(),
                           InkWell(
                             onTap: () async {
-                              if (examination != null) {
+                              if (examination?.finishedAt != null) {
                                 await examinationCubit
-                                    .setupReadExamination(examination.id!);
+                                    .setupReadExamination(examination!.id!);
+                                if (mounted) {
+                                  Navigator.of(context).push(
+                                      ExaminationPage.route(test,
+                                          examinationId: examination.id! ));
+                                }
                               }
-                              if (mounted) {
-                                Navigator.of(context).push(
-                                    ExaminationPage.route(test,
-                                        examinationId: examination?.id ?? -1));
-                              }
+
                             },
                             child: Chip(
                               elevation: 0,
                               backgroundColor: Colors.green.withOpacity(0.8),
                               padding: const EdgeInsets.all(8),
                               label: Text(
-                                examination != null
+                                examination?.finishedAt != null
                                     ? 'Xem chi tiết'
-                                    : 'Làm bài',
+                                    : '',
                               ),
                             ),
                           ),
@@ -178,34 +179,6 @@ class _ListTestPageState extends State<ListTestPage> {
       ),
     );
   }
-
-  // examination != null ? Row(
-  // children: [
-  // Đoạn này cần kiểm tra xem nó đã có examination_detail chưa? Nếu có rồi thì
-  // hiển thị số câu đã làm đúng trên tổng số
-  // GestureDetector(
-  // onTap: () => {},
-  // child: Container(
-  // margin: const EdgeInsets.only(right: 8),
-  // child: Chip(
-  // backgroundColor: primaryColor.withOpacity(0.5),
-  // elevation: 2,
-  // padding: const EdgeInsets.all(8),
-  // label: Text('$numberOfCorrect/$numberOfQuestions'),
-  // ),
-  // ),
-  // ),
-  // GestureDetector(
-  // onTap: () => {},
-  // child: Chip(
-  // elevation: 2,
-  // backgroundColor: Colors.green.withOpacity(0.8),
-  // padding: const EdgeInsets.all(8),
-  // label: const Text('Làm lại'),
-  // ),
-  // )
-  // ],
-  // ) : const SizedBox()
 
   int countQuestion(List<Exams> exams) {
     int count = 0;
@@ -249,15 +222,18 @@ class _ListTestPageState extends State<ListTestPage> {
               fontSize: 18, color: darkBlueColor, fontWeight: FontWeight.bold),
         ),
         leading: widget.typeTestId != 8
-            ? Container(
-                width: 24,
-                height: 24,
-                padding: const EdgeInsets.all(8),
-                child: SvgPicture.asset(
-                  'assets/images/arrow-left-icon.svg',
+            ? GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: Container(
                   width: 24,
                   height: 24,
-                  color: orangeColor,
+                  padding: const EdgeInsets.all(8),
+                  child: SvgPicture.asset(
+                    'assets/images/arrow-left-icon.svg',
+                    width: 24,
+                    height: 24,
+                    color: orangeColor,
+                  ),
                 ),
               )
             : null,

@@ -51,6 +51,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
   ValueNotifier<int> curIndexNotifier = ValueNotifier(0);
   int pages = 0;
   ValueNotifier<int> totalTime = ValueNotifier(0);
+  int TOTAL_TIME = 12000; // 200 minute
 
   LoadingCubit loadingCubit = LoadingCubit();
   late CountdownController countdownController;
@@ -69,10 +70,6 @@ class _ExaminationPageState extends State<ExaminationPage> {
     int hour = totalTime ~/ 3600;
     int minute = (totalTime - hour*3600)~/60;
     int second = totalTime - hour*3600 - minute*60;
-    logger(hour);
-    logger(minute);
-    logger(second);
-
     return "${convertNumberToString(hour)}:${convertNumberToString(minute)}:${convertNumberToString(second)}";
   }
 
@@ -92,9 +89,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
       // loadingCubit.showLoading();
       examinationCubit.setupTest(widget.test);
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-
         totalTime.value+=1;
-        logger(totalTime.value);
+        if(totalTime == TOTAL_TIME && examinationCubit.examination?.test?.typeTest?.id == 8){
+          examinationCubit.submitExamination(totalTime.value);
+        }
       });
     }
 
@@ -131,6 +129,17 @@ class _ExaminationPageState extends State<ExaminationPage> {
     await player.dispose();
     pageController.dispose();
     timer.cancel();
+  }
+
+
+  @override
+  void deactivate() async {
+    super.deactivate();
+    await player.dispose();
+  }
+
+  void stopPlayer() async{
+    await player.stop();
   }
 
   Widget _buildPart1(Exams exam) {
@@ -572,6 +581,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
 
   Widget _buildPart5(Exams exam) {
     var hasImage = exam.images?.isNotEmpty ?? false;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -700,8 +710,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
     } else if (exam.part!.id == 3 || exam.part!.id == 4) {
       return _buildPart3(exam);
     } else if (exam.part!.id == 5) {
+      stopPlayer();
       return _buildPart5(exam);
     } else {
+      stopPlayer();
       return _buildPart6(exam);
     }
   }

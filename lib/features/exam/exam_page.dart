@@ -35,10 +35,7 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: ListTestPage(typeTestId: 8)
-    );
+    return const ListTestPage(typeTestId: 8);
   }
 
 

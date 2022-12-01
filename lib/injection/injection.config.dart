@@ -95,6 +95,7 @@ _i1.GetIt $initGetIt(
   gh.factory<_i23.ExaminationCubit>(() => _i23.ExaminationCubit(
         get<_i11.AuthenticationRepository>(),
         get<_i13.ExaminationRepository>(),
+        get<_i7.TestRepository>(),
       ));
   return get;
 }

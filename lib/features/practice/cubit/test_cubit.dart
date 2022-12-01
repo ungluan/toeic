@@ -26,7 +26,13 @@ class TestCubit extends Cubit<TestState> {
 
   TestCubit(this.userRepository, this.testRepository,
       this.authenticationRepository, this.examinationRepository)
-      : super(const TestState.loading());
+      : super(const TestState.loading()){
+    examinationRepository.testStateStream.listen((event) {
+      if(event is TestStateLoaded){
+        getListTestByTypeTest(_listTest.first.typeTest?.id ?? 1);
+      }
+    });
+  }
 
   List<Choice>? _choices = [];
 

@@ -28,7 +28,7 @@ abstract class TokenRestClient {
   Future<Examination> startExamination(@Query('test_id') int testId);
 
   @POST('examination/submit-examination/{examination_id}')
-  Future<Examination> submitExamination(@Path('examination_id') int examinationId, @Body() Map<String, dynamic> data);
+  Future<Examination> submitExamination(@Path('examination_id') int examinationId, @Query('total_time') int totalTime, @Body() Map<String, dynamic> data);
 
   @GET('/examination/{examination_id}')
   Future<Examination> getExamination(@Path('examination_id') int examinationId);

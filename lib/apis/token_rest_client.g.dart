@@ -148,10 +148,11 @@ class _TokenRestClient implements TokenRestClient {
   @override
   Future<Examination> submitExamination(
     examinationId,
+    totalTime,
     data,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'total_time': totalTime};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data);

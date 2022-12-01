@@ -1,5 +1,7 @@
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:toeic/apis/models/Examination.dart';
+import 'package:toeic/features/practice/cubit/test_cubit.dart';
 import 'package:toeic/repositories/examination_repository.dart';
 
 import '../../apis/rest_client_factory.dart';
@@ -17,14 +19,19 @@ class ExaminationRepositoryImpl extends ExaminationRepository {
 
   Examination? examination;
 
+  final BehaviorSubject<TestState> testStateSubject =
+  BehaviorSubject();
+  @override
+
   @override
   Future<Examination> startExamination(int testId) {
     return _tokenRestClient.startExamination(testId);
   }
 
   @override
-  Future<Examination> submitExamination(int examinationId, Map<String, dynamic> data) {
-    return _tokenRestClient.submitExamination(examinationId, data);
+  Future<Examination> submitExamination(int examinationId, int totalTime, Map<String, dynamic> data) {
+    testStateSubject.add(TestStateLoaded());
+    return _tokenRestClient.submitExamination(examinationId,totalTime, data);
   }
 
   @override
@@ -36,4 +43,7 @@ class ExaminationRepositoryImpl extends ExaminationRepository {
   Future<List<Examination>> getListExaminationByUser() {
     return _tokenRestClient.getListExaminationByUser();
   }
+
+  @override
+  Stream<TestState> get testStateStream => testStateSubject.stream;
 }
