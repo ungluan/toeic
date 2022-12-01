@@ -59,7 +59,6 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
 
   final examinationCubit = getIt<ExaminationCubit>();
   final loadingCubit = getIt<LoadingCubit>();
-  TestCubit get testCubit => context.read<TestCubit>();
   @override
   void initState() {
     super.initState();

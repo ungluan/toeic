@@ -6,13 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:toeic/apis/models/Test.dart';
 import 'package:toeic/features/activity/cubit/history_cubit.dart';
-import 'package:toeic/features/practice/Introduce_Examination.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
-import 'package:toeic/features/practice/cubit/test_cubit.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/widgets/cubits/loading_cubit.dart';
-import 'package:toeic/utils/utils.dart';
-import 'package:loadmore/loadmore.dart';
 
 import '../../apis/models/Examination.dart';
 import '../../apis/models/Exams.dart';
@@ -32,12 +28,10 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  // final testCubit = getIt<TestCubit>();
   final loadingCubit = getIt<LoadingCubit>();
   final examinationCubit = getIt<ExaminationCubit>();
   final historyCubit = getIt<HistoryCubit>();
   final ScrollController _controller = ScrollController();
-  int _currentMax = 10;
 
   @override
   void initState() {
@@ -194,13 +188,6 @@ class _HistoryPageState extends State<HistoryPage> {
       count += exam.questions?.length ?? 0;
     }
     return count;
-  }
-
-  Future<bool> _loadMore() async {
-    print("onLoadMore");
-    // await examinationCubit.getListExaminationByUser().
-    await historyCubit.getHistory();
-    return true;
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -151,10 +152,9 @@ class _ListTestPageState extends State<ListTestPage> {
                                 if (mounted) {
                                   Navigator.of(context).push(
                                       ExaminationPage.route(test,
-                                          examinationId: examination.id! ));
+                                          examinationId: examination.id!));
                                 }
                               }
-
                             },
                             child: Chip(
                               elevation: 0,
@@ -242,18 +242,64 @@ class _ListTestPageState extends State<ListTestPage> {
         child: Stack(
           children: [
             BlocBuilder<TestCubit, TestState>(
-              bloc: testCubit,
-              builder: (context, state) {
-                if (state is TestStateFailed) {
-                  return Center(child: Text(state.error));
-                }
-                return ListView.builder(
-                  itemBuilder: (context, index) => _buildTestItem(
-                      testCubit.listTest[index], testCubit.examination?[index]),
-                  itemCount: testCubit.listTest.length,
-                );
-              },
-            ),
+                bloc: testCubit,
+                builder: (context, state) {
+                  if (state is TestStateFailed) {
+                    return Center(child: Text(state.error));
+                  }
+                  return CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 80,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: DropdownSearch<String>(
+                              popupProps: const PopupProps.menu(
+                                showSelectedItems: true,
+                              ),
+                              items: const [
+                                "500",
+                                "700",
+                                "900"
+                              ],
+                              dropdownDecoratorProps: const DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                  labelText: "Mục tiêu",
+                                  hintText: "Chọn mục tiêu",
+                                ),
+                              ),
+                              onChanged: (val){
+                                //Todo: Thực hiện call api và reset lại mảng
+                                print(val);
+                              },
+                              selectedItem: examinationCubit.authenticationRepository.user?.target?.toString() ?? "500",
+                            ),
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Container(
+                          // padding: EdgeInsets.only(bottom: 150),
+                          height: MediaQuery.of(context).size.height - 100,
+                          child: ListView.builder(
+                            itemBuilder: (context, index){
+                              if(index == testCubit.listTest.length){
+                                return Container(
+                                  height: widget.typeTestId == 8 ? 150 : 100,
+                                );
+                              }
+                              return _buildTestItem(
+                                  testCubit.listTest[index],
+                                  testCubit.examination?[index]);
+                            },
+                            itemCount: testCubit.listTest.length + 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
             Loading(
               loadingCubit: loadingCubit,
             )
