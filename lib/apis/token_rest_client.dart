@@ -47,4 +47,7 @@ abstract class TokenRestClient {
 
   @GET('/user/{user_id}')
   Future<User> getUserById(@Path('user_id') int userId);
+
+  @GET('examination/history')
+  Future<List<Examination>> getHistory(@Query('skip') int skip, @Query('limit') int limit);
 }

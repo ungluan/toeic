@@ -46,4 +46,9 @@ class ExaminationRepositoryImpl extends ExaminationRepository {
 
   @override
   Stream<TestState> get testStateStream => testStateSubject.stream;
+
+  @override
+  Future<List<Examination>> getHistory(int skip, int limit) {
+    return _tokenRestClient.getHistory(skip, limit);
+  }
 }
