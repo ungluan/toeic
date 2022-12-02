@@ -10,15 +10,17 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../apis/rest_client_factory.dart' as _i6;
 import '../features/activity/cubit/history_cubit.dart' as _i15;
-import '../features/activity/cubit/user_cubit.dart' as _i22;
-import '../features/login/cubit/authentication_cubit.dart' as _i23;
-import '../features/login/cubit/login_cubit.dart' as _i16;
-import '../features/login/cubit/otp_cubit.dart' as _i17;
-import '../features/login/cubit/register_cubit.dart' as _i18;
-import '../features/login/cubit/reset_password_cubit.dart' as _i19;
-import '../features/practice/cubit/examination_cubit.dart' as _i24;
-import '../features/practice/cubit/test_cubit.dart' as _i20;
-import '../features/update_profile_lv1/update_profile_cubit.dart' as _i21;
+import '../features/activity/cubit/user_cubit.dart' as _i24;
+import '../features/home/cubit/home_cubit.dart' as _i16;
+import '../features/home/cubit/piechart_cubit.dart' as _i19;
+import '../features/login/cubit/authentication_cubit.dart' as _i25;
+import '../features/login/cubit/login_cubit.dart' as _i17;
+import '../features/login/cubit/otp_cubit.dart' as _i18;
+import '../features/login/cubit/register_cubit.dart' as _i20;
+import '../features/login/cubit/reset_password_cubit.dart' as _i21;
+import '../features/practice/cubit/examination_cubit.dart' as _i26;
+import '../features/practice/cubit/test_cubit.dart' as _i22;
+import '../features/update_profile_lv1/update_profile_cubit.dart' as _i23;
 import '../hive/hive_service.dart' as _i3;
 import '../repositories/authentication_repository.dart' as _i11;
 import '../repositories/examination_repository.dart' as _i13;
@@ -72,33 +74,42 @@ _i1.GetIt $initGetIt(
         get<_i9.UserRepository>(),
         get<_i13.ExaminationRepository>(),
       ));
-  gh.factory<_i16.LoginCubit>(
-      () => _i16.LoginCubit(get<_i11.AuthenticationRepository>()));
-  gh.factory<_i17.OtpCubit>(
-      () => _i17.OtpCubit(get<_i11.AuthenticationRepository>()));
-  gh.factory<_i18.RegisterCubit>(() =>
-      _i18.RegisterCubit(authRepository: get<_i11.AuthenticationRepository>()));
-  gh.factory<_i19.ResetPasswordCubit>(
-      () => _i19.ResetPasswordCubit(get<_i11.AuthenticationRepository>()));
-  gh.factory<_i20.TestCubit>(() => _i20.TestCubit(
+  gh.factory<_i16.HomeCubit>(() => _i16.HomeCubit(
+        get<_i11.AuthenticationRepository>(),
+        get<_i9.UserRepository>(),
+        get<_i13.ExaminationRepository>(),
+      ));
+  gh.factory<_i17.LoginCubit>(
+      () => _i17.LoginCubit(get<_i11.AuthenticationRepository>()));
+  gh.factory<_i18.OtpCubit>(
+      () => _i18.OtpCubit(get<_i11.AuthenticationRepository>()));
+  gh.factory<_i19.PieChartCubit>(() => _i19.PieChartCubit(
+        get<_i9.UserRepository>(),
+        get<_i13.ExaminationRepository>(),
+      ));
+  gh.factory<_i20.RegisterCubit>(() =>
+      _i20.RegisterCubit(authRepository: get<_i11.AuthenticationRepository>()));
+  gh.factory<_i21.ResetPasswordCubit>(
+      () => _i21.ResetPasswordCubit(get<_i11.AuthenticationRepository>()));
+  gh.factory<_i22.TestCubit>(() => _i22.TestCubit(
         get<_i9.UserRepository>(),
         get<_i7.TestRepository>(),
         get<_i11.AuthenticationRepository>(),
         get<_i13.ExaminationRepository>(),
       ));
-  gh.factory<_i21.UpdateProfileCubit>(() => _i21.UpdateProfileCubit(
+  gh.factory<_i23.UpdateProfileCubit>(() => _i23.UpdateProfileCubit(
         get<_i9.UserRepository>(),
         get<_i11.AuthenticationRepository>(),
       ));
-  gh.factory<_i22.UserCubit>(() => _i22.UserCubit(
+  gh.factory<_i24.UserCubit>(() => _i24.UserCubit(
         get<_i11.AuthenticationRepository>(),
         get<_i9.UserRepository>(),
       ));
-  gh.factory<_i23.AuthenticationCubit>(() => _i23.AuthenticationCubit(
+  gh.factory<_i25.AuthenticationCubit>(() => _i25.AuthenticationCubit(
         get<_i11.AuthenticationRepository>(),
         get<_i9.UserRepository>(),
       ));
-  gh.factory<_i24.ExaminationCubit>(() => _i24.ExaminationCubit(
+  gh.factory<_i26.ExaminationCubit>(() => _i26.ExaminationCubit(
         get<_i11.AuthenticationRepository>(),
         get<_i13.ExaminationRepository>(),
         get<_i7.TestRepository>(),

@@ -1,23 +1,30 @@
 import 'package:dio/src/form_data.dart';
 import 'package:injectable/injectable.dart';
-import 'package:toeic/apis/models/Test.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:toeic/apis/models/DateRoutine.dart';
+import 'package:toeic/apis/models/Number_of_examination.dart';
 import 'package:toeic/apis/rest_client_factory.dart';
+import 'package:toeic/features/home/cubit/piechart_cubit.dart';
+
 import '../../apis/models/user.dart';
 import '../../apis/token_rest_client.dart';
-
-
+import '../../features/home/cubit/piechart_cubit.dart';
 import '../../hive/hive_service.dart';
 import '../user_repository.dart';
 
 @LazySingleton(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
-
   final TokenRestClient _tokenRestClient;
   final HiveService hiveService;
 
-  UserRepositoryImpl(RestClientFactory factory, this.hiveService) :
-        _tokenRestClient = factory.obtainTokenRestClient();
-
+  UserRepositoryImpl(RestClientFactory factory, this.hiveService)
+      : _tokenRestClient = factory.obtainTokenRestClient() {
+    dateActivitiesSubject.add({});
+    // sumOfTestSubject.add([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]);
+  }
+  // final piechartStateSubject = BehaviorSubject<PieChartState>();
+  final dateActivitiesSubject = BehaviorSubject<Map<DateTime, int>>();
+  // final sumOfTestSubject = BehaviorSubject<List<double>>();
 
   @override
   Future<User> updateLv1(Map<String, dynamic> data) {
@@ -38,4 +45,36 @@ class UserRepositoryImpl extends UserRepository {
   Future<String?> updateUserByAdmin(int userId, FormData formData) {
     return _tokenRestClient.updateUserByAdmin(userId, formData);
   }
+
+  @override
+  Future<List<DateRoutine>> getActivities(int year, int month) async {
+    var response = await _tokenRestClient.getActivities(year, month);
+    Map<DateTime, int> map = {};
+    for (var item in response) {
+      var token = item.createdAt!.split('-');
+      var key = DateTime(
+          int.parse(token[0]), int.parse(token[1]), int.parse(token[2]));
+      map.addAll({key: 1});
+    }
+    dateActivitiesSubject.add(map);
+    return response;
+  }
+
+  @override
+  Map<DateTime, int> get dateActivities => dateActivitiesSubject.value;
+
+  // @override
+  // List<double>? get sumOfTest => sumOfTestSubject.value;
+
+  @override
+  Future<List<double>> getSumOfTest() async {
+    var response = await _tokenRestClient.getSumOfTest();
+    var data = response.map((item) => double.parse((item.total!).toString())).toList();
+    print("AAAAA: ${data}");
+    // piechartStateSubject.add(PieChartStateLoaded(data));
+    return data;
+  }
+
+  // @override
+  // Stream<PieChartState> get pieChartState => piechartStateSubject.stream;
 }

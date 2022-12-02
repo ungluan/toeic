@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:toeic/apis/models/DateRoutine.dart';
 
 import 'models/Examination.dart';
+import 'models/Number_of_examination.dart';
 import 'models/Test.dart';
 import 'models/user.dart';
 
@@ -50,4 +52,10 @@ abstract class TokenRestClient {
 
   @GET('examination/history')
   Future<List<Examination>> getHistory(@Query('skip') int skip, @Query('limit') int limit);
+
+  @GET('user/list-activity')
+  Future<List<DateRoutine>> getActivities(@Query('year') int year, @Query('month') int month);
+
+  @GET('user/sum-of-test')
+  Future<List<NumberOfExamination>> getSumOfTest();
 }
