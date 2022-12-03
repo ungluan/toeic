@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     cubit.stream.listen((state) {
       if (state is LoginStateFailed) {
-        // showOkToast(state.message);
+        loadingCubit.hideLoading();
         showDialog(
           context: context,
           builder: (context) => Air18NotificationDialog(
@@ -60,17 +60,12 @@ class _LoginPageState extends State<LoginPage> {
             isShowNegative: false,
           ),
         );
-      } /*else if (state is LoginStateSuccess) {
-        if (mounted) if (Navigator.canPop(context)) Navigator.pop(context);
-      }*/
+      }else if(state is LoginStateSuccess){
+        loadingCubit.hideLoading();
+      }else{
+        loadingCubit.showLoading();
+      }
     });
-    // registerCubit.stream.listen((state) {
-    //   if (state is RegisterStateLoaded) {
-    //     userNameController.text =
-    //         state.data['phone'].toString().replaceFirst('+84', '');
-    //     passwordController.text = state.data['password'];
-    //   }
-    // });
 
     phoneNotifier.addListener(() {
       loginNotifier.value = phoneNotifier.value && passwordNotifier.value;
@@ -111,53 +106,6 @@ class _LoginPageState extends State<LoginPage> {
                           height: 128,
                         ),
                         const SizedBox(height: 20),
-                        // RichText(
-                        //   text: TextSpan(
-                        //     children: [
-                        //       const TextSpan(
-                        //         text: "Make ",
-                        //         style: TextStyle(
-                        //           color: Colors.black,
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //       TextSpan(
-                        //         text: "Friend ",
-                        //         style: TextStyle(
-                        //           color: blueColor,
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //       const TextSpan(
-                        //         text: "& ",
-                        //         style: TextStyle(
-                        //           color: Colors.black,
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //       TextSpan(
-                        //         text: "Chat, ",
-                        //         style: TextStyle(
-                        //           color: orangeColor,
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //       const TextSpan(
-                        //         text: "Dating",
-                        //         style: TextStyle(
-                        //           color: Color(0xff7d00ec),
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 16),
                         PhoneNumberTextField(
                           validator: validatorPhoneNumber,
                           controller: userNameController,
@@ -243,16 +191,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onPressed() async {
-    // print("OK");
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
       final userName = userNameController.text;
       final password = passwordController.text;
-      logger("phone_number: $userName");
-      logger("password: $password");
-      loadingCubit.showLoading();
       await cubit.login(username: trimStart(userName), password: password);
-      loadingCubit.hideLoading();
     }
   }
 }

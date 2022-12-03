@@ -68,17 +68,12 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<void> login(Map<String, dynamic> data) async {
+  Future<bool> login(Map<String, dynamic> data) async {
     try {
       final response = await _restClient.login(data);
       hiveService.updateToken(response.accessToken ?? '');
       dispatch();
-      // if (response.error == false) {
-      //
-      // } else {
-      //   authenticationStateSubject
-      //       .add(AuthenticationState.failed(response.message));
-      // }
+      return true;
     } catch (e) {
       logger(e);
       // logger(e.response?.statusCode);
@@ -90,6 +85,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         authenticationStateSubject
             .add(AuthenticationState.failed(e.toString()));
       }
+      return false;
     }
   }
 
