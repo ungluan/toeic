@@ -241,7 +241,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                 const SizedBox(
                   height: 16,
                 ),
-                _buildTitleChart(title: "Biểu đồ hoạt động theo tháng"),
+                _buildTitleChart(title: "Biểu đồ miêu tả tiến độ luyện tập"),
                 Divider(
                   thickness: 1,
                   color: lightPurpleColor,
@@ -313,7 +313,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                 const SizedBox(
                   height: 8,
                 ),
-                _buildTitleChart(title: "Biểu đồ miêu tả tiến độ luyện tập"),
+                _buildTitleChart(title: "Biểu đồ miêu tả hoạt động theo tháng"),
                 const SizedBox(
                   height: 16,
                 ),

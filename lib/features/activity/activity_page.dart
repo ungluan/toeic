@@ -153,7 +153,6 @@ class _ActivityPageState extends State<ActivityPage>
   }
 
   Future<void> _onPressed() async {
-
     loadingCubit.showLoading();
     await userCubit.updateAvatar(fileNotifier!.value!);
     loadingCubit.hideLoading();
@@ -284,19 +283,35 @@ class _ActivityPageState extends State<ActivityPage>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Text(
-                                      '${userCubit.user?.firstName} ${userCubit.user?.lastName}',
-                                      textAlign: TextAlign.left,
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/images/membership.svg',
+                                          width: 24,
+                                          height: 24,
+                                          color: orangeColor,
+                                        ),
+                                        Text(
+                                          '${userCubit.user?.firstName} ${userCubit.user?.lastName}',
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      'Mục tiêu: ${userCubit.user?.target ?? 0}',
-                                      textAlign: TextAlign.left,
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Mục tiêu: ${userCubit.user?.target ?? 0}',
+                                          textAlign: TextAlign.left,
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        SvgPicture.asset('assets/images/la-medal.svg', width: 24, height: 24,)
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -313,18 +328,20 @@ class _ActivityPageState extends State<ActivityPage>
                             _interceptTap(DrawerItem.UpdateProfile);
                           }, enable: true),
                           const SizedBox(height: 16),
-                          buildContent('assets/images/partner-heart-icon.svg',
-                              'Lịch sử luyện tập', onTap: () {
+                          buildContent(
+                              'assets/images/la-medal.svg', 'Lịch sử luyện tập',
+                              onTap: () {
                             _interceptTap(DrawerItem.History);
                           }, enable: true),
                           const SizedBox(height: 16),
-                          buildContent('assets/images/message-text.svg',
+                          buildContent('assets/images/ic_chat_time.svg',
                               'Thời gian nhắc nhở', onTap: () {
                             _interceptTap(DrawerItem.Notification);
                           }, enable: true),
                           const SizedBox(height: 16),
-                          buildContent('assets/images/give-coin-icon.svg',
-                              'Điều khoản sử dụng', onTap: () {
+                          buildContent(
+                              'assets/images/report.svg', 'Điều khoản sử dụng',
+                              onTap: () {
                             _interceptTap(DrawerItem.Policy);
                           }, enable: true),
                           const SizedBox(height: 16),
