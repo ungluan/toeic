@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toeic/features/activity/cubit/user_cubit.dart';
+import 'package:toeic/features/activity/term_and_condition_page.dart';
 import 'package:toeic/features/edit_profile/edit_profile_page.dart';
 import '../../injection/injection.dart';
 import '../../services/notification.dart';
@@ -77,7 +78,7 @@ class _ActivityPageState extends State<ActivityPage>
         }
         break;
       case DrawerItem.Policy:
-        // TODO: Handle this case.
+        Navigator.of(context).push(TermAndConditionPage.route());
         break;
     }
   }
