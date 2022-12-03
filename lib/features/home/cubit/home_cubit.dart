@@ -25,7 +25,6 @@ class HomeCubit extends Cubit<HomeState> {
       : super(const HomeState.loading()) {
     examinationRepository.testStateStream.listen((state) {
       if(state is ExaminationStateSubmitted){
-
       }
     });
   }

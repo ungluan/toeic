@@ -12,39 +12,38 @@ import '../../../repositories/authentication_repository.dart';
 import '../../../repositories/examination_repository.dart';
 import '../../../repositories/user_repository.dart';
 
-part 'piechart_cubit.freezed.dart';
+part 'radar_chart_cubit.freezed.dart';
 
 @injectable
-class PieChartCubit extends Cubit<PieChartState> {
+class RadarChartCubit extends Cubit<RadarChartState> {
   final UserRepository userRepository;
   final ExaminationRepository examinationRepository;
 
-
-  PieChartCubit(this.userRepository, this.examinationRepository)
-      : super(const PieChartState.loading()) {
+  RadarChartCubit(this.userRepository, this.examinationRepository)
+      : super(const RadarChartState.loading()) {
     examinationRepository.testStateStream.listen((state) {
       if (state is ExaminationStateSubmitted) {
-        getSumOfTest();
+        getDataRadarChar();
       }
     });
   }
 
-  Future<void> getSumOfTest() async {
+  Future<void> getDataRadarChar() async {
     try {
-      emit(const PieChartState.loading());
-      var data = await userRepository.getSumOfTest();
-      emit(PieChartState.loaded(data));
+      emit(const RadarChartState.loading());
+      var data = await userRepository.getAverageNumberOfScoreEachPartFrom3LastExamination();
+      emit(RadarChartState.loaded(data));
     } on DioError catch (e) {
-      emit(PieChartState.failed(e.message));
+      emit(RadarChartState.failed(e.message));
     }
   }
 }
 
 @freezed
-class PieChartState with _$PieChartState {
-  const factory PieChartState.loading() = PieChartStateLoading;
+class RadarChartState with _$RadarChartState {
+  const factory RadarChartState.loading() = RadarChartStateLoading;
 
-  const factory PieChartState.loaded(List<double> data) = PieChartStateLoaded;
+  const factory RadarChartState.loaded(List<double> data) = RadarChartStateLoaded;
 
-  const factory PieChartState.failed(String error) = PieChartStateFailed;
+  const factory RadarChartState.failed(String error) = RadarChartStateFailed;
 }

@@ -75,6 +75,23 @@ class UserRepositoryImpl extends UserRepository {
     return data;
   }
 
+  @override
+  Future<List<double>> getSumOfTestCreated() async {
+    var response = await _tokenRestClient.getSumOfTestCreated();
+    var data = response.map((item) => double.parse((item.total!).toString())).toList();
+    return data;
+  }
+
+  @override
+  Future<double> getAverageScoreFrom3LastExamination() {
+    return _tokenRestClient.getAverageScoreFrom3LastExamination();
+  }
+
+  @override
+  Future<List<double>> getAverageNumberOfScoreEachPartFrom3LastExamination() {
+    return _tokenRestClient.getAverageNumberOfScoreEachPartFrom3LastExamination();
+  }
+
   // @override
   // Stream<PieChartState> get pieChartState => piechartStateSubject.stream;
 }

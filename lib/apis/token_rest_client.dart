@@ -58,4 +58,13 @@ abstract class TokenRestClient {
 
   @GET('user/sum-of-test')
   Future<List<NumberOfExamination>> getSumOfTest();
+
+  @GET('user/sum-of-test-created')
+  Future<List<NumberOfExamination>> getSumOfTestCreated();
+
+  @GET('user/avg-score-from-3-last-examination')
+  Future<double> getAverageScoreFrom3LastExamination();
+
+  @GET('user/get-average-number-of-score-each-part-from-3-last-examination')
+  Future<List<double>> getAverageNumberOfScoreEachPartFrom3LastExamination();
 }

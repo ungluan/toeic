@@ -6,15 +6,20 @@ import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:toeic/features/home/cubit/barchart_cubit.dart';
+import 'package:toeic/features/home/cubit/radar_chart_cubit.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/colors.dart';
 
-// import 'package:d_chart/d_chart.dart';
+import 'package:d_chart/d_chart.dart';
 import 'package:flutter_charts/flutter_charts.dart';
+import 'package:toeic/ui_kits/widgets/views/d_chart_bart.dart';
 
 import '../../ui_kits/widgets/views/pie_chart.dart';
+import '../activity/cubit/user_cubit.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/piechart_cubit.dart';
+import 'cubit/progress_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,11 +28,24 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin{
   final homeCubit = getIt<HomeCubit>();
-  final piechartCubit = getIt<PieChartCubit>();
-  final dataNotifier =
-      ValueNotifier<List<double>>([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]);
+  final pieChartCubit = getIt<PieChartCubit>();
+  final barChartCubit = getIt<BarChartCubit>();
+  final progressCubit = getIt<ProgressCubit>();
+  final userCubit = getIt<UserCubit>();
+  final radarChartCubit = getIt<RadarChartCubit>();
+
+  var ticks = [20, 40, 60, 80, 100];
+  var features = [
+    "Part 1",
+    "Part 2",
+    "Part 3",
+    "Part 4",
+    "Part 5",
+    "Part 6",
+    "Part 7"
+  ];
 
   @override
   void initState() {
@@ -38,164 +56,246 @@ class _HomePageState extends State<HomePage> {
   void setup() async {
     Future.wait([
       homeCubit.getActivities(DateTime.now().year, DateTime.now().month),
-      piechartCubit.getSumOfTest()
+      pieChartCubit.getSumOfTest(),
+      barChartCubit.getDataBarChar(),
+      progressCubit.getAverageScoreFrom3LastExamination(),
+      radarChartCubit.getDataRadarChar()
     ]);
+  }
 
-    piechartCubit.stream.listen((state) {
-      if (state is PieChartStateLoaded) {
-        print("Data Change");
-        dataNotifier.value = state.data;
-      }
-    });
+  Widget _buildTitleChart({required String title}) {
+    return Center(
+      child: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.openSans(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: lightTextColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle({required String title}) {
+    return Text(
+      title,
+      style: GoogleFonts.openSans(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        color: darkBlueColor,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    const ticks = [10, 20, 30, 40, 50];
-    var features = [
-      "Part 1",
-      "Part 2",
-      "Part 3",
-      "Part 4",
-      "Part 5",
-      "Part 6",
-      "Part 7"
-    ];
-    var data = [
-      [10.0, 20, 28, 5, 16, 15, 50],
-      [14.5, 1, 4, 14, 23, 10, 6],
-      [36, 10, 50, 50, 50, 50, 20],
-      [34, 20, 27, 5, 23, 10, 20],
-    ];
-
-    // features = features.sublist(0, numberOfFeatures.floor());
-    // data = data
-    //     .map((graph) => graph.sublist(0, numberOfFeatures.floor()))
-    //     .toList();
     return Container(
       color: Colors.white,
       child: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/security-on-green.svg'),
-                    Text(
-                      "Xin chào: ",
-                      style: GoogleFonts.openSans(
-                        color: Colors.deepPurple,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+          child: BlocBuilder<UserCubit, UserState>(
+            bloc: userCubit,
+            builder: (context, state) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset('assets/images/security-on-green.svg'),
+                      Text(
+                        "Xin chào: ",
+                        style: GoogleFonts.openSans(
+                          color: Colors.deepPurple,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Luân",
-                      style: GoogleFonts.openSans(
-                        color: Colors.deepPurple,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
+                      Text(
+                        userCubit.user?.lastName ?? '...',
+                        style: GoogleFonts.openSans(
+                          color: Colors.deepPurple,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
-                    ),
-                    const Spacer(),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        width: 100,
-                        height: 54,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: lightPurpleColor,
-                              width: 1,
+                      const Spacer(),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          width: 100,
+                          height: 54,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: lightPurpleColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: DefaultTextStyle(
+                            style: GoogleFonts.openSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: orangeColor),
+                            child: AnimatedTextKit(
+                              displayFullTextOnTap: true,
+                              repeatForever: true,
+                              animatedTexts: [
+                                RotateAnimatedText(
+                                    '${userCubit.user?.target ?? 500} Toeic'),
+                              ],
+                              onTap: () {
+                                print("Tap Event");
+                              },
                             ),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: DefaultTextStyle(
-                          style: GoogleFonts.openSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: orangeColor),
-                          child: AnimatedTextKit(
-                            displayFullTextOnTap: true,
-                            repeatForever: true,
-                            animatedTexts: [
-                              RotateAnimatedText('500 Toeic'),
-                            ],
-                            onTap: () {
-                              print("Tap Event");
-                            },
                           ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  thickness: 1,
+                  color: lightPurpleColor,
+                ),
+                BlocBuilder<ProgressCubit, ProgressState>(
+                  bloc: progressCubit,
+                  builder: (context, state) => state.maybeWhen(
+                    loaded: (data) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '1. Mức điểm trung bình: ${data.toInt()}',
+                          textAlign: TextAlign.start,
+                          style: GoogleFonts.openSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: darkBlueColor,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Center(
+                          child: SleekCircularSlider(
+                            appearance: CircularSliderAppearance(
+                              customWidths:
+                                  CustomSliderWidths(progressBarWidth: 10),
+                            ),
+                            min: 0,
+                            max: 100,
+                            initialValue:
+                                (data / (userCubit.user?.target ?? 500)) * 100,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 1,
-                color: lightPurpleColor,
-              ),
-              Text(
-                '1. Mức điểm trung bình: 532',
-                textAlign: TextAlign.start,
-                style: GoogleFonts.openSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: darkBlueColor,
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Center(
-                child: SleekCircularSlider(
-                  appearance: CircularSliderAppearance(
-                    customWidths: CustomSliderWidths(progressBarWidth: 10),
-                  ),
-                  min: 0,
-                  max: 100,
-                  initialValue: 50,
-                ),
-              ),
-              Center(
-                child: Text(
-                  'Biểu đồ miêu tả năng lực hiện tại so mới mục tiêu',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.openSans(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: lightTextColor,
+                    orElse: () => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '1. Mức điểm trung bình: 0',
+                          textAlign: TextAlign.start,
+                          style: GoogleFonts.openSans(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: darkBlueColor,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Center(
+                          child: SleekCircularSlider(
+                            appearance: CircularSliderAppearance(
+                              customWidths:
+                                  CustomSliderWidths(progressBarWidth: 10),
+                            ),
+                            min: 0,
+                            max: 100,
+                            initialValue: 0,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Divider(
-                thickness: 1,
-                color: lightPurpleColor,
-              ),
-              Text(
-                '2. Lịch sử hoạt động',
-                style: GoogleFonts.openSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: darkBlueColor,
+                _buildTitleChart(
+                    title: "Biểu đồ miêu tả năng lực hiện tại so mới mục tiêu"),
+                Divider(
+                  thickness: 1,
+                  color: lightPurpleColor,
                 ),
-              ),
-              Container(
-                child: BlocBuilder<HomeCubit, HomeState>(
+                _buildTitle(title: "2. Tiến độ luyện tập"),
+                BlocBuilder<BarChartCubit, BarChartState>(
+                  bloc: barChartCubit,
+                  builder: (context, state) => state.maybeWhen(
+                    loaded: (dataUser, dataApp) =>
+                        AppBarChart(dataUser: dataUser, dataApp: dataApp),
+                    orElse: () => const SizedBox(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                _buildTitleChart(title: "Biểu đồ hoạt động theo tháng"),
+                Divider(
+                  thickness: 1,
+                  color: lightPurpleColor,
+                ),
+                _buildTitle(title: "3. Xu hướng luyện tập"),
+                BlocBuilder<PieChartCubit, PieChartState>(
+                  bloc: pieChartCubit,
+                  builder: (context, state) => state.maybeWhen(
+                    loaded: (data) => PieChartSample2(data: data),
+                    orElse: () => const SizedBox(),
+                  ),
+                ),
+                _buildTitleChart(title: "Biểu đồ thể hiện xu hướng luyện tập"),
+                const SizedBox(height: 16),
+                Divider(
+                  thickness: 1,
+                  color: lightPurpleColor,
+                ),
+                _buildTitle(title: "4. Năng lực bản thân"),
+                SizedBox(
+                  height: 324,
+                  child: BlocBuilder<RadarChartCubit, RadarChartState>(
+                    bloc: radarChartCubit,
+                    builder: (context, state) => state.maybeWhen(
+                      loaded: (data) => RadarChart.light(
+                        ticks: ticks,
+                        features: features,
+                        data: [data],
+                        reverseAxis: false,
+                        useSides: true,
+                      ),
+                      orElse: () => const SizedBox(),
+                    ),
+                  ),
+                ),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    child: _buildTitleChart(
+                        title:
+                            "Biểu đồ miêu tả chi tiết phần trăm đúng của mỗi phần của 3 bài thi thử gần nhất")),
+                Divider(
+                  thickness: 1,
+                  color: lightPurpleColor,
+                ),
+                _buildTitle(title: "5. Lịch sử hoạt động"),
+                BlocBuilder<HomeCubit, HomeState>(
                   bloc: homeCubit,
                   builder: (context, state) {
-                    print(homeCubit.dateActivities);
                     return HeatMapCalendar(
                       defaultColor: Colors.white,
                       flexible: true,
                       colorMode: ColorMode.color,
                       datasets: homeCubit.dateActivities,
-                      colorsets: {
+                      colorsets: const {
                         1: Colors.green,
                       },
                       borderRadius: 100.0,
@@ -203,113 +303,29 @@ class _HomePageState extends State<HomePage> {
                       onMonthChange: (value) {
                         homeCubit.getActivities(value.year, value.month);
                       },
-                      onClick: (value) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(value.toString())));
-                      },
+                      // onClick: (value) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //       SnackBar(content: Text(value.toString())));
+                      // },
                     );
                   },
                 ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Center(
-                child: Text(
-                  'Biểu đồ hoạt động theo tháng',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.openSans(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: lightTextColor,
-                  ),
+                const SizedBox(
+                  height: 8,
                 ),
-              ),
-              Text('Biểu đồ hoàn thành các đề luyện tập'),
-              Text('Biểu đồ điểm mạnh điểm yếu của từng part'),
-              Container(
-                height: 324,
-                child: RadarChart.light(
-                  ticks: ticks,
-                  features: features,
-                  data: data,
-                  reverseAxis: false,
-                  useSides: true,
+                _buildTitleChart(title: "Biểu đồ miêu tả tiến độ luyện tập"),
+                const SizedBox(
+                  height: 16,
                 ),
-              ),
-              Divider(
-                thickness: 1,
-                color: lightPurpleColor,
-              ),
-              Text(
-                '3. Xu hướng luyện tập',
-                style: GoogleFonts.openSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: darkBlueColor,
-                ),
-              ),
-              // ValueListenableBuilder<List<double>>(
-              //   valueListenable: dataNotifier,
-              //   builder: (context, data, _){
-              //     print("DATATATATATA: ${data}");
-              //     return PieChartSample2(data: data);
-              //   },
-              // ),
-              BlocBuilder<PieChartCubit, PieChartState>(
-                bloc: piechartCubit,
-                builder: (context, state) => state.maybeWhen(
-                  loaded: (data) => PieChartSample2(data: data),
-                  orElse: () => const SizedBox(),
-                ),
-              ),
-              Center(
-                child: Text(
-                  'Biểu đồ thể hiện xu hướng luyện tập',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.openSans(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: lightTextColor,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-// Widget chartToRun() {
-//   LabelLayoutStrategy? xContainerLabelLayoutStrategy;
-//   ChartData chartData;
-//   ChartOptions chartOptions = const ChartOptions();
-//   // Example with side effects cannot be simply pasted to your code, as the _ExampleSideEffects is private
-//   // This example shows the result with sufficient space to show all labels, but not enough to be horizontal;
-//   // The iterative layout strategy makes the labels to tilt but show fully.
-//   chartData = ChartData(
-//     dataRows: const [
-//       [200.0, 190.0, 180.0, 200.0, 250.0, 300.0],
-//       [300.0, 280.0, 260.0, 240.0, 300.0, 350.0],
-//     ],
-//     xUserLabels: const ['January', 'February', 'March', 'April', 'May', 'June'],
-//     dataRowsLegends: const [
-//       'Owl count',
-//       'Hawk count',
-//     ],
-//     chartOptions: chartOptions,
-//   );
-//   // exampleSideEffects = _ExampleSideEffects()..leftSqueezeText='>>'.. rightSqueezeText='<' * 3;
-//   var verticalBarChartContainer = VerticalBarChartTopContainer(
-//     chartData: chartData,
-//     xContainerLabelLayoutStrategy: xContainerLabelLayoutStrategy,
-//   );
-//
-//   var verticalBarChart = VerticalBarChart(
-//     painter: VerticalBarChartPainter(
-//       verticalBarChartContainer: verticalBarChartContainer,
-//     ),
-//   );
-//   return verticalBarChart;
-// }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

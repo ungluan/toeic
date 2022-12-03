@@ -29,105 +29,102 @@ class PieChart2State extends State<PieChartSample2> {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.3,
-      child: Card(
-        color: Colors.white,
-        child: Row(
-          children: <Widget>[
-            const SizedBox(
-              height: 18,
-            ),
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: PieChart(
-                  PieChartData(
-                    pieTouchData: PieTouchData(
-                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (!event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            touchedIndex = -1;
-                            return;
-                          }
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        });
-                      },
-                    ),
-                    borderData: FlBorderData(
-                      show: false,
-                    ),
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 40,
-                    sections: showingSections(),
+      child: Row(
+        children: <Widget>[
+          const SizedBox(
+            height: 18,
+          ),
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      });
+                    },
                   ),
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 40,
+                  sections: showingSections(),
                 ),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
-                Indicator(
-                  color: Color(0xff0293ee),
-                  text: 'Part 1',
-                  isSquare: false,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xfff8b250),
-                  text: 'Part 2',
-                  isSquare: false,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xff845bef),
-                  text: 'Part 3',
-                  isSquare: false,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xff13d38e),
-                  text: 'Part 4',
-                  isSquare: false,
-                ),
-                Indicator(
-                  color: Colors.yellow,
-                  text: 'Part 5',
-                  isSquare: false,
-                ),
-                Indicator(
-                  color: Colors.indigo,
-                  text: 'Part 6',
-                  isSquare: false,
-                ),
-                Indicator(
-                  color: Colors.pink,
-                  text: 'Part 7',
-                  isSquare: false,
-                ),
-                Indicator(
-                  color: Colors.redAccent,
-                  text: 'Thi thử',
-                  isSquare: false,
-                ),
-                SizedBox(
-                  height: 18,
-                ),
-              ],
-            ),
-            const SizedBox(
-              width: 28,
-            ),
-          ],
-        ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const <Widget>[
+              Indicator(
+                color: Color(0xff0293ee),
+                text: 'Part 1',
+                isSquare: false,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Color(0xfff8b250),
+                text: 'Part 2',
+                isSquare: false,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Color(0xff845bef),
+                text: 'Part 3',
+                isSquare: false,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Color(0xff13d38e),
+                text: 'Part 4',
+                isSquare: false,
+              ),
+              Indicator(
+                color: Colors.yellow,
+                text: 'Part 5',
+                isSquare: false,
+              ),
+              Indicator(
+                color: Colors.indigo,
+                text: 'Part 6',
+                isSquare: false,
+              ),
+              Indicator(
+                color: Colors.pink,
+                text: 'Part 7',
+                isSquare: false,
+              ),
+              Indicator(
+                color: Colors.redAccent,
+                text: 'Thi thử',
+                isSquare: false,
+              ),
+              SizedBox(
+                height: 18,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 28,
+          ),
+        ],
       ),
     );
   }

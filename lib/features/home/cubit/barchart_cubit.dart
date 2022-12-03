@@ -12,39 +12,40 @@ import '../../../repositories/authentication_repository.dart';
 import '../../../repositories/examination_repository.dart';
 import '../../../repositories/user_repository.dart';
 
-part 'piechart_cubit.freezed.dart';
+part 'barchart_cubit.freezed.dart';
 
 @injectable
-class PieChartCubit extends Cubit<PieChartState> {
+class BarChartCubit extends Cubit<BarChartState> {
   final UserRepository userRepository;
   final ExaminationRepository examinationRepository;
 
 
-  PieChartCubit(this.userRepository, this.examinationRepository)
-      : super(const PieChartState.loading()) {
+  BarChartCubit(this.userRepository, this.examinationRepository)
+      : super(const BarChartState.loading()) {
     examinationRepository.testStateStream.listen((state) {
       if (state is ExaminationStateSubmitted) {
-        getSumOfTest();
+        getDataBarChar();
       }
     });
   }
 
-  Future<void> getSumOfTest() async {
+  Future<void> getDataBarChar() async {
     try {
-      emit(const PieChartState.loading());
-      var data = await userRepository.getSumOfTest();
-      emit(PieChartState.loaded(data));
+      emit(const BarChartState.loading());
+      var dataUser = await userRepository.getSumOfTest();
+      var dataApp = await userRepository.getSumOfTestCreated();
+      emit(BarChartState.loaded(dataUser, dataApp));
     } on DioError catch (e) {
-      emit(PieChartState.failed(e.message));
+      emit(BarChartState.failed(e.message));
     }
   }
 }
 
 @freezed
-class PieChartState with _$PieChartState {
-  const factory PieChartState.loading() = PieChartStateLoading;
+class BarChartState with _$BarChartState {
+  const factory BarChartState.loading() = BarChartStateLoading;
 
-  const factory PieChartState.loaded(List<double> data) = PieChartStateLoaded;
+  const factory BarChartState.loaded(List<double> dataUser, List<double> dataApp) = BarChartStateLoaded;
 
-  const factory PieChartState.failed(String error) = PieChartStateFailed;
+  const factory BarChartState.failed(String error) = BarChartStateFailed;
 }
