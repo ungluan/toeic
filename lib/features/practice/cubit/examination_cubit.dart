@@ -145,6 +145,18 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }
   }
+
+  Future<void> getTheLastExaminationByTypeTestId(int typeTestId) async {
+    try{
+      emit(const ExaminationState.loading());
+      var response = await examinationRepository.getTheLastExaminationByTypeTest(typeTestId, authenticationRepository.user!.id!);
+      print("DATATATA: ");
+      print(response);
+      emit(ExaminationState.lated(response));
+    }on DioError catch(e){
+      emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
+    }
+  }
 }
 
 @freezed
@@ -162,5 +174,7 @@ class ExaminationState with _$ExaminationState {
 
   const factory ExaminationState.history(List<Examination> examinations) =
   ExaminationStateHistory;
+
+  const factory ExaminationState.lated(Examination? examinationLasted) = ExaminationStateLated;
 // const factory ExaminationState.chooseAnswer() = ExaminationStateChooseAnswer;
 }

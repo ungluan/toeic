@@ -15,4 +15,6 @@ abstract class ExaminationRepository {
   Future<List<Examination>> getListExaminationByUser();
 
   Future<List<Examination>> getHistory(int skip, int limit);
+
+  Future<Examination?> getTheLastExaminationByTypeTest(int typeTestId, int userId);
 }

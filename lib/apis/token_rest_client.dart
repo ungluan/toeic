@@ -67,4 +67,7 @@ abstract class TokenRestClient {
 
   @GET('user/get-average-number-of-score-each-part-from-3-last-examination')
   Future<List<double>> getAverageNumberOfScoreEachPartFrom3LastExamination();
+
+  @GET('examination/get-the-last-examination-by-type-test')
+  Future<Examination?> getTheLastExaminationByTypeTest(@Query('type_test_id') int typeTestId, @Query('user_id') int userId);
 }

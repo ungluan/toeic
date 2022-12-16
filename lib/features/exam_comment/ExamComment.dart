@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toeic/features/practice/examination_page.dart';
@@ -14,13 +15,15 @@ import '../practice/Introduce_Examination.dart';
 import '../practice/cubit/examination_cubit.dart';
 
 class ExamComment extends StatefulWidget {
-  const ExamComment({Key? key}) : super(key: key);
+  const ExamComment({Key? key, this.theLastExamination}) : super(key: key);
+  final Examination? theLastExamination;
 
   @override
   State<ExamComment> createState() => _ExamCommentState();
 
-  static Route route() {
-    return MaterialPageRoute(builder: (_) => const ExamComment());
+  static Route route(Examination? theLastExamination) {
+    return MaterialPageRoute(
+        builder: (_) => ExamComment(theLastExamination: theLastExamination));
   }
 }
 
@@ -93,8 +96,7 @@ class _ExamCommentState extends State<ExamComment>
     return (percent * 100).toStringAsFixed(2);
   }
 
-  int calScore() {
-    var examination = examinationCubit.examination;
+  int calScore(Examination? examination) {
     if (examination?.test?.typeTest?.id != 8) return 0;
     var totalScore = 0;
     var listening = (examination?.numberCorrectPart1 ?? 0) +
@@ -103,7 +105,7 @@ class _ExamCommentState extends State<ExamComment>
         (examination?.numberCorrectPart4 ?? 0);
     var reading = (examination?.numberCorrectPart5 ?? 0) +
         (examination?.numberCorrectPart6 ?? 0) +
-        (examination?.numberCorrectPart7 ?? 0) ;
+        (examination?.numberCorrectPart7 ?? 0);
     if (listening == 0) {
       totalScore += 5;
     } else if (listening == 15) {
@@ -123,17 +125,79 @@ class _ExamCommentState extends State<ExamComment>
     return totalScore;
   }
 
-  bool success(){
-    return (calScore() >= (examinationCubit.authenticationRepository.user?.target ?? 500));
+  bool success() {
+    var examination = examinationCubit.examination;
+    return (calScore(examination) >=
+        (examinationCubit.authenticationRepository.user?.target ?? 500));
   }
 
-  // int caculateScore(Examination examination){
-  //
-  // }
+  Widget _buildCompareWidget(Examination? examination) {
+    if (examination == null) return const SizedBox();
+    var curExamination = examinationCubit.examination;
+    if (examination.test?.typeTest?.id == 8) {
+      var oldScore = calScore(examination);
+      var curScore = calScore(curExamination);
+      IconData iconData =
+          (curScore > oldScore) ? Icons.arrow_upward : Icons.arrow_downward;
+      var rateChange = (curScore > oldScore)
+          ?  curScore  - oldScore
+          :  oldScore  - curScore ;
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
 
-  // String getComment(){
-  //
-  // }
+          Icon(
+            iconData,
+            size: 24,
+            color: orangeColor,
+          ),
+          Text(
+            ' $rateChange điểm',
+            style: GoogleFonts.openSans(
+                fontSize: 16, fontWeight: FontWeight.w500, color: orangeColor),
+          ),
+          Text('  so với bài thi trước')
+        ],
+      );
+    }
+    var oldNumberOfCorrect = examination.numberCorrectPart1! +
+        examination.numberCorrectPart2! +
+        examination.numberCorrectPart3! +
+        examination.numberCorrectPart4! +
+        examination.numberCorrectPart5! +
+        examination.numberCorrectPart6! +
+        examination.numberCorrectPart7!;
+    var curNumberOfCorrect = curExamination!.numberCorrectPart1! +
+        curExamination.numberCorrectPart2! +
+        curExamination.numberCorrectPart3! +
+        curExamination.numberCorrectPart4! +
+        curExamination.numberCorrectPart5! +
+        curExamination.numberCorrectPart6! +
+        curExamination.numberCorrectPart7!;
+    IconData iconData = (curNumberOfCorrect > oldNumberOfCorrect)
+        ? Icons.arrow_upward
+        : Icons.arrow_downward;
+
+    var rateChange = (curNumberOfCorrect > oldNumberOfCorrect)
+        ? curNumberOfCorrect - oldNumberOfCorrect
+        : oldNumberOfCorrect - curNumberOfCorrect ;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          iconData,
+          size: 24,
+          color: orangeColor,
+        ),
+        Text(
+          ' $rateChange câu',
+          style: GoogleFonts.openSans(
+              fontSize: 16, fontWeight: FontWeight.w500, color: orangeColor),
+        ),
+        const Text(' so với bài thực hành trước')
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,12 +246,14 @@ class _ExamCommentState extends State<ExamComment>
                               height: 32,
                             ),
                             Text(
-                              success() ? 'Chúc mừng bạn, bạn đã đạt được mục tiêu đề ra' : 'Bạn cần cố gắng hơn nữa',
+                              success()
+                                  ? 'Chúc mừng bạn, bạn đã đạt được mục tiêu đề ra'
+                                  : 'Bạn cần cố gắng hơn nữa',
                               style: GoogleFonts.openSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: success() ? darkBlueColor : Colors.black
-                              ),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      success() ? darkBlueColor : Colors.black),
                             ),
                             SizedBox(
                               height: 32,
@@ -196,7 +262,7 @@ class _ExamCommentState extends State<ExamComment>
                               examinationCubit
                                           .examination?.test?.typeTest?.id ==
                                       8
-                                  ? 'Kết quả: ${calScore()}'
+                                  ? 'Kết quả: ${calScore(examinationCubit.examination)}'
                                   : 'Kết quả',
                               style: GoogleFonts.openSans(
                                 fontSize: 14,
@@ -207,6 +273,10 @@ class _ExamCommentState extends State<ExamComment>
                             // getPercent(examinationCubit.examination)
                             SizedBox(
                               height: 4,
+                            ),
+                            _buildCompareWidget(widget.theLastExamination),
+                            SizedBox(
+                              height: 8,
                             ),
                             Card(
                               margin: EdgeInsets.symmetric(horizontal: 16),

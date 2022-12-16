@@ -24,6 +24,7 @@ mixin _$ExaminationState {
     required TResult Function() started,
     required TResult Function() submitted,
     required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -34,6 +35,7 @@ mixin _$ExaminationState {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -44,6 +46,7 @@ mixin _$ExaminationState {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -55,6 +58,7 @@ mixin _$ExaminationState {
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
     required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -65,6 +69,7 @@ mixin _$ExaminationState {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -75,6 +80,7 @@ mixin _$ExaminationState {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -146,6 +152,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     required TResult Function() started,
     required TResult Function() submitted,
     required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
   }) {
     return loading();
   }
@@ -159,6 +166,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
   }) {
     return loading?.call();
   }
@@ -172,6 +180,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -189,6 +198,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
     required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
   }) {
     return loading(this);
   }
@@ -202,6 +212,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
   }) {
     return loading?.call(this);
   }
@@ -215,6 +226,7 @@ class _$ExaminationStateLoading implements ExaminationStateLoading {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -301,6 +313,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     required TResult Function() started,
     required TResult Function() submitted,
     required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
   }) {
     return failed(error);
   }
@@ -314,6 +327,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
   }) {
     return failed?.call(error);
   }
@@ -327,6 +341,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -344,6 +359,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
     required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
   }) {
     return failed(this);
   }
@@ -357,6 +373,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
   }) {
     return failed?.call(this);
   }
@@ -370,6 +387,7 @@ class _$ExaminationStateFailed implements ExaminationStateFailed {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -478,6 +496,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     required TResult Function() started,
     required TResult Function() submitted,
     required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
   }) {
     return loaded(data, selections);
   }
@@ -491,6 +510,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
   }) {
     return loaded?.call(data, selections);
   }
@@ -504,6 +524,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -521,6 +542,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
     required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
   }) {
     return loaded(this);
   }
@@ -534,6 +556,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
   }) {
     return loaded?.call(this);
   }
@@ -547,6 +570,7 @@ class _$ExaminationStateLoaded implements ExaminationStateLoaded {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -617,6 +641,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     required TResult Function() started,
     required TResult Function() submitted,
     required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
   }) {
     return started();
   }
@@ -630,6 +655,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
   }) {
     return started?.call();
   }
@@ -643,6 +669,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -660,6 +687,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
     required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
   }) {
     return started(this);
   }
@@ -673,6 +701,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
   }) {
     return started?.call(this);
   }
@@ -686,6 +715,7 @@ class _$ExaminationStateStarted implements ExaminationStateStarted {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -749,6 +779,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     required TResult Function() started,
     required TResult Function() submitted,
     required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
   }) {
     return submitted();
   }
@@ -762,6 +793,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
   }) {
     return submitted?.call();
   }
@@ -775,6 +807,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
     required TResult orElse(),
   }) {
     if (submitted != null) {
@@ -792,6 +825,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
     required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
   }) {
     return submitted(this);
   }
@@ -805,6 +839,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
   }) {
     return submitted?.call(this);
   }
@@ -818,6 +853,7 @@ class _$ExaminationStateSubmitted implements ExaminationStateSubmitted {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
     required TResult orElse(),
   }) {
     if (submitted != null) {
@@ -910,6 +946,7 @@ class _$ExaminationStateHistory implements ExaminationStateHistory {
     required TResult Function() started,
     required TResult Function() submitted,
     required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
   }) {
     return history(examinations);
   }
@@ -923,6 +960,7 @@ class _$ExaminationStateHistory implements ExaminationStateHistory {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
   }) {
     return history?.call(examinations);
   }
@@ -936,6 +974,7 @@ class _$ExaminationStateHistory implements ExaminationStateHistory {
     TResult Function()? started,
     TResult Function()? submitted,
     TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
     required TResult orElse(),
   }) {
     if (history != null) {
@@ -953,6 +992,7 @@ class _$ExaminationStateHistory implements ExaminationStateHistory {
     required TResult Function(ExaminationStateStarted value) started,
     required TResult Function(ExaminationStateSubmitted value) submitted,
     required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
   }) {
     return history(this);
   }
@@ -966,6 +1006,7 @@ class _$ExaminationStateHistory implements ExaminationStateHistory {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
   }) {
     return history?.call(this);
   }
@@ -979,6 +1020,7 @@ class _$ExaminationStateHistory implements ExaminationStateHistory {
     TResult Function(ExaminationStateStarted value)? started,
     TResult Function(ExaminationStateSubmitted value)? submitted,
     TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
     required TResult orElse(),
   }) {
     if (history != null) {
@@ -995,5 +1037,172 @@ abstract class ExaminationStateHistory implements ExaminationState {
   List<Examination> get examinations;
   @JsonKey(ignore: true)
   _$$ExaminationStateHistoryCopyWith<_$ExaminationStateHistory> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ExaminationStateLatedCopyWith<$Res> {
+  factory _$$ExaminationStateLatedCopyWith(_$ExaminationStateLated value,
+          $Res Function(_$ExaminationStateLated) then) =
+      __$$ExaminationStateLatedCopyWithImpl<$Res>;
+  $Res call({Examination? examinationLasted});
+}
+
+/// @nodoc
+class __$$ExaminationStateLatedCopyWithImpl<$Res>
+    extends _$ExaminationStateCopyWithImpl<$Res>
+    implements _$$ExaminationStateLatedCopyWith<$Res> {
+  __$$ExaminationStateLatedCopyWithImpl(_$ExaminationStateLated _value,
+      $Res Function(_$ExaminationStateLated) _then)
+      : super(_value, (v) => _then(v as _$ExaminationStateLated));
+
+  @override
+  _$ExaminationStateLated get _value => super._value as _$ExaminationStateLated;
+
+  @override
+  $Res call({
+    Object? examinationLasted = freezed,
+  }) {
+    return _then(_$ExaminationStateLated(
+      examinationLasted == freezed
+          ? _value.examinationLasted
+          : examinationLasted // ignore: cast_nullable_to_non_nullable
+              as Examination?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ExaminationStateLated implements ExaminationStateLated {
+  const _$ExaminationStateLated(this.examinationLasted);
+
+  @override
+  final Examination? examinationLasted;
+
+  @override
+  String toString() {
+    return 'ExaminationState.lated(examinationLasted: $examinationLasted)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ExaminationStateLated &&
+            const DeepCollectionEquality()
+                .equals(other.examinationLasted, examinationLasted));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(examinationLasted));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$ExaminationStateLatedCopyWith<_$ExaminationStateLated> get copyWith =>
+      __$$ExaminationStateLatedCopyWithImpl<_$ExaminationStateLated>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(String error) failed,
+    required TResult Function(Test data, List<Choice> selections) loaded,
+    required TResult Function() started,
+    required TResult Function() submitted,
+    required TResult Function(List<Examination> examinations) history,
+    required TResult Function(Examination? examinationLasted) lated,
+  }) {
+    return lated(examinationLasted);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function(Test data, List<Choice> selections)? loaded,
+    TResult Function()? started,
+    TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
+  }) {
+    return lated?.call(examinationLasted);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(String error)? failed,
+    TResult Function(Test data, List<Choice> selections)? loaded,
+    TResult Function()? started,
+    TResult Function()? submitted,
+    TResult Function(List<Examination> examinations)? history,
+    TResult Function(Examination? examinationLasted)? lated,
+    required TResult orElse(),
+  }) {
+    if (lated != null) {
+      return lated(examinationLasted);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ExaminationStateLoading value) loading,
+    required TResult Function(ExaminationStateFailed value) failed,
+    required TResult Function(ExaminationStateLoaded value) loaded,
+    required TResult Function(ExaminationStateStarted value) started,
+    required TResult Function(ExaminationStateSubmitted value) submitted,
+    required TResult Function(ExaminationStateHistory value) history,
+    required TResult Function(ExaminationStateLated value) lated,
+  }) {
+    return lated(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ExaminationStateLoading value)? loading,
+    TResult Function(ExaminationStateFailed value)? failed,
+    TResult Function(ExaminationStateLoaded value)? loaded,
+    TResult Function(ExaminationStateStarted value)? started,
+    TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
+  }) {
+    return lated?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ExaminationStateLoading value)? loading,
+    TResult Function(ExaminationStateFailed value)? failed,
+    TResult Function(ExaminationStateLoaded value)? loaded,
+    TResult Function(ExaminationStateStarted value)? started,
+    TResult Function(ExaminationStateSubmitted value)? submitted,
+    TResult Function(ExaminationStateHistory value)? history,
+    TResult Function(ExaminationStateLated value)? lated,
+    required TResult orElse(),
+  }) {
+    if (lated != null) {
+      return lated(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ExaminationStateLated implements ExaminationState {
+  const factory ExaminationStateLated(final Examination? examinationLasted) =
+      _$ExaminationStateLated;
+
+  Examination? get examinationLasted;
+  @JsonKey(ignore: true)
+  _$$ExaminationStateLatedCopyWith<_$ExaminationStateLated> get copyWith =>
       throw _privateConstructorUsedError;
 }

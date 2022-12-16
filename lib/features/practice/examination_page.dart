@@ -15,6 +15,7 @@ import 'package:toeic/ui_kits/widgets/cubits/loading_cubit.dart';
 import 'package:toeic/ui_kits/widgets/views/sbox_loading.dart';
 import 'package:toeic/utils/utils.dart';
 
+import '../../apis/models/Examination.dart';
 import '../../apis/models/Test.dart';
 import '../../ui_kits/styles.dart';
 import '../../ui_kits/widgets/views/notification_dialog.dart';
@@ -54,6 +55,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
   int pages = 0;
   ValueNotifier<int> totalTime = ValueNotifier(0);
   int TOTAL_TIME = 12000; // 200 minute
+  Examination? theLastExamination;
 
   LoadingCubit loadingCubit = LoadingCubit();
   late CountdownController countdownController;
@@ -83,6 +85,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
     } else {
       // loadingCubit.showLoading();
       examinationCubit.setupTest(widget.test);
+      examinationCubit.getTheLastExaminationByTypeTestId(widget.test.typeTest!.id!);
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         totalTime.value += 1;
         if (totalTime == TOTAL_TIME &&
@@ -107,7 +110,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
       }
       if (state is ExaminationStateSubmitted) {
         // Chuyển tới trang nhận xét
-        Navigator.of(context).pushReplacement(ExamComment.route());
+        Navigator.of(context).pushReplacement(ExamComment.route(theLastExamination));
+      }
+      else if(state is ExaminationStateLated){
+        theLastExamination = state.examinationLasted ;
       }
     });
 

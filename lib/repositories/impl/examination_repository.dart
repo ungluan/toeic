@@ -51,4 +51,9 @@ class ExaminationRepositoryImpl extends ExaminationRepository {
   Future<List<Examination>> getHistory(int skip, int limit) {
     return _tokenRestClient.getHistory(skip, limit);
   }
+
+  @override
+  Future<Examination?> getTheLastExaminationByTypeTest(int typeTestId, int userId) {
+    return _tokenRestClient.getTheLastExaminationByTypeTest(typeTestId, userId);
+  }
 }
