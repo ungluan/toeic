@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toeic/apis/models/Choice.dart';
-import 'package:toeic/ui_kits/widgets/views/sbox_button.dart';
 
+import '../../../apis/models/Exams.dart';
 import '../../colors.dart';
 
 typedef QuizItemCallBack(int index);
@@ -10,8 +10,9 @@ typedef QuizItemCallBack(int index);
 class QuizDialog extends StatefulWidget {
   final List<Choice> data;
   final PageController pageController;
-
-  const QuizDialog({Key? key, required this.data, required this.pageController})
+  final List<Exams> exams;
+  final bool? readOnly ;
+  const QuizDialog({Key? key, required this.data, required this.pageController, required this.exams, this.readOnly = false})
       : super(key: key);
 
   @override
@@ -52,7 +53,6 @@ class QuizDialogState extends State<QuizDialog> {
   _buildItemAnswerSheet({
     required Choice choice,
     required int index,
-    bool? isSubmitted = false,
     required String answer,
   }) {
     return Row(
@@ -66,25 +66,31 @@ class QuizDialogState extends State<QuizDialog> {
         _buildItemCircle(
             title: 'A',
             backgroundColor:
-                answer == 'a' ? Colors.green.shade500 : Colors.white,
+                getBackgroundColor('a', choice.selected, answer),
             index: index),
         _buildItemCircle(
             title: 'B',
             backgroundColor:
-                answer == 'b' ? Colors.green.shade500 : Colors.white,
+            getBackgroundColor('b', choice.selected, answer),
             index: index),
         _buildItemCircle(
             title: 'C',
             backgroundColor:
-                answer == 'c' ? Colors.green.shade500 : Colors.white,
+            getBackgroundColor('c', choice.selected, answer),
             index: index),
         _buildItemCircle(
             title: 'D',
             backgroundColor:
-                answer == 'd' ? Colors.green.shade500 : Colors.white,
+            getBackgroundColor('d', choice.selected, answer),
             index: index),
       ],
     );
+  }
+
+  Color? getBackgroundColor(String val, String selected, String answer){
+      if(val == answer) return Colors.green.shade500;
+      if(widget.readOnly == true && val == selected) return Colors.red;
+      return Colors.white;
   }
 
   @override
@@ -93,8 +99,28 @@ class QuizDialogState extends State<QuizDialog> {
     super.initState();
   }
 
-  void _onTap(int index) {
+  void _onTap(int numberOfQuestion) {
+    int number = 0;
+    int index = 1;
+    for(int i=0; i<widget.exams.length; i++){
+      int questions = widget.exams[i].questions?.length ?? 0;
+      number += questions;
+      if(numberOfQuestion + 1 <= number) {
+        index = i;
+        break;
+      }
+    }
     widget.pageController.jumpToPage(index);
+  }
+
+  String? getAnswer(int questionId){
+    for(int i=0; i<widget.exams.length; i++){
+      for(int j=0; j<(widget.exams[i].questions?.length ?? 0); j++){
+        if(widget.exams[i].questions?[j].id == questionId){
+          return widget.exams[i].questions?[j].answer;
+        };
+      }
+    }
   }
 
   @override
@@ -116,7 +142,7 @@ class QuizDialogState extends State<QuizDialog> {
           itemBuilder: (context, index) => _buildItemAnswerSheet(
             choice: _data[index],
             index: index,
-            answer: _data[index].selected,
+            answer: getAnswer(_data[index].id) ?? '',
           ),
         ),
       ),

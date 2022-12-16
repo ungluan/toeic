@@ -162,7 +162,8 @@ class _ExaminationPageState extends State<ExaminationPage> {
               itemCount: exam.images!.length,
               itemBuilder: (context, index) => CachedNetworkImage(
                   imageUrl:
-                      "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+                      "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+              ),
             ),
           ),
         ),
@@ -188,6 +189,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                   selected: selected!,
                   isEnable: widget.examinationId == -1,
                   explain: exam.questions![index].explain ?? '',
+                  answer: exam.questions![index].answer ?? '',
                 );
               }),
         ),
@@ -322,6 +324,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                   selected: selected!,
                   isEnable: widget.examinationId == -1,
                   explain: exam.questions![index].explain ?? '',
+                  answer: exam.questions![index].answer ?? '',
                 );
               }),
         ),
@@ -475,6 +478,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                   selected: selected!,
                   isEnable: widget.examinationId == -1,
                   explain: exam.questions![index].explain ?? '',
+                  answer: exam.questions![index].answer ?? '',
                 );
               }),
         ),
@@ -633,6 +637,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                 selected: selected!,
                 isEnable: widget.examinationId == -1,
                 explain: exam.questions![index].explain ?? '',
+                answer: exam.questions![index].answer ?? '',
               );
             },
           ),
@@ -694,6 +699,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                 selected: selected!,
                 isEnable: widget.examinationId == -1,
                 explain: exam.questions![index].explain ?? '',
+                answer: exam.questions![index].answer ?? '',
               );
             },
           ),
@@ -718,10 +724,19 @@ class _ExaminationPageState extends State<ExaminationPage> {
     }
   }
 
-  _buildDescription() {
-    return Center(
-      child: Text("Desctiption"),
-    );
+  String getNumber( int curIndex){
+    int begin = 0;
+    int end = 1;
+    var exam = examinationCubit.examination?.test?.exams ?? [];
+    for(int i=0; i<curIndex; i++){
+      begin += exam[i].questions?.length ?? 0;
+    }
+    print("CURINDEX: "+curIndex.toString());
+    end = begin + (exam[curIndex].questions?.length ?? 0);
+    if(exam[curIndex].questions?.length == 1) return end.toString();
+    print("BEGIN"+begin.toString());
+    print("END"+end.toString());
+    return "${begin+1}-$end";
   }
 
   @override
@@ -748,7 +763,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                 ValueListenableBuilder<int>(
                   valueListenable: curIndexNotifier,
                   builder: (_, curIndex, __) => Text(
-                    "Câu hỏi: ${curIndex + 1}/${examinationCubit.choices?.length ?? 'N/A'}",
+                    "Câu hỏi: ${getNumber(curIndex)}/${examinationCubit.choices?.length ?? 'N/A'}",
                     style: textTitleStyle.copyWith(
                       color: lightTextColor,
                       fontSize: 14,
@@ -764,6 +779,8 @@ class _ExaminationPageState extends State<ExaminationPage> {
                 builder: (context) => QuizDialog(
                   data: examinationCubit.choices ?? [],
                   pageController: pageController,
+                  exams: examinationCubit.examination?.test?.exams ?? [],
+                  readOnly: widget.examinationId != -1,
                 ),
               ),
               child: Image.asset(

@@ -66,20 +66,21 @@ class _HistoryPageState extends State<HistoryPage> {
           examination.numberCorrectPart7!);
     }
     void _onTap() async{
+      print('Click Xem chi tiet');
       loadingCubit.showLoading();
-      if (examination?.finishedAt != null) {
-        await examinationCubit
-            .setupReadExamination(examination!.id!);
-        if (mounted) {
-          Navigator.of(context).push(
-            ExaminationPage.route(
-              test,
-              examinationId: examination.id!,
-            ),
-          );
-          loadingCubit.hideLoading();
-        }
-      }
+      // if (examination?.finishedAt != null) {
+      //   await examinationCubit
+      //       .setupReadExamination(examination!.id!);
+      //   if (mounted) {
+      //     Navigator.of(context).push(
+      //       ExaminationPage.route(
+      //         test,
+      //         examinationId: examination.id!,
+      //       ),
+      //     );
+      //     loadingCubit.hideLoading();
+      //   }
+      // }
     }
     return GestureDetector(
       onTap: () => _onTap(),
@@ -157,7 +158,10 @@ class _HistoryPageState extends State<HistoryPage> {
                                 )
                               : const SizedBox(),
                           InkWell(
-                            onTap: ()=> _onTap(),
+                            onTap: () {
+                              loadingCubit.showLoading();
+                              _onTap();
+                            },
                             child: Chip(
                               elevation: 0,
                               backgroundColor: Colors.green.withOpacity(0.8),

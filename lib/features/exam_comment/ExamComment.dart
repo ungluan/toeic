@@ -24,16 +24,44 @@ class ExamComment extends StatefulWidget {
   }
 }
 
-class _ExamCommentState extends State<ExamComment> {
+class _ExamCommentState extends State<ExamComment>
+    with TickerProviderStateMixin {
   final examinationCubit = getIt<ExaminationCubit>();
   final loadingCubit = getIt<LoadingCubit>();
   double percent = 0;
 
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(seconds: 1),
+    vsync: this,
+  )..repeat(reverse: true);
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeIn,
+  );
+
+  // late final AnimationController _controller2 = AnimationController(
+  //   duration: const Duration(microseconds: 300000),
+  //   vsync: this,
+  // )..repeat(reverse: true);
+  // late final Animation<double> _animation2 = CurvedAnimation(
+  //   parent: _controller2,
+  //   curve: Curves.easeIn,
+  // );
   /**
    *
    * */
 
-  // Tính điểm:
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    // _controller2.dispose();
+    super.dispose();
+  } // Tính điểm:
   // điểm >= target: Bạn đã đạt được mục tiêu của mình.
   // else : Bạn cần cố gắng hơn nữa
 
@@ -65,6 +93,40 @@ class _ExamCommentState extends State<ExamComment> {
     return (percent * 100).toStringAsFixed(2);
   }
 
+  int calScore() {
+    var examination = examinationCubit.examination;
+    if (examination?.test?.typeTest?.id != 8) return 0;
+    var totalScore = 0;
+    var listening = (examination?.numberCorrectPart1 ?? 0) +
+        (examination?.numberCorrectPart2 ?? 0) +
+        (examination?.numberCorrectPart3 ?? 0) +
+        (examination?.numberCorrectPart4 ?? 0);
+    var reading = (examination?.numberCorrectPart5 ?? 0) +
+        (examination?.numberCorrectPart6 ?? 0) +
+        (examination?.numberCorrectPart7 ?? 0) ;
+    if (listening == 0) {
+      totalScore += 5;
+    } else if (listening == 15) {
+      totalScore += 15;
+    } else if (listening < 96) {
+      totalScore += 20 + (listening - 1) * 5;
+    } else {
+      totalScore += 495;
+    }
+
+    if (reading <= 2) {
+      totalScore += 5;
+    } else {
+      totalScore += 5 + (reading - 2) * 5;
+    }
+
+    return totalScore;
+  }
+
+  bool success(){
+    return (calScore() >= (examinationCubit.authenticationRepository.user?.target ?? 500));
+  }
+
   // int caculateScore(Examination examination){
   //
   // }
@@ -90,8 +152,17 @@ class _ExamCommentState extends State<ExamComment> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Image.asset('assets/images/firework.png',
-                              fit: BoxFit.fitWidth),
+                          FadeTransition(
+                            opacity: _animation,
+                            child: Image.asset(
+                              'assets/images/firework.png',
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                          Image.asset(
+                            'assets/images/confeti-vector.png',
+                            fit: BoxFit.fitWidth,
+                          ),
                           SvgPicture.asset(
                             'assets/images/meditate-illustrator.svg',
                             height: 256,
@@ -111,17 +182,22 @@ class _ExamCommentState extends State<ExamComment> {
                               height: 32,
                             ),
                             Text(
-                              'Bạn cần cố gắng hơn nữa',
+                              success() ? 'Chúc mừng bạn, bạn đã đạt được mục tiêu đề ra' : 'Bạn cần cố gắng hơn nữa',
                               style: GoogleFonts.openSans(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                                color: success() ? darkBlueColor : Colors.black
                               ),
                             ),
                             SizedBox(
                               height: 32,
                             ),
                             Text(
-                              'Kết quả',
+                              examinationCubit
+                                          .examination?.test?.typeTest?.id ==
+                                      8
+                                  ? 'Kết quả: ${calScore()}'
+                                  : 'Kết quả',
                               style: GoogleFonts.openSans(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -142,6 +218,9 @@ class _ExamCommentState extends State<ExamComment> {
                                   children: [
                                     const SizedBox(
                                       height: 16,
+                                    ),
+                                    SizedBox(
+                                      height: 4,
                                     ),
                                     Row(
                                       children: [
@@ -188,9 +267,9 @@ class _ExamCommentState extends State<ExamComment> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: makeSBoxButton(
+                              child: makeRoundButton(
                                 'Hiển thị đáp án',
-                                onTap: () => {
+                                onPressed: () => {
                                   Navigator.of(context).pushReplacement(
                                     ExaminationPage.route(
                                       examinationCubit.examination!.test!,
@@ -200,7 +279,7 @@ class _ExamCommentState extends State<ExamComment> {
                                   )
                                 },
                                 height: 45,
-                                width: 200,
+                                // width: 200,
                               ),
                             ),
                             const SizedBox(width: 16),

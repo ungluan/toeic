@@ -146,6 +146,7 @@ class _ListTestPageState extends State<ListTestPage> {
                               : const SizedBox(),
                           InkWell(
                             onTap: () async {
+                              loadingCubit.showLoading();
                               if (examination?.finishedAt != null) {
                                 await examinationCubit
                                     .setupReadExamination(examination!.id!);
@@ -153,6 +154,7 @@ class _ListTestPageState extends State<ListTestPage> {
                                   Navigator.of(context).push(
                                       ExaminationPage.route(test,
                                           examinationId: examination.id!));
+                                  loadingCubit.hideLoading();
                                 }
                               }
                             },

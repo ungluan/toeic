@@ -41,23 +41,23 @@ ButtonStyle get fowButtonNoBorderStyle => ButtonStyle(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: Colors.transparent, width: 2))));
 
-TextStyle get textFowButtonStyle => GoogleFonts.aBeeZee(
+TextStyle get textFowButtonStyle => GoogleFonts.openSans(
     fontSize: 16, letterSpacing: 1.33, fontWeight: FontWeight.bold);
 
 TextStyle get textItemMenuStyle =>
-    GoogleFonts.aBeeZee(fontSize: 12, color: menuItemColor);
+    GoogleFonts.openSans(fontSize: 12, color: menuItemColor);
 
-TextStyle get textTitleStyle => GoogleFonts.aBeeZee(
+TextStyle get textTitleStyle => GoogleFonts.openSans(
     fontSize: 14, color: darkBlueColor, fontWeight: FontWeight.w500);
 
 TextStyle get textContentStyle =>
-    GoogleFonts.aBeeZee(fontSize: 14, color: Colors.black);
+    GoogleFonts.openSans(fontSize: 14, color: Colors.black);
 
-TextStyle get aBeeZeeStyle => GoogleFonts.aBeeZee(
+TextStyle get openSansStyle => GoogleFonts.openSans(
   textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
 );
 
-TextStyle get questionStyle => GoogleFonts.aBeeZee(
+TextStyle get questionStyle => GoogleFonts.openSans(
   textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
 );
 

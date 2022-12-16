@@ -20,6 +20,7 @@ class OneChoice extends StatefulWidget {
     required this.questionContent,
     required this.kind,
     required this.explain,
+    this.answer,
   }) : super(key: key);
   final int questionNumber;
   final String questionContent;
@@ -29,6 +30,7 @@ class OneChoice extends StatefulWidget {
   final bool isEnable;
   final KindDisplay kind;
   final String explain;
+  final String? answer;
   @override
   State<OneChoice> createState() => _OneChoiceState();
 }
@@ -56,34 +58,36 @@ class _OneChoiceState extends State<OneChoice> {
               });
             }
           },
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IgnorePointer(
-                  child: FowRadio(
-                    isCheck: key == selected,
-                    isEnable: widget.isEnable,
-                    onCheckChange: () {},
-                  ),
-                ),
-                Flexible(
-                  child: Text(
-                    widget.kind == KindDisplay.ABCD ? "(${value.toUpperCase()})" : "(${key.toUpperCase()}) $value" ,
-                    style: textContentStyle.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: widget.isEnable ? Colors.black : Colors.black45,
+          child: Container(
+            color: (!widget.isEnable && widget.answer == key)  ? lightBlueColor :
+            (!widget.isEnable && widget.selected == key) ? null : null,
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  IgnorePointer(
+                    child: FowRadio(
+                      isCheck: key == selected,
+                      isEnable: widget.isEnable,
+                      onCheckChange: () {},
                     ),
                   ),
-                ),
-              ],
+                  Flexible(
+                    child: Text(
+                      widget.kind == KindDisplay.ABCD ? "(${value.toUpperCase()})" : "(${key.toUpperCase()}) $value" ,
+                      style: textContentStyle.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: widget.isEnable ? Colors.black : Colors.black45,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
