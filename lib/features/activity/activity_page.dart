@@ -336,7 +336,7 @@ class _ActivityPageState extends State<ActivityPage>
                           }, enable: true),
                           const SizedBox(height: 16),
                           buildContent('assets/images/ic_chat_time.svg',
-                              'Thời gian nhắc nhở', onTap: () {
+                              'Nhắc nhở ôn luyện', onTap: () {
                             _interceptTap(DrawerItem.Notification);
                           }, enable: true),
                           const SizedBox(height: 16),

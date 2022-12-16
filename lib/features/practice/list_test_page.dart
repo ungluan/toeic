@@ -250,33 +250,34 @@ class _ListTestPageState extends State<ListTestPage> {
                   return CustomScrollView(
                     slivers: [
                       SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 80,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: DropdownSearch<String>(
-                              popupProps: const PopupProps.menu(
-                                showSelectedItems: true,
-                              ),
-                              items: const [
-                                "500",
-                                "700",
-                                "900"
-                              ],
-                              dropdownDecoratorProps: const DropDownDecoratorProps(
-                                dropdownSearchDecoration: InputDecoration(
-                                  labelText: "Mục tiêu",
-                                  hintText: "Chọn mục tiêu",
-                                ),
-                              ),
-                              onChanged: (val){
-                                //Todo: Thực hiện call api và reset lại mảng
-                                print(val);
-                              },
-                              selectedItem: examinationCubit.authenticationRepository.user?.target?.toString() ?? "500",
-                            ),
-                          ),
-                        ),
+                        child: SizedBox(),
+                        // child: SizedBox(
+                        //   height: 80,
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 16),
+                        //     child: DropdownSearch<String>(
+                        //       popupProps: const PopupProps.menu(
+                        //         showSelectedItems: true,
+                        //       ),
+                        //       items: const [
+                        //         "500",
+                        //         "700",
+                        //         "900"
+                        //       ],
+                        //       dropdownDecoratorProps: const DropDownDecoratorProps(
+                        //         dropdownSearchDecoration: InputDecoration(
+                        //           labelText: "Mục tiêu",
+                        //           hintText: "Chọn mục tiêu",
+                        //         ),
+                        //       ),
+                        //       onChanged: (val){
+                        //         //Todo: Thực hiện call api và reset lại mảng
+                        //         print(val);
+                        //       },
+                        //       selectedItem: examinationCubit.authenticationRepository.user?.target?.toString() ?? "500",
+                        //     ),
+                        //   ),
+                        // ),
                       ),
                       SliverToBoxAdapter(
                         child: Container(
