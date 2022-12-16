@@ -985,7 +985,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                   key: _one,
                   title: 'Câu hỏi',
                   description:
-                      "Thông tin Số thứ tự của câu hỏi / Tổng số câu hỏi",
+                      "Thông tin số thứ tự của câu hỏi / tổng số câu hỏi",
                   tooltipBackgroundColor: Theme.of(context).primaryColor,
                   textColor: Colors.white,
                   targetShapeBorder: const CircleBorder(),
