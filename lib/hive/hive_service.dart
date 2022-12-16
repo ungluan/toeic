@@ -16,6 +16,11 @@ class HiveService {
   String get token => box.get('token', defaultValue: '');
 
   bool get hasFingerPrint => box.get('finger_print', defaultValue: false);
+
   void updateFingerPrint(bool enable) => box.put('finger_print', enable);
+
+  bool get didShowCase => box.get('show_case', defaultValue: false);
+
+  void updateDidShowCase(bool didShow) => box.put('show_case', didShow);
 }
 

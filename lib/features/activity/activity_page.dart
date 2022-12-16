@@ -292,12 +292,14 @@ class _ActivityPageState extends State<ActivityPage>
                                           height: 24,
                                           color: orangeColor,
                                         ),
-                                        Text(
-                                          '${userCubit.user?.firstName} ${userCubit.user?.lastName}',
-                                          textAlign: TextAlign.left,
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600),
+                                        Flexible(
+                                          child: Text(
+                                            '${userCubit.user?.firstName} ${userCubit.user?.lastName}',
+                                            textAlign: TextAlign.left,
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                         ),
                                       ],
                                     ),

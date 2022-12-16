@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
 import 'package:toeic/ui_kits/colors.dart';
 import 'package:toeic/ui_kits/widgets/cubits/loading_cubit.dart';
@@ -14,8 +15,7 @@ import 'cubit/test_cubit.dart';
 import 'examination_page.dart';
 
 class IntroduceExamination extends StatefulWidget {
-  const IntroduceExamination({Key? key, required this.test})
-      : super(key: key);
+  const IntroduceExamination({Key? key, required this.test}) : super(key: key);
   final Test test;
 
   static Route route({required Test test}) {
@@ -59,13 +59,26 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
 
   final examinationCubit = getIt<ExaminationCubit>();
   final loadingCubit = getIt<LoadingCubit>();
+
   @override
   void initState() {
     super.initState();
     key = widget.test.typeTest?.id ?? 1;
     examinationCubit.stream.listen((state) {
-      if (state is ExaminationStateStarted){
-        Navigator.of(context).pushReplacement(ExaminationPage.route(examinationCubit.examination!.test!));
+      if (state is ExaminationStateStarted) {
+        print(examinationCubit.examination?.test);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => ShowCaseWidget(
+              builder: Builder(
+                builder: (context) => ExaminationPage(
+                    test: examinationCubit.examination!.test!,
+                    examinationId: -1,
+                ),
+              ),
+            ),
+          ),
+        );
       }
     });
   }
@@ -77,7 +90,7 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          title[key-1],
+          title[key - 1],
           style: GoogleFonts.openSans(
               fontSize: 18, color: darkBlueColor, fontWeight: FontWeight.bold),
         ),
@@ -88,7 +101,7 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
           height: 24,
           padding: const EdgeInsets.all(8),
           child: GestureDetector(
-            onTap: ()=> Navigator.of(context).pop(),
+            onTap: () => Navigator.of(context).pop(),
             child: SvgPicture.asset(
               'assets/images/arrow-left-icon.svg',
               width: 24,
@@ -130,7 +143,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: key == 1 || key == 8 ? "\n\n${title[0]}: " : '',
+                                        text: key == 1 || key == 8
+                                            ? "\n\n${title[0]}: "
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -138,7 +153,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: key == 1 || key == 8 ? "$part1" : '',
+                                        text: key == 1 || key == 8
+                                            ? "$part1"
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -146,7 +163,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: key == 2 || key == 8 ? "${title[1]}: " : '',
+                                        text: key == 2 || key == 8
+                                            ? "${title[1]}: "
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -162,7 +181,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: key == 3 || key == 8 ? "${title[2]}: " : '',
+                                        text: key == 3 || key == 8
+                                            ? "${title[2]}: "
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -178,7 +199,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: key == 4 || key == 8 ? "${title[3]}: " : '',
+                                        text: key == 4 || key == 8
+                                            ? "${title[3]}: "
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -194,7 +217,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: key == 5 || key == 8 ? "${title[4]}: " : '',
+                                        text: key == 5 || key == 8
+                                            ? "${title[4]}: "
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -210,7 +235,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: key == 6 || key == 8 ? "${title[5]}: " : '',
+                                        text: key == 6 || key == 8
+                                            ? "${title[5]}: "
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -226,7 +253,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: key == 7 || key == 8 ? "${title[6]}: " : '',
+                                        text: key == 7 || key == 8
+                                            ? "${title[6]}: "
+                                            : '',
                                         style: GoogleFonts.openSans(
                                           fontSize: 14,
                                           color: Colors.black,
@@ -254,7 +283,8 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                   'Làm bài',
                                   onTap: () {
                                     loadingCubit.showLoading();
-                                    examinationCubit.startExamination(widget.test.id!);
+                                    examinationCubit
+                                        .startExamination(widget.test.id!);
                                   },
                                   height: 50,
                                 ),
@@ -275,7 +305,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                 ),
               ],
             ),
-            Loading(loadingCubit: loadingCubit,)
+            Loading(
+              loadingCubit: loadingCubit,
+            )
           ],
         ),
       ),

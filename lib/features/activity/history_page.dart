@@ -68,19 +68,19 @@ class _HistoryPageState extends State<HistoryPage> {
     void _onTap() async{
       print('Click Xem chi tiet');
       loadingCubit.showLoading();
-      // if (examination?.finishedAt != null) {
-      //   await examinationCubit
-      //       .setupReadExamination(examination!.id!);
-      //   if (mounted) {
-      //     Navigator.of(context).push(
-      //       ExaminationPage.route(
-      //         test,
-      //         examinationId: examination.id!,
-      //       ),
-      //     );
-      //     loadingCubit.hideLoading();
-      //   }
-      // }
+      if (examination?.finishedAt != null) {
+        await examinationCubit
+            .setupReadExamination(examination!.id!);
+        if (mounted) {
+          Navigator.of(context).push(
+            ExaminationPage.route(
+              test,
+              examinationId: examination.id!,
+            ),
+          );
+          loadingCubit.hideLoading();
+        }
+      }
     }
     return GestureDetector(
       onTap: () => _onTap(),

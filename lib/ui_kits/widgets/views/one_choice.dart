@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../../colors.dart';
 import '../../styles.dart';
@@ -21,6 +22,8 @@ class OneChoice extends StatefulWidget {
     required this.kind,
     required this.explain,
     this.answer,
+    this.globalKeys,
+
   }) : super(key: key);
   final int questionNumber;
   final String questionContent;
@@ -31,12 +34,14 @@ class OneChoice extends StatefulWidget {
   final KindDisplay kind;
   final String explain;
   final String? answer;
+  final List<GlobalKey>? globalKeys ;
   @override
   State<OneChoice> createState() => _OneChoiceState();
 }
 
 class _OneChoiceState extends State<OneChoice> {
   late String selected;
+  bool? theFirstTime;
 
   @override
   void initState() {
@@ -58,7 +63,44 @@ class _OneChoiceState extends State<OneChoice> {
               });
             }
           },
-          child: Container(
+          child: widget.globalKeys?.length == 2 && key == 'a' ?
+          Showcase(targetPadding: const EdgeInsets.all(5),
+            key: widget.globalKeys![1],
+            title: 'Đáp án',
+            description:
+            "Hiển thị nội dung của các đáp án, bấm để chọn đáp án mà bạn mong muốn",
+            tooltipBackgroundColor: Theme.of(context).primaryColor,
+            textColor: Colors.white,
+            targetShapeBorder: const CircleBorder(),
+            child: Container(
+              color: (!widget.isEnable && widget.answer == key)  ? lightBlueColor :
+              (!widget.isEnable && widget.selected == key) ? null : null,
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  IgnorePointer(
+                    child: FowRadio(
+                      isCheck: key == selected,
+                      isEnable: widget.isEnable,
+                      onCheckChange: () {},
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      widget.kind == KindDisplay.ABCD ? "(${value.toUpperCase()})" : "(${key.toUpperCase()}) $value" ,
+                      style: textContentStyle.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: widget.isEnable ? Colors.black : Colors.black45,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ) :
+          Container(
             color: (!widget.isEnable && widget.answer == key)  ? lightBlueColor :
             (!widget.isEnable && widget.selected == key) ? null : null,
               padding: const EdgeInsets.all(4),
@@ -88,11 +130,50 @@ class _OneChoiceState extends State<OneChoice> {
           ),
         ),
       );
-
+    if(theFirstTime == null) theFirstTime = true;
+    else if(theFirstTime == true) theFirstTime = false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
+        widget.globalKeys?.length == 2 && theFirstTime == true ?
+        Showcase(
+          targetPadding: const EdgeInsets.all(5),
+          key: widget.globalKeys![0],
+          title: 'Nội dung câu hỏi',
+          description:
+          "Hiển thị nội dung câu hỏi",
+          tooltipBackgroundColor: Theme.of(context).primaryColor,
+          textColor: Colors.white,
+          targetShapeBorder: const CircleBorder(),
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(left: 14, right: 14, top: 12, bottom: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: lightBlueColor,
+            ),
+            child: RichText(
+              text: TextSpan(
+                text: '${widget.questionNumber}. ',
+                style: questionStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: darkBlueColor,
+                ),
+                children: [
+                  TextSpan(
+                    text: widget.questionContent,
+                    style: questionStyle.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ) : Container(
           width: double.infinity,
           margin: const EdgeInsets.only(left: 14, right: 14, top: 12, bottom: 12),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
@@ -104,9 +185,9 @@ class _OneChoiceState extends State<OneChoice> {
             text: TextSpan(
               text: '${widget.questionNumber}. ',
               style: questionStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: darkBlueColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: darkBlueColor,
               ),
               children: [
                 TextSpan(
