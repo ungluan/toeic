@@ -113,6 +113,15 @@ class _ListTestPageState extends State<ListTestPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          const SizedBox(width: 4,),
+                          test.typeTest?.id == 8 && examination!=null ? Text(
+                            'Điểm: ${calScore(examination)}',
+                            style: GoogleFonts.openSans(
+                              fontSize: 14,
+                              color: orangeColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ): const SizedBox(),
                         ],
                       ),
                     ),
@@ -208,6 +217,34 @@ class _ListTestPageState extends State<ListTestPage> {
     } else {
       return 'Thi thử';
     }
+  }
+  int calScore(Examination? examination) {
+    if (examination?.test?.typeTest?.id != 8) return 0;
+    var totalScore = 0;
+    var listening = (examination?.numberCorrectPart1 ?? 0) +
+        (examination?.numberCorrectPart2 ?? 0) +
+        (examination?.numberCorrectPart3 ?? 0) +
+        (examination?.numberCorrectPart4 ?? 0);
+    var reading = (examination?.numberCorrectPart5 ?? 0) +
+        (examination?.numberCorrectPart6 ?? 0) +
+        (examination?.numberCorrectPart7 ?? 0);
+    if (listening == 0) {
+      totalScore += 5;
+    } else if (listening == 15) {
+      totalScore += 15;
+    } else if (listening < 96) {
+      totalScore += 20 + (listening - 1) * 5;
+    } else {
+      totalScore += 495;
+    }
+
+    if (reading <= 2) {
+      totalScore += 5;
+    } else {
+      totalScore += 5 + (reading - 2) * 5;
+    }
+
+    return totalScore;
   }
 
   @override
