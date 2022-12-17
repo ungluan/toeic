@@ -29,16 +29,17 @@ class TestCubit extends Cubit<TestState> {
       : super(const TestState.loading()){
     examinationRepository.testStateStream.listen((event) {
       if(event is TestStateLoaded){
+        /// Lắng nghe khi nộp bài thành công thì sẽ cập nhật lại UI
         getListTestByTypeTest(_listTest.first.typeTest?.id ?? 1);
       }
     });
   }
 
+  /// * Danh sách lựa chọn ***/
   List<Choice>? _choices = [];
-
   List<Choice>? get choices => _choices;
+  /// * Danh sách bài thi ***/
   List<Examination?>? _examinations = [];
-
   List<Examination?>? get examination => _examinations;
 
   Map<String, String> convertQuestionToMap(Questions question) {
@@ -50,6 +51,7 @@ class TestCubit extends Cubit<TestState> {
     };
   }
 
+  /// * Lấy đáp án đã chọn theo câu hỏi ***/
   int getSelectionNumber(int questionId) {
     for (int i = 0; i < _choices!.length; i++) {
       if (_choices![i].id == questionId) return i + 1;
@@ -57,35 +59,21 @@ class TestCubit extends Cubit<TestState> {
     return -1;
   }
 
+  /// * Chọn đáp án ***/
   void chooseAnswer(String newSelected, int questionId) {
     _choices?.where((choice) => choice.id == questionId).first.selected =
         newSelected;
   }
 
-  // Future<void> setupTest(int typeId) async {
-  //   try {
-  //       emit(const TestState.loading());
-  //       // String responseStr = await rootBundle.loadString('assets/mock/part$typeId.json');
-  //       var response = Test.fromJson(mock());
-  //       List<Exams>? exams = response.exams;
-  //       for( int i=0; i<exams!.length; i++){
-  //         var questions = exams[i].questions;
-  //         for( int j=0; j<questions!.length; j++){
-  //           _choices?.add(Choice(id: questions[j].id! , selected: ''));
-  //         }
-  //       emit(TestState.loaded(data: response, selections: choices!));
-  //     }
-  //   } on DioError catch (e) {
-  //     emit(TestState.failed(e.response?.statusMessage ?? ''));
-  //   }
-  // }
-
+  /// * API lấy danh sách bài thi theo "Loại" và "Mục tiêu" ***/
   Future<void> getListTestByTypeTest(int typeTestId) async {
     try {
       emit(const TestStateLoading());
       var tests = await testRepository.getListTestByTypeTest(
           typeTestId, authenticationRepository.user?.target ?? 500);
+      /// * Gán kết quả trả về cho _listTest ***/
       _listTest = tests;
+      /// * Lấy danh sách các ôn luyện cùng TypeTest gần nhất để hiển thị lịch sử
       _examinations =
           await getListExaminationByTestsId(tests.map((e) => e.id!).toList());
       emit(const TestStateLoaded());
@@ -94,6 +82,7 @@ class TestCubit extends Cubit<TestState> {
     }
   }
 
+  /// !Importance cần thêm try catch
   Future<List<Examination?>> getListExaminationByTestsId(
       List<int> testsId) async {
     return await testRepository.getListExaminationByTestsId(testsId);
