@@ -38,13 +38,9 @@ class LoginCubit extends Cubit<LoginState> {
       emit(const LoginState.loading());
       final data = {'phone_number': username, 'password': password};
       var response = await repository.login(data);
-      // if(response){
-        emit(const LoginStateSuccess());
-      // }else{
-      //   emit(const LoginStateFailed("Error"));
-      // }
+      emit(const LoginState.success());
     } on DioError catch (e) {
-      emit(const LoginStateFailed("Tài khoản hoặc mật khẩu không chính xác."));
+      emit(const LoginState.failed("Tài khoản hoặc mật khẩu không chính xác."));
     }
   }
 }

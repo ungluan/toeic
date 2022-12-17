@@ -82,10 +82,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   title: "Thông báo",
                   content: "Đổi mật khẩu thành công, hãy đăng nhập lại.",
                   onPositiveTap: () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.popUntil(
                       context,
-                      LoginPage.route(),
-                      (route) => false,
+                      (route) => route.isFirst,
                     );
                   },
                   onNegativeTap: () {},

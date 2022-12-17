@@ -79,8 +79,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       // logger(e.response?.statusCode);
       if (e is DioError && e.response?.statusCode != 500) {
         // DataResponse dataResponse = DataResponse.fromJson(e.response?.data);
-        // authenticationStateSubject
-        //     .add(AuthenticationState.failed(dataResponse.message));
+        authenticationStateSubject
+            .add(const AuthenticationState.failed("Tài khoản hoặc mật khẩu không chính xác."));
       } else {
         authenticationStateSubject
             .add(AuthenticationState.failed(e.toString()));

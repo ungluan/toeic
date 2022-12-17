@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +8,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
-import 'package:toeic/features/blank_page.dart';
 import 'package:toeic/features/main_page.dart';
 import 'package:toeic/features/update_profile_lv1/update_profile_page.dart';
 import 'package:toeic/services/notification.dart';
 import 'package:toeic/utils/utils.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'features/login/cubit/authentication_cubit.dart';
 import 'features/login/view/login_page.dart';
 import 'hive/hive_service.dart';
@@ -81,8 +78,7 @@ class _MyAppState extends State<MyApp> {
           builder: (BuildContext context, state) => state.maybeWhen(
             authenticated: () => MainPage(),
             level1: () => const UpdateProfilePage(),
-            unauthenticated: () => const LoginPage(),
-            orElse: () => const BlankPage(),
+            orElse: () => const LoginPage(),
           ),
         ),
       ),
