@@ -75,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void initState() {
-    mock();
+    // mock();
     init();
     passwordNotifier.addListener(() {
       final text = repeatPasswordController.text;
