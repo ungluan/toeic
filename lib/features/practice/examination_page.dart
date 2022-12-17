@@ -28,9 +28,12 @@ class ExaminationPage extends StatefulWidget {
   const ExaminationPage(
       {Key? key, required this.test, required this.examinationId})
       : super(key: key);
+  /// Input: đề thi, mã bài thi
   final Test test;
   final int examinationId;
 
+  /// Mã bài thi mặc định bằng -1=> Hành động thi
+  /// Ngược lại => Hành động xem chi tiết
   static Route route(Test test, {int examinationId = -1}) {
     return MaterialPageRoute(
       builder: (_) => ExaminationPage(test: test, examinationId: examinationId),
@@ -80,12 +83,14 @@ class _ExaminationPageState extends State<ExaminationPage> {
   void initState() {
     super.initState();
     if (widget.examinationId != -1) {
-      // loadingCubit.showLoading();
+      /// Setup status readOnly
       examinationCubit.setupReadExamination(widget.examinationId);
     } else {
-      // loadingCubit.showLoading();
+      /// Setup thi
       examinationCubit.setupTest(widget.test);
+      /// Cái này ta có thể chuyển sang trang nhận xét
       examinationCubit.getTheLastExaminationByTypeTestId(widget.test.typeTest!.id!);
+      /// Timer
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         totalTime.value += 1;
         if (totalTime == TOTAL_TIME &&
@@ -104,12 +109,11 @@ class _ExaminationPageState extends State<ExaminationPage> {
     });
     examinationCubit.stream.listen((state) {
       if (state is ExaminationStateLoaded) {
-        // loadingCubit.hideLoading();
+        /// Gán tổng số trang bằng tổng số đề bài
         pages = state.data.exams!.length;
-        print(state.data);
       }
       if (state is ExaminationStateSubmitted) {
-        // Chuyển tới trang nhận xét
+        /// Chuyển tới trang nhận xét
         Navigator.of(context).pushReplacement(ExamComment.route(theLastExamination));
       }
       else if(state is ExaminationStateLated){
@@ -120,12 +124,13 @@ class _ExaminationPageState extends State<ExaminationPage> {
     countdownController = CountdownController(
       duration: const Duration(seconds: 7200),
       onEnd: () {
-        // Nộp bài
+        /// Nộp bài
         loadingCubit.showLoading();
         examinationCubit.submitExamination(totalTime.value);
       },
     );
 
+    /// Showcase
     if(hive.didShowCase != true && examinationCubit.examination?.test?.typeTest?.id == 8){
       WidgetsBinding.instance.addPostFrameCallback(
             (_) => ShowCaseWidget.of(context)
@@ -192,6 +197,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
             ),
             child: ListView.builder(
               itemCount: exam.images!.length,
+              /// Đoạn này sẽ có 2 th: 1 render NetworkImage, 2 render FileImage
               itemBuilder: (context, index) => CachedNetworkImage(
                 imageUrl: "$FIREBASE_URL/${exam.images![index].url}?alt=media",
               ),

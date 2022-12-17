@@ -26,13 +26,14 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     _examination = examinationRepository.examination;
   }
 
+  /// Danh sách lựa chọn của bài thi
   List<Choice>? _choices = [];
-
   List<Choice>? get choices => _choices;
+  /// Bài thi đang thi
   Examination? _examination;
-
   Examination? get examination => _examination;
 
+  /// ?? Làm gì nhỉ
   Map<String, String> convertQuestionToMap(Questions question, {bool hasD = true}) {
     if(hasD){
       return {
@@ -49,6 +50,7 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     };
   }
 
+  /// Lấy đáp án đã chọn theo câu hỏi
   int getSelectionNumber(int questionId) {
     for (int i = 0; i < _choices!.length; i++) {
       if (_choices![i].id == questionId) return i + 1;
@@ -56,16 +58,19 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     return -1;
   }
 
+  /// Chọn đáp án
   void chooseAnswer(String newSelected, int questionId) {
     _choices?.where((choice) => choice.id == questionId).first.selected =
         newSelected;
   }
 
+  /// Setup trước khi làm bài thi
   Future<void> setupTest(Test test) async {
     try {
       emit(const ExaminationState.loading());
+      /// Gán exams = danh sách các câu hỏi của đề thi
       List<Exams>? exams = test.exams;
-      // exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
+      /// Khởi tạo danh sách lựa chọn
       for (int i = 0; i < exams!.length; i++) {
         var questions = exams[i].questions;
         for (int j = 0; j < questions!.length; j++) {
@@ -78,18 +83,24 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     }
   }
 
+  /// Setup trước khi xem chi tiết bài thi
   Future<void> setupReadExamination(int examinationId) async {
+    /// Nếu chi tiết bài thi chưa có sẵn thì gọi api
     if (_examination?.id != examinationId) {
-      // getExamination
+      /// Lấy chi tiết bài thi theo Id.  """ Thêm gọi local cho API này """
       _examination = await examinationRepository.getExamination(examinationId);
+      /// Sắp xếp lại thứ tự câu hỏi phần
       _examination?.test?.exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
+      /// Gán vào examination để đem đi hiển thị bên UI
       examinationRepository.examination = _examination;
     }
+    /// Khi đã có chi tiết bài thi
     try {
       emit(const ExaminationState.loading());
       List<Exams>? exams = examination!.test!.exams;
       exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
       logger(exams);
+      /// gán danh sách lựa chọn
       for (int i = 0; i < exams!.length; i++) {
         var questions = exams[i].questions;
         for (int j = 0; j < questions!.length; j++) {
@@ -105,23 +116,32 @@ class ExaminationCubit extends Cubit<ExaminationState> {
     }
   }
 
+  /// Bắt đầu bài thi
+  //Todo: cần thêm gọi db ngay chổ này
   Future<void> startExamination(int testId) async {
     try {
       emit(const ExaminationState.loading());
+      /// Tạo chi tiết bài thi
       _examination = await examinationRepository.startExamination(testId);
+      /// Sắp xếp danh sách câu hỏi theo phần thi
       _examination?.test?.exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
-      examination!.test!.exams!.forEach((element) {print(element.part!.id!);});
+      /// Lưu trữ chi tiết bài thi trong repository
       examinationRepository.examination = _examination;
-      logger(examinationRepository.examination);
       emit(const ExaminationStateStarted());
     } on DioError catch (e) {
+      /// Ngay chổ này.
+      /// Gọi db: lấy examination chưa finished hoặc tạo mới 1 examination
+      /// Sắp xếp lại danh sách câu hỏi theo phần nếu cần thiết
+      /// lưu trữ chi tiết bài thi trong ExaminationRepository
+      /// emit Success
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }
   }
 
+  /// Nộp bài
   Future<void> submitExamination(int totalTime) async {
     Map<String, dynamic> data = {};
-    // data['total_time'] = totalTime;
+    /// Tạo Map<questionId, selected> gửi lên Server
     for (var selected in choices ?? []) {
       data['${selected.id}'] = selected.selected;
     }
@@ -132,20 +152,27 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       examinationRepository.examination = _examination;
       emit(const ExaminationState.submitted());
     } on DioError catch (e) {
+      /// Khi không có mạng cần lưu trữ data vào đâu?
+      /// Hay là tạo danh sách chi tiết bài thi lưu vào db, tính toán điểm, Khi nào có mạng query submit lên Server
+      /// Get lại examination. đem gán vào repository
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }
   }
 
+  /// Lịch sử ôn luyện
   Future<void> getListExaminationByUser() async{
     try{
       emit(const ExaminationState.loading());
       var response = await examinationRepository.getListExaminationByUser();
       emit(ExaminationStateHistory(response));
     }on DioError catch(e){
+      /// Gọi db lấy danh sách chi tiết bài thi
+      /// Emit successful
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }
   }
 
+  /// Lấy dữ liệu bài thi gần nhất, để so sánh với bài thi này.
   Future<void> getTheLastExaminationByTypeTestId(int typeTestId) async {
     try{
       emit(const ExaminationState.loading());
@@ -154,6 +181,8 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       print(response);
       emit(ExaminationState.lated(response));
     }on DioError catch(e){
+      /// Gọi trong db ra
+      /// emit
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }
   }

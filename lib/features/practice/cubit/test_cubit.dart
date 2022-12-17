@@ -20,27 +20,32 @@ class TestCubit extends Cubit<TestState> {
   final TestRepository testRepository;
   final ExaminationRepository examinationRepository;
   final AuthenticationRepository authenticationRepository;
+
+  /// Danh sách đề thi
   List<Test> _listTest = [];
 
   List<Test> get listTest => _listTest;
 
+  /// * Danh sách lựa chọn ***/
+  List<Choice>? _choices = [];
+
+  List<Choice>? get choices => _choices;
+
+  /// * Danh sách bài thi ***/
+  List<Examination?>? _examinations = [];
+
+  List<Examination?>? get examination => _examinations;
+
   TestCubit(this.userRepository, this.testRepository,
       this.authenticationRepository, this.examinationRepository)
-      : super(const TestState.loading()){
+      : super(const TestState.loading()) {
     examinationRepository.testStateStream.listen((event) {
-      if(event is TestStateLoaded){
+      if (event is TestStateLoaded) {
         /// Lắng nghe khi nộp bài thành công thì sẽ cập nhật lại UI
         getListTestByTypeTest(_listTest.first.typeTest?.id ?? 1);
       }
     });
   }
-
-  /// * Danh sách lựa chọn ***/
-  List<Choice>? _choices = [];
-  List<Choice>? get choices => _choices;
-  /// * Danh sách bài thi ***/
-  List<Examination?>? _examinations = [];
-  List<Examination?>? get examination => _examinations;
 
   Map<String, String> convertQuestionToMap(Questions question) {
     return {
@@ -71,8 +76,10 @@ class TestCubit extends Cubit<TestState> {
       emit(const TestStateLoading());
       var tests = await testRepository.getListTestByTypeTest(
           typeTestId, authenticationRepository.user?.target ?? 500);
+
       /// * Gán kết quả trả về cho _listTest ***/
       _listTest = tests;
+
       /// * Lấy danh sách các ôn luyện cùng TypeTest gần nhất để hiển thị lịch sử
       _examinations =
           await getListExaminationByTestsId(tests.map((e) => e.id!).toList());
@@ -100,6 +107,4 @@ class TestState with _$TestState {
   const factory TestState.failed(String error) = TestStateFailed;
 
   const factory TestState.loaded() = TestStateLoaded;
-
-// const factory TestState.chooseAnswer() = TestStateChooseAnswer;
 }

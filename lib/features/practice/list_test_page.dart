@@ -55,6 +55,7 @@ class _ListTestPageState extends State<ListTestPage> {
     });
   }
 
+  /// Build Item: đầu vào là bài test, bài thi gần nhất
   Widget _buildTestItem(Test test, Examination? examination) {
     int numberOfQuestions = countQuestion(test.exams ?? []);
     int numberOfCorrect = 0;
@@ -68,6 +69,7 @@ class _ListTestPageState extends State<ListTestPage> {
           examination.numberCorrectPart7!);
     }
     return GestureDetector(
+      /// Chuyển đến trang giới thiệu bài thi
       onTap: () => Navigator.of(context).push(
         IntroduceExamination.route(test: test),
       ),
@@ -155,11 +157,14 @@ class _ListTestPageState extends State<ListTestPage> {
                               : const SizedBox(),
                           InkWell(
                             onTap: () async {
+                              /// Xem chi tiết (Nếu có)
                               loadingCubit.showLoading();
                               if (examination?.finishedAt != null) {
+                                /// Setup xem chi tiết
                                 await examinationCubit
                                     .setupReadExamination(examination!.id!);
                                 if (mounted) {
+                                  /// Chuyển đến trang thi với chế độ readOnly
                                   Navigator.of(context).push(
                                       ExaminationPage.route(test,
                                           examinationId: examination.id!));
@@ -177,6 +182,7 @@ class _ListTestPageState extends State<ListTestPage> {
                                     : '',
                               ),
                             ),
+                            //Todo: Icon download hoặc đã download tại đây
                           ),
                         ],
                       ),
@@ -260,6 +266,7 @@ class _ListTestPageState extends State<ListTestPage> {
           style: GoogleFonts.openSans(
               fontSize: 18, color: darkBlueColor, fontWeight: FontWeight.bold),
         ),
+        /// Thi thử thì không có nút back
         leading: widget.typeTestId != 8
             ? GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
@@ -329,6 +336,9 @@ class _ListTestPageState extends State<ListTestPage> {
                                   height: widget.typeTestId == 8 ? 150 : 100,
                                 );
                               }
+                              /// Điểm mấu chốt quan trọng ở đây chỉ cần đảm bảo 2 điều kiện sau:
+                              /// 1. Lấy được danh sách đề bài. Nếu không mạng gọi db
+                              /// 2. Lấy được danh sách lịch sử thi. Nếu không mạng gọi db
                               return _buildTestItem(
                                   testCubit.listTest[index],
                                   testCubit.examination?[index]);

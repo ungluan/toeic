@@ -62,11 +62,10 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
 
   @override
   void initState() {
-    super.initState();
+    /// Gán key bằng typeTestId
     key = widget.test.typeTest?.id ?? 1;
     examinationCubit.stream.listen((state) {
       if (state is ExaminationStateStarted) {
-        print(examinationCubit.examination?.test);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => ShowCaseWidget(
@@ -81,6 +80,7 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
         );
       }
     });
+    super.initState();
   }
 
   @override
@@ -89,6 +89,7 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
+        /// Dựa vào loại bài thi sẽ có title khác nhau
         title: Text(
           title[key - 1],
           style: GoogleFonts.openSans(
@@ -141,6 +142,7 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                       fontWeight: FontWeight.bold,
                                       color: orangeColor,
                                     ),
+                                    /// Build hướng dẫn
                                     children: [
                                       TextSpan(
                                         text: key == 1 || key == 8
@@ -283,6 +285,9 @@ class _IntroduceExaminationState extends State<IntroduceExamination> {
                                   'Làm bài',
                                   onTap: () {
                                     loadingCubit.showLoading();
+                                    /// Khi click vào nút làm bài, thực hiện tạo 1 Examination.
+                                    /// Nếu có examination nào chưa hoàn thành thì sẽ lấy nó.
+                                    /// Không có mạng: Tạo 1 examination ở db
                                     examinationCubit
                                         .startExamination(widget.test.id!);
                                   },
