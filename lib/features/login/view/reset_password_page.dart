@@ -207,7 +207,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                                 TextInputAction.done,
                                             focusNode: repeatPasswordFocusNode,
                                             isRepeat: true,
-                                            image: '',
+                                            image: 'assets/images/password.svg',
                                           ),
                                           const SizedBox(
                                             height: 72,
