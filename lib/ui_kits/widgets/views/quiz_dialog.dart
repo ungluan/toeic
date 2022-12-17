@@ -11,8 +11,14 @@ class QuizDialog extends StatefulWidget {
   final List<Choice> data;
   final PageController pageController;
   final List<Exams> exams;
-  final bool? readOnly ;
-  const QuizDialog({Key? key, required this.data, required this.pageController, required this.exams, this.readOnly = false})
+  final bool? readOnly;
+
+  const QuizDialog(
+      {Key? key,
+      required this.data,
+      required this.pageController,
+      required this.exams,
+      this.readOnly = false})
       : super(key: key);
 
   @override
@@ -65,32 +71,30 @@ class QuizDialogState extends State<QuizDialog> {
         ),
         _buildItemCircle(
             title: 'A',
-            backgroundColor:
-                getBackgroundColor('a', choice.selected, answer),
+            backgroundColor: getBackgroundColor('a', choice.selected, answer),
             index: index),
         _buildItemCircle(
             title: 'B',
-            backgroundColor:
-            getBackgroundColor('b', choice.selected, answer),
+            backgroundColor: getBackgroundColor('b', choice.selected, answer),
             index: index),
         _buildItemCircle(
             title: 'C',
-            backgroundColor:
-            getBackgroundColor('c', choice.selected, answer),
+            backgroundColor: getBackgroundColor('c', choice.selected, answer),
             index: index),
         _buildItemCircle(
             title: 'D',
-            backgroundColor:
-            getBackgroundColor('d', choice.selected, answer),
+            backgroundColor: getBackgroundColor('d', choice.selected, answer),
             index: index),
       ],
     );
   }
 
-  Color? getBackgroundColor(String val, String selected, String answer){
-      if(val == answer) return Colors.green.shade500;
-      if(widget.readOnly == true && val == selected) return Colors.red;
-      return Colors.white;
+  Color? getBackgroundColor(String val, String selected, String answer) {
+    if (widget.readOnly != true && val == selected)
+      return Colors.green.shade500;
+    if (widget.readOnly == true && val == answer) return Colors.green.shade500;
+    if (widget.readOnly == true && val == selected) return Colors.red;
+    return Colors.white;
   }
 
   @override
@@ -102,10 +106,10 @@ class QuizDialogState extends State<QuizDialog> {
   void _onTap(int numberOfQuestion) {
     int number = 0;
     int index = 1;
-    for(int i=0; i<widget.exams.length; i++){
+    for (int i = 0; i < widget.exams.length; i++) {
       int questions = widget.exams[i].questions?.length ?? 0;
       number += questions;
-      if(numberOfQuestion + 1 <= number) {
+      if (numberOfQuestion + 1 <= number) {
         index = i;
         break;
       }
@@ -113,12 +117,13 @@ class QuizDialogState extends State<QuizDialog> {
     widget.pageController.jumpToPage(index);
   }
 
-  String? getAnswer(int questionId){
-    for(int i=0; i<widget.exams.length; i++){
-      for(int j=0; j<(widget.exams[i].questions?.length ?? 0); j++){
-        if(widget.exams[i].questions?[j].id == questionId){
+  String? getAnswer(int questionId) {
+    for (int i = 0; i < widget.exams.length; i++) {
+      for (int j = 0; j < (widget.exams[i].questions?.length ?? 0); j++) {
+        if (widget.exams[i].questions?[j].id == questionId) {
           return widget.exams[i].questions?[j].answer;
-        };
+        }
+        ;
       }
     }
   }
