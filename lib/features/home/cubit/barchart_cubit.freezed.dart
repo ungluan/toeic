@@ -19,7 +19,7 @@ mixin _$BarChartState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> dataUser, List<double> dataApp)
+    required TResult Function(List<double>? dataUser, List<double>? dataApp)
         loaded,
     required TResult Function(String error) failed,
   }) =>
@@ -27,14 +27,14 @@ mixin _$BarChartState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) =>
@@ -122,7 +122,7 @@ class _$BarChartStateLoading implements BarChartStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> dataUser, List<double> dataApp)
+    required TResult Function(List<double>? dataUser, List<double>? dataApp)
         loaded,
     required TResult Function(String error) failed,
   }) {
@@ -133,7 +133,7 @@ class _$BarChartStateLoading implements BarChartStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
   }) {
     return loading?.call();
@@ -143,7 +143,7 @@ class _$BarChartStateLoading implements BarChartStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) {
@@ -197,7 +197,7 @@ abstract class _$$BarChartStateLoadedCopyWith<$Res> {
   factory _$$BarChartStateLoadedCopyWith(_$BarChartStateLoaded value,
           $Res Function(_$BarChartStateLoaded) then) =
       __$$BarChartStateLoadedCopyWithImpl<$Res>;
-  $Res call({List<double> dataUser, List<double> dataApp});
+  $Res call({List<double>? dataUser, List<double>? dataApp});
 }
 
 /// @nodoc
@@ -220,11 +220,11 @@ class __$$BarChartStateLoadedCopyWithImpl<$Res>
       dataUser == freezed
           ? _value._dataUser
           : dataUser // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+              as List<double>?,
       dataApp == freezed
           ? _value._dataApp
           : dataApp // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+              as List<double>?,
     ));
   }
 }
@@ -233,22 +233,26 @@ class __$$BarChartStateLoadedCopyWithImpl<$Res>
 
 class _$BarChartStateLoaded implements BarChartStateLoaded {
   const _$BarChartStateLoaded(
-      final List<double> dataUser, final List<double> dataApp)
+      final List<double>? dataUser, final List<double>? dataApp)
       : _dataUser = dataUser,
         _dataApp = dataApp;
 
-  final List<double> _dataUser;
+  final List<double>? _dataUser;
   @override
-  List<double> get dataUser {
+  List<double>? get dataUser {
+    final value = _dataUser;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_dataUser);
+    return EqualUnmodifiableListView(value);
   }
 
-  final List<double> _dataApp;
+  final List<double>? _dataApp;
   @override
-  List<double> get dataApp {
+  List<double>? get dataApp {
+    final value = _dataApp;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_dataApp);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -281,7 +285,7 @@ class _$BarChartStateLoaded implements BarChartStateLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> dataUser, List<double> dataApp)
+    required TResult Function(List<double>? dataUser, List<double>? dataApp)
         loaded,
     required TResult Function(String error) failed,
   }) {
@@ -292,7 +296,7 @@ class _$BarChartStateLoaded implements BarChartStateLoaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
   }) {
     return loaded?.call(dataUser, dataApp);
@@ -302,7 +306,7 @@ class _$BarChartStateLoaded implements BarChartStateLoaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) {
@@ -349,11 +353,11 @@ class _$BarChartStateLoaded implements BarChartStateLoaded {
 
 abstract class BarChartStateLoaded implements BarChartState {
   const factory BarChartStateLoaded(
-          final List<double> dataUser, final List<double> dataApp) =
+          final List<double>? dataUser, final List<double>? dataApp) =
       _$BarChartStateLoaded;
 
-  List<double> get dataUser;
-  List<double> get dataApp;
+  List<double>? get dataUser;
+  List<double>? get dataApp;
   @JsonKey(ignore: true)
   _$$BarChartStateLoadedCopyWith<_$BarChartStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -426,7 +430,7 @@ class _$BarChartStateFailed implements BarChartStateFailed {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> dataUser, List<double> dataApp)
+    required TResult Function(List<double>? dataUser, List<double>? dataApp)
         loaded,
     required TResult Function(String error) failed,
   }) {
@@ -437,7 +441,7 @@ class _$BarChartStateFailed implements BarChartStateFailed {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
   }) {
     return failed?.call(error);
@@ -447,7 +451,7 @@ class _$BarChartStateFailed implements BarChartStateFailed {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> dataUser, List<double> dataApp)? loaded,
+    TResult Function(List<double>? dataUser, List<double>? dataApp)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) {

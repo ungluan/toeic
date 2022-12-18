@@ -45,7 +45,7 @@ class BarChartCubit extends Cubit<BarChartState> {
 class BarChartState with _$BarChartState {
   const factory BarChartState.loading() = BarChartStateLoading;
 
-  const factory BarChartState.loaded(List<double> dataUser, List<double> dataApp) = BarChartStateLoaded;
+  const factory BarChartState.loaded(List<double>? dataUser, List<double>? dataApp) = BarChartStateLoaded;
 
   const factory BarChartState.failed(String error) = BarChartStateFailed;
 }

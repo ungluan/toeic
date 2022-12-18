@@ -897,7 +897,9 @@ class _ExaminationPageState extends State<ExaminationPage> {
                     itemCount: exam.images!.length,
                     itemBuilder: (context, index) => CachedNetworkImage(
                         imageUrl:
-                            "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+                            "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
                 ),
               )

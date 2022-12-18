@@ -19,21 +19,21 @@ mixin _$PieChartState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> data) loaded,
+    required TResult Function(List<double>? data) loaded,
     required TResult Function(String error) failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) =>
@@ -121,7 +121,7 @@ class _$PieChartStateLoading implements PieChartStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> data) loaded,
+    required TResult Function(List<double>? data) loaded,
     required TResult Function(String error) failed,
   }) {
     return loading();
@@ -131,7 +131,7 @@ class _$PieChartStateLoading implements PieChartStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
   }) {
     return loading?.call();
@@ -141,7 +141,7 @@ class _$PieChartStateLoading implements PieChartStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) {
@@ -195,7 +195,7 @@ abstract class _$$PieChartStateLoadedCopyWith<$Res> {
   factory _$$PieChartStateLoadedCopyWith(_$PieChartStateLoaded value,
           $Res Function(_$PieChartStateLoaded) then) =
       __$$PieChartStateLoadedCopyWithImpl<$Res>;
-  $Res call({List<double> data});
+  $Res call({List<double>? data});
 }
 
 /// @nodoc
@@ -217,7 +217,7 @@ class __$$PieChartStateLoadedCopyWithImpl<$Res>
       data == freezed
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+              as List<double>?,
     ));
   }
 }
@@ -225,13 +225,15 @@ class __$$PieChartStateLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$PieChartStateLoaded implements PieChartStateLoaded {
-  const _$PieChartStateLoaded(final List<double> data) : _data = data;
+  const _$PieChartStateLoaded(final List<double>? data) : _data = data;
 
-  final List<double> _data;
+  final List<double>? _data;
   @override
-  List<double> get data {
+  List<double>? get data {
+    final value = _data;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_data);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -261,7 +263,7 @@ class _$PieChartStateLoaded implements PieChartStateLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> data) loaded,
+    required TResult Function(List<double>? data) loaded,
     required TResult Function(String error) failed,
   }) {
     return loaded(data);
@@ -271,7 +273,7 @@ class _$PieChartStateLoaded implements PieChartStateLoaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
   }) {
     return loaded?.call(data);
@@ -281,7 +283,7 @@ class _$PieChartStateLoaded implements PieChartStateLoaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) {
@@ -327,10 +329,10 @@ class _$PieChartStateLoaded implements PieChartStateLoaded {
 }
 
 abstract class PieChartStateLoaded implements PieChartState {
-  const factory PieChartStateLoaded(final List<double> data) =
+  const factory PieChartStateLoaded(final List<double>? data) =
       _$PieChartStateLoaded;
 
-  List<double> get data;
+  List<double>? get data;
   @JsonKey(ignore: true)
   _$$PieChartStateLoadedCopyWith<_$PieChartStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -403,7 +405,7 @@ class _$PieChartStateFailed implements PieChartStateFailed {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<double> data) loaded,
+    required TResult Function(List<double>? data) loaded,
     required TResult Function(String error) failed,
   }) {
     return failed(error);
@@ -413,7 +415,7 @@ class _$PieChartStateFailed implements PieChartStateFailed {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
   }) {
     return failed?.call(error);
@@ -423,7 +425,7 @@ class _$PieChartStateFailed implements PieChartStateFailed {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<double> data)? loaded,
+    TResult Function(List<double>? data)? loaded,
     TResult Function(String error)? failed,
     required TResult orElse(),
   }) {

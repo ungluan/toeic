@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,7 @@ import 'package:toeic/ui_kits/colors.dart';
 import 'package:d_chart/d_chart.dart';
 import 'package:flutter_charts/flutter_charts.dart';
 import 'package:toeic/ui_kits/widgets/views/d_chart_bart.dart';
+import 'package:toeic/utils/utils.dart';
 
 import '../../ui_kits/widgets/views/pie_chart.dart';
 import '../activity/cubit/user_cubit.dart';
@@ -28,7 +31,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin{
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   final homeCubit = getIt<HomeCubit>();
   final pieChartCubit = getIt<PieChartCubit>();
   final barChartCubit = getIt<BarChartCubit>();
@@ -188,7 +192,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                             min: 0,
                             max: 100,
                             initialValue:
-                                (data / (userCubit.user?.target ?? 500)) * 100,
+                                (data / (userCubit.user?.target ?? 700)) * 100,
                           ),
                         ),
                       ],
@@ -232,6 +236,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                 _buildTitle(title: "2. Tiến độ luyện tập"),
                 BlocBuilder<BarChartCubit, BarChartState>(
                   bloc: barChartCubit,
+                  buildWhen: (p,c) => c is BarChartStateLoaded,
                   builder: (context, state) => state.maybeWhen(
                     loaded: (dataUser, dataApp) =>
                         AppBarChart(dataUser: dataUser, dataApp: dataApp),
@@ -249,8 +254,9 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                 _buildTitle(title: "3. Xu hướng luyện tập"),
                 BlocBuilder<PieChartCubit, PieChartState>(
                   bloc: pieChartCubit,
+                  buildWhen: (p,c) => c is PieChartStateLoaded,
                   builder: (context, state) => state.maybeWhen(
-                    loaded: (data) => PieChartSample2(data: data),
+                    loaded: (data) => PieChartSample2(data: data ?? []),
                     orElse: () => const SizedBox(),
                   ),
                 ),
@@ -266,22 +272,37 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                   child: BlocBuilder<RadarChartCubit, RadarChartState>(
                     bloc: radarChartCubit,
                     builder: (context, state) => state.maybeWhen(
-                      loaded: (data) => RadarChart.light(
-                        ticks: ticks,
-                        features: features,
-                        data: [data],
-                        reverseAxis: false,
-                        useSides: true,
-                      ),
+                      loaded: (data) {
+                        logger("Radar Chart");
+                        logger(data);
+                        var newData = [
+                          (data[0] / 6) * 100,
+                          (data[1] / 25) * 100,
+                          (data[2] / 39) * 100,
+                          (data[3] / 30) * 100,
+                          (data[4] / 30) * 100,
+                          (data[5] / 16) * 100,
+                          (data[6] / 54) * 100
+                        ];
+                        return RadarChart.light(
+                          ticks: ticks,
+                          features: features,
+                          data: [newData],
+                          reverseAxis: false,
+                          useSides: true,
+                        );
+                      },
                       orElse: () => const SizedBox(),
                     ),
                   ),
                 ),
                 Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildTitleChart(
-                        title:
-                            "Biểu đồ miêu tả chi tiết phần trăm đúng của mỗi phần của 3 bài thi thử gần nhất")),
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: _buildTitleChart(
+                    title:
+                        "Biểu đồ miêu tả chi tiết phần trăm đúng mỗi phần của trung bình 3 bài thi thử gần nhất",
+                  ),
+                ),
                 Divider(
                   thickness: 1,
                   color: lightPurpleColor,
