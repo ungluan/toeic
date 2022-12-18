@@ -4,8 +4,8 @@ import 'package:d_chart/d_chart.dart';
 import '../../colors.dart';
 
 class AppBarChart extends StatelessWidget {
-  final List<double>? dataUser;
-  final List<double>? dataApp;
+  final List<double> dataUser;
+  final List<double> dataApp;
 
   const AppBarChart({Key? key, required this.dataUser, required this.dataApp})
       : super(key: key);
@@ -13,7 +13,7 @@ class AppBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double max = dataApp?.reduce((cur, next) => cur > next ? cur : next) ?? 0;
+    double max = dataApp.reduce((cur, next) => cur > next ? cur : next);
     return SizedBox(
       height: 456,
       child: AspectRatio(
@@ -23,27 +23,27 @@ class AppBarChart extends StatelessWidget {
             {
               'id': 'Bar 1',
               'data': [
-                {'domain': '1', 'measure': dataUser?.length == 7 ? (dataUser?[0].toInt() ?? 0) : 0},
-                {'domain': '2', 'measure': dataUser?.length == 7 ? (dataUser?[1].toInt() ?? 0) : 0},
-                {'domain': '3', 'measure': dataUser?.length == 7 ? (dataUser?[2].toInt() ?? 0) : 0},
-                {'domain': '4', 'measure': dataUser?.length == 7 ? (dataUser?[3].toInt() ?? 0) : 0},
-                {'domain': '5', 'measure': dataUser?.length == 7 ? (dataUser?[4].toInt() ?? 0) : 0},
-                {'domain': '6', 'measure': dataUser?.length == 7 ? (dataUser?[5].toInt() ?? 0) : 0},
-                {'domain': '7', 'measure': dataUser?.length == 7 ? (dataUser?[6].toInt() ?? 0) : 0},
-                {'domain': 'TT', 'measure': dataUser?.length == 7 ? (dataUser?[7].toInt() ?? 0) : 0},
+                {'domain': '1', 'measure': dataUser[0].toInt()},
+                {'domain': '2', 'measure': dataUser[1].toInt()},
+                {'domain': '3', 'measure': dataUser[2].toInt()},
+                {'domain': '4', 'measure': dataUser[3].toInt()},
+                {'domain': '5', 'measure': dataUser[4].toInt()},
+                {'domain': '6', 'measure': dataUser[5].toInt()},
+                {'domain': '7', 'measure': dataUser[6].toInt()},
+                {'domain': 'TT', 'measure': dataUser[7].toInt()},
               ],
             },
             {
               'id': 'Bar 2',
               'data': [
-                {'domain': '1', 'measure': dataApp?[0].toInt() ?? 0},
-                {'domain': '2', 'measure': dataApp?[1].toInt() ?? 0},
-                {'domain': '3', 'measure': dataApp?[2].toInt() ?? 0},
-                {'domain': '4', 'measure': dataApp?[3].toInt() ?? 0},
-                {'domain': '5', 'measure': dataApp?[4].toInt() ?? 0},
-                {'domain': '6', 'measure': dataApp?[5].toInt() ?? 0},
-                {'domain': '7', 'measure': dataApp?[6].toInt() ?? 0},
-                {'domain': 'TT', 'measure': dataApp?[7].toInt() ?? 0},
+                {'domain': '1', 'measure': dataApp[0].toInt()},
+                {'domain': '2', 'measure': dataApp[1].toInt()},
+                {'domain': '3', 'measure': dataApp[2].toInt()},
+                {'domain': '4', 'measure': dataApp[3].toInt()},
+                {'domain': '5', 'measure': dataApp[4].toInt()},
+                {'domain': '6', 'measure': dataApp[5].toInt()},
+                {'domain': '7', 'measure': dataApp[6].toInt()},
+                {'domain': 'TT', 'measure': dataApp[7].toInt()},
               ],
             },
           ],

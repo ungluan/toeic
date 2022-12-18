@@ -1,29 +1,28 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:toeic/features/home/cubit/piechart_cubit.dart';
 
-import '../../../injection/injection.dart';
 import 'indicator.dart';
 
 class PieChartSample2 extends StatefulWidget {
-  const PieChartSample2({super.key,  required this.data});
-  final List<double>? data  ;
+  const PieChartSample2({super.key, required this.data});
+
+  final List<double> data;
+
   @override
   State<StatefulWidget> createState() => PieChart2State();
 }
 
 class PieChart2State extends State<PieChartSample2> {
   int touchedIndex = -1;
-  late List<double>? data;
+  late List<double> data;
   double sum = 1;
 
   @override
   void initState() {
     super.initState();
-    data = (widget.data?.length != 7) ? null : widget.data;
-    sum = data?.reduce((value, element) => value+element) ?? 0;
+    data = widget.data;
+    sum = data.reduce((value, element) => value + element);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +137,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 0:
           return PieChartSectionData(
             color: const Color(0xff0293ee),
-            value: data?[0] ?? 1,
-            title: '${((data?[0] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[0],
+            title: '${((data[0] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -150,8 +149,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 1:
           return PieChartSectionData(
             color: const Color(0xfff8b250),
-            value: data?[1] ?? 1,
-            title: '${((data?[1] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[1],
+            title: '${((data[1] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -162,8 +161,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 2:
           return PieChartSectionData(
             color: const Color(0xff845bef),
-            value: data?[2] ?? 1,
-            title: '${((data?[2] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[2],
+            title: '${((data[2] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -174,8 +173,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 3:
           return PieChartSectionData(
             color: const Color(0xff13d38e),
-            value: data?[3] ?? 1,
-            title: '${((data?[3] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[3],
+            title: '${((data[3] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -186,8 +185,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 4:
           return PieChartSectionData(
             color: Colors.yellow,
-            value: data?[4] ?? 1,
-            title: '${((data?[4] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[4],
+            title: '${((data[4] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -198,8 +197,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 5:
           return PieChartSectionData(
             color: Colors.indigo,
-            value: data?[5] ?? 1,
-            title: '${((data?[5] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[5],
+            title: '${((data[5] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -210,8 +209,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 6:
           return PieChartSectionData(
             color: Colors.pink,
-            value: data?[6] ?? 1,
-            title: '${((data?[6] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[6],
+            title: '${((data[6] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -222,8 +221,8 @@ class PieChart2State extends State<PieChartSample2> {
         case 7:
           return PieChartSectionData(
             color: Colors.redAccent,
-            value: data?[7] ?? 1,
-            title: '${((data?[7] ?? 0 / sum) * 100).toStringAsFixed(2)}%',
+            value: data[7],
+            title: '${((data[7] / sum) * 100).toStringAsFixed(2)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

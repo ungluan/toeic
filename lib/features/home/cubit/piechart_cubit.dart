@@ -44,7 +44,7 @@ class PieChartCubit extends Cubit<PieChartState> {
 class PieChartState with _$PieChartState {
   const factory PieChartState.loading() = PieChartStateLoading;
 
-  const factory PieChartState.loaded(List<double>? data) = PieChartStateLoaded;
+  const factory PieChartState.loaded(List<double> data) = PieChartStateLoaded;
 
   const factory PieChartState.failed(String error) = PieChartStateFailed;
 }

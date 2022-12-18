@@ -238,8 +238,12 @@ class _HomePageState extends State<HomePage>
                   bloc: barChartCubit,
                   buildWhen: (p,c) => c is BarChartStateLoaded,
                   builder: (context, state) => state.maybeWhen(
-                    loaded: (dataUser, dataApp) =>
-                        AppBarChart(dataUser: dataUser, dataApp: dataApp),
+                    loaded: (dataUser, dataApp) {
+                      if(dataUser == null || dataUser.length != 8 || dataApp == null || dataApp.length != 8) return SizedBox(
+                        child: Center(child: Text('Chưa có dữ liệu')),
+                      );
+                      return AppBarChart(dataUser: dataUser, dataApp: dataApp);
+                    },
                     orElse: () => const SizedBox(),
                   ),
                 ),
@@ -256,7 +260,17 @@ class _HomePageState extends State<HomePage>
                   bloc: pieChartCubit,
                   buildWhen: (p,c) => c is PieChartStateLoaded,
                   builder: (context, state) => state.maybeWhen(
-                    loaded: (data) => PieChartSample2(data: data ?? []),
+                    loaded: (data) {
+                      print("Length: "+data.length.toString());
+                      if(data == null || data.length == 0 || data.length != 8) {
+                        return const SizedBox(
+                        child: Center(
+                            child: Text('Chưa có dữ liệu'),
+                        ),
+                      );
+                      }
+                      return PieChartSample2(data: data);
+                      },
                     orElse: () => const SizedBox(),
                   ),
                 ),
@@ -275,6 +289,11 @@ class _HomePageState extends State<HomePage>
                       loaded: (data) {
                         logger("Radar Chart");
                         logger(data);
+                        if(data == null || data.length == 0 || data.length != 7) {
+                          return const SizedBox(
+                          child: Center(child: Text('Chưa có dữ liệu',)),
+                        );
+                        }
                         var newData = [
                           (data[0] / 6) * 100,
                           (data[1] / 25) * 100,
