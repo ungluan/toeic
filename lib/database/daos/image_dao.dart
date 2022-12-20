@@ -11,8 +11,11 @@ abstract class ImageDao {
   @Query('SELECT * FROM image WHERE id = :id')
   Stream<ImageEntity?> findImageById(int id);
 
-  @insert
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertImageEntity(ImageEntity imageEntity);
+
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertImagesEntity(List<ImageEntity> imagesEntity);
 
   @Query('DELETE FROM image')
   Future<void> deleteAllImage();
