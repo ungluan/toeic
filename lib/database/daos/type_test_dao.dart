@@ -12,6 +12,9 @@ abstract class TypeTestDao {
   @insert
   Future<void> insertTypeTestEntity(TypeTestEntity typeTestEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertTypesTestEntity(List<TypeTestEntity> typesTestEntity);
+
   @Query('DELETE FROM type_test')
   Future<void> deleteAllTypeTest();
 

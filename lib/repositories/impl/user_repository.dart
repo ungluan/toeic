@@ -2,13 +2,13 @@ import 'package:dio/src/form_data.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:toeic/apis/models/DateRoutine.dart';
-import 'package:toeic/apis/models/Number_of_examination.dart';
+import 'package:toeic/apis/models/Level.dart';
+import 'package:toeic/apis/models/Part.dart';
+import 'package:toeic/apis/models/TypeTest.dart';
 import 'package:toeic/apis/rest_client_factory.dart';
-import 'package:toeic/features/home/cubit/piechart_cubit.dart';
 
 import '../../apis/models/user.dart';
 import '../../apis/token_rest_client.dart';
-import '../../features/home/cubit/piechart_cubit.dart';
 import '../../hive/hive_service.dart';
 import '../user_repository.dart';
 
@@ -90,6 +90,21 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<List<double>> getAverageNumberOfScoreEachPartFrom3LastExamination() {
     return _tokenRestClient.getAverageNumberOfScoreEachPartFrom3LastExamination();
+  }
+
+  @override
+  Future<List<Level>> getAllLevel(int limit, int skip) {
+    return _tokenRestClient.getAllLevel(limit, skip);
+  }
+
+  @override
+  Future<List<Part>> getAllPart(int limit, int skip) {
+    return _tokenRestClient.getAllPart(limit, skip);
+  }
+
+  @override
+  Future<List<TypeTest>> getAllTypeTest(int limit, int skip) {
+    return _tokenRestClient.getAllTypeTest(limit, skip);
   }
 
   // @override

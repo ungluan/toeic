@@ -12,6 +12,9 @@ abstract class PartDao {
   @insert
   Future<void> insertPartEntity(PartEntity partEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertPartsEntity(List<PartEntity> partsEntity);
+
   @Query('DELETE FROM part')
   Future<void> deleteAllPart();
 

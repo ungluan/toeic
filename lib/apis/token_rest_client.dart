@@ -3,9 +3,12 @@ import 'package:retrofit/retrofit.dart';
 import 'package:toeic/apis/models/DateRoutine.dart';
 
 import 'models/Examination.dart';
+import 'models/Level.dart';
 import 'models/Number_of_examination.dart';
 import 'models/Test.dart';
+import 'models/TypeTest.dart';
 import 'models/user.dart';
+import 'models/Part.dart' as pa;
 
 
 part 'token_rest_client.g.dart';
@@ -70,4 +73,15 @@ abstract class TokenRestClient {
 
   @GET('examination/get-the-last-examination-by-type-test')
   Future<Examination?> getTheLastExaminationByTypeTest(@Query('type_test_id') int typeTestId, @Query('user_id') int userId);
+
+  @GET('part/')
+  Future<List<pa.Part>> getAllPart(@Query('limit') int limit, @Query('skip') int skip);
+
+
+  @GET('level/')
+  Future<List<Level>> getAllLevel(@Query('limit') int limit, @Query('skip') int skip);
+
+  @GET('type_test/')
+  Future<List<TypeTest>> getAllTypeTest(@Query('limit') int limit, @Query('skip') int skip);
+
 }

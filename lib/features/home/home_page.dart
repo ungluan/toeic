@@ -58,6 +58,12 @@ class _HomePageState extends State<HomePage>
   }
 
   void setup() async {
+
+    //Todo: Lưu thông tin sau
+    //1. Phần thi
+    //2. Loại đề thi
+    //3. Độ khó
+    /// Vẫn chưa lưu trữ được đống này
     Future.wait([
       homeCubit.getActivities(DateTime.now().year, DateTime.now().month),
       pieChartCubit.getSumOfTest(),

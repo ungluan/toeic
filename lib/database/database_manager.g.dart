@@ -568,7 +568,13 @@ class _$ImageDao extends ImageDao {
   @override
   Future<void> insertImageEntity(ImageEntity imageEntity) async {
     await _imageEntityInsertionAdapter.insert(
-        imageEntity, OnConflictStrategy.abort);
+        imageEntity, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> insertImagesEntity(List<ImageEntity> imagesEntity) async {
+    await _imageEntityInsertionAdapter.insertList(
+        imagesEntity, OnConflictStrategy.replace);
   }
 
   @override
@@ -641,6 +647,12 @@ class _$LevelDao extends LevelDao {
   }
 
   @override
+  Future<void> insertLevelsEntity(List<LevelEntity> levelsEntity) async {
+    await _levelEntityInsertionAdapter.insertList(
+        levelsEntity, OnConflictStrategy.replace);
+  }
+
+  @override
   Future<void> deleteLevelEntity(LevelEntity levelEntity) async {
     await _levelEntityDeletionAdapter.delete(levelEntity);
   }
@@ -707,6 +719,12 @@ class _$PartDao extends PartDao {
   Future<void> insertPartEntity(PartEntity partEntity) async {
     await _partEntityInsertionAdapter.insert(
         partEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertPartsEntity(List<PartEntity> partsEntity) async {
+    await _partEntityInsertionAdapter.insertList(
+        partsEntity, OnConflictStrategy.replace);
   }
 
   @override
@@ -1148,6 +1166,13 @@ class _$TypeTestDao extends TypeTestDao {
   Future<void> insertTypeTestEntity(TypeTestEntity typeTestEntity) async {
     await _typeTestEntityInsertionAdapter.insert(
         typeTestEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertTypesTestEntity(
+      List<TypeTestEntity> typesTestEntity) async {
+    await _typeTestEntityInsertionAdapter.insertList(
+        typesTestEntity, OnConflictStrategy.replace);
   }
 
   @override

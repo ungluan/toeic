@@ -14,6 +14,9 @@ abstract class LevelDao {
   @insert
   Future<void> insertLevelEntity(LevelEntity levelEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertLevelsEntity(List<LevelEntity> levelsEntity);
+
   @Query('DELETE FROM level')
   Future<void> deleteAllLevel();
 
