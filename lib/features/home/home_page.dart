@@ -13,8 +13,6 @@ import 'package:toeic/features/home/cubit/radar_chart_cubit.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/colors.dart';
 
-import 'package:d_chart/d_chart.dart';
-import 'package:flutter_charts/flutter_charts.dart';
 import 'package:toeic/ui_kits/widgets/views/d_chart_bart.dart';
 import 'package:toeic/utils/utils.dart';
 
@@ -58,11 +56,6 @@ class _HomePageState extends State<HomePage>
   }
 
   void setup() async {
-
-    //Todo: Lưu thông tin sau
-    //1. Phần thi
-    //2. Loại đề thi
-    //3. Độ khó
     /// Vẫn chưa lưu trữ được đống này
     Future.wait([
       homeCubit.getActivities(DateTime.now().year, DateTime.now().month),
@@ -71,6 +64,7 @@ class _HomePageState extends State<HomePage>
       progressCubit.getAverageScoreFrom3LastExamination(),
       radarChartCubit.getDataRadarChar()
     ]);
+    homeCubit.saveDataToDB();
   }
 
   Widget _buildTitleChart({required String title}) {

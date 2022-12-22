@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -5,8 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
 import 'package:toeic/hive/hive_service.dart';
 import 'package:toeic/injection/injection.dart';
-
-import '../../../apis/models/Examination.dart';
+import 'package:toeic/utils/utils.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../repositories/examination_repository.dart';
 import '../../../repositories/user_repository.dart';
@@ -39,17 +40,48 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  // Future<void> getSumOfTest() async{
-  //   try {
-  //     emit(const HomeState.loading());
-  //     await userRepository.getSumOfTest();
-  //     emit(const HomeState.loaded());
-  //     // emit(const HomeState.success());
-  //   } on DioError catch (e) {
-  //     emit(HomeState.failed(e.message));
-  //   }
-  // }
+  void saveDataToDB() async{
+    saveData();
+    saveExaminations();
+    saveRoutines();
+  }
 
+  void saveData() async {
+    try{
+      var types = await userRepository.getAllTypeTest(0, 100);
+      var parts = await userRepository.getAllPart(0, 100);
+      var levels = await userRepository.getAllLevel(0, 100);
+      await userRepository.saveAllLevel(levels);
+      await userRepository.saveAllPart(parts);
+      await userRepository.saveAllTypeTest(types);
+    } on DioError catch(e){
+      logger(e);
+    }
+  }
+
+  void saveExaminations() async {
+    var maxId = hive.maxExaminationId;
+    var examinations = await userRepository.getExaminationByMaxId(maxId);
+    for (var element in examinations) {
+      if(maxId < element.id!) {
+        maxId = element.id!;
+      }
+    }
+    userRepository.saveAllExamination(examinations);
+    hive.updateMaxExaminationId(maxId);
+  }
+
+  void saveRoutines() async{
+    var maxId = hive.maxRoutineId;
+    var routines = await userRepository.getRoutineFromMaxId(maxId);
+    for (var element in routines) {
+      if(maxId < element.id!) {
+        maxId = element.id!;
+      }
+    }
+    userRepository.saveAllRoutine(routines);
+    hive.updateMaxRoutineId(maxId);
+  }
 }
 
 @freezed

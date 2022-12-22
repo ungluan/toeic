@@ -2,10 +2,7 @@ import 'package:floor/floor.dart';
 import 'package:toeic/database/entities/test_entity.dart';
 import 'package:toeic/database/entities/user_entity.dart';
 
-@Entity(tableName: 'examination', foreignKeys: [
-  ForeignKey(childColumns: ['test_id'], parentColumns: ['id'], entity: TestEntity),
-  ForeignKey(childColumns: ['user_id'], parentColumns: ['id'], entity: UserEntity)
-])
+@Entity(tableName: 'examination')
 class ExaminationEntity {
   @primaryKey
   @ColumnInfo(name: 'id')

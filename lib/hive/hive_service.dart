@@ -22,5 +22,13 @@ class HiveService {
   bool get didShowCase => box.get('show_case', defaultValue: false);
 
   void updateDidShowCase(bool didShow) => box.put('show_case', didShow);
+
+  int get maxExaminationId => box.get('max_examination_id', defaultValue: 0);
+
+  void updateMaxExaminationId(int id) => box.put('max_examination_id', id);
+
+  int get maxRoutineId => box.get('max_routine_id', defaultValue: 0);
+
+  void updateMaxRoutineId(int id) => box.put('max_routine_id', id);
 }
 

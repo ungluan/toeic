@@ -91,7 +91,7 @@ class _$DatabaseManager extends DatabaseManager {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -111,7 +111,7 @@ class _$DatabaseManager extends DatabaseManager {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `examination_detail` (`id` INTEGER, `examination_id` INTEGER, `question_id` INTEGER, `selection` TEXT, FOREIGN KEY (`examination_id`) REFERENCES `examination` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `examination` (`id` INTEGER, `test_id` INTEGER, `user_id` INTEGER, `number_correct_part_1` INTEGER, `number_correct_part_2` INTEGER, `number_correct_part_3` INTEGER, `number_correct_part_4` INTEGER, `number_correct_part_5` INTEGER, `number_correct_part_6` INTEGER, `number_correct_part_7` INTEGER, `started_at` TEXT, `finished_at` TEXT, FOREIGN KEY (`test_id`) REFERENCES `level` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `examination` (`id` INTEGER, `test_id` INTEGER, `user_id` INTEGER, `number_correct_part_1` INTEGER, `number_correct_part_2` INTEGER, `number_correct_part_3` INTEGER, `number_correct_part_4` INTEGER, `number_correct_part_5` INTEGER, `number_correct_part_6` INTEGER, `number_correct_part_7` INTEGER, `started_at` TEXT, `finished_at` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `image` (`id` INTEGER, `exam_id` INTEGER, `index` INTEGER, `url` TEXT, FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
@@ -121,7 +121,7 @@ class _$DatabaseManager extends DatabaseManager {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `question` (`id` INTEGER, `content` TEXT, `explain` TEXT, `a` TEXT, `b` TEXT, `c` TEXT, `d` TEXT, `answer` TEXT, `exam_id` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `routine` (`id` INTEGER, `user_id` INTEGER, `created_at` INTEGER, `total_time` INTEGER, `number_of_practice` INTEGER, `number_of_test` INTEGER, FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `routine` (`id` INTEGER, `user_id` INTEGER, `created_at` TEXT, `total_time` INTEGER, `number_of_practice` INTEGER, `number_of_test` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `test_detail` (`id` INTEGER, `test_id` INTEGER, `exam_id` INTEGER, FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`test_id`) REFERENCES `level` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
@@ -395,6 +395,12 @@ class _$ExaminationDao extends ExaminationDao {
       ExaminationEntity examinationEntity) async {
     await _examinationEntityInsertionAdapter.insert(
         examinationEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertListExaminationEntity(List<ExaminationEntity> data) async {
+    await _examinationEntityInsertionAdapter.insertList(
+        data, OnConflictStrategy.replace);
   }
 
   @override
@@ -883,7 +889,7 @@ class _$RoutineDao extends RoutineDao {
         mapper: (Map<String, Object?> row) => RoutineEntity(
             id: row['id'] as int?,
             userId: row['user_id'] as int?,
-            createdAt: row['created_at'] as int?,
+            createdAt: row['created_at'] as String?,
             totalTime: row['total_time'] as int?,
             numberOfPractice: row['number_of_practice'] as int?,
             numberOfTest: row['number_of_test'] as int?));
@@ -895,7 +901,7 @@ class _$RoutineDao extends RoutineDao {
         mapper: (Map<String, Object?> row) => RoutineEntity(
             id: row['id'] as int?,
             userId: row['user_id'] as int?,
-            createdAt: row['created_at'] as int?,
+            createdAt: row['created_at'] as String?,
             totalTime: row['total_time'] as int?,
             numberOfPractice: row['number_of_practice'] as int?,
             numberOfTest: row['number_of_test'] as int?),
@@ -919,6 +925,12 @@ class _$RoutineDao extends RoutineDao {
   Future<void> insertRoutineEntity(RoutineEntity routineEntity) async {
     await _routineEntityInsertionAdapter.insert(
         routineEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertRoutineEntities(List<RoutineEntity> entities) async {
+    await _routineEntityInsertionAdapter.insertList(
+        entities, OnConflictStrategy.replace);
   }
 
   @override

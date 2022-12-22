@@ -14,6 +14,9 @@ abstract class ExaminationDao {
   @insert
   Future<void> insertExaminationEntity(ExaminationEntity examinationEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertListExaminationEntity(List<ExaminationEntity> data);
+
   @Query('DELETE FROM examination')
   Future<void> deleteAllExamination();
 

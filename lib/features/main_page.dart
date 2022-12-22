@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toeic/database/database_manager.dart';
 import 'package:toeic/features/activity/activity_page.dart';
 import 'package:toeic/features/exam/exam_page.dart';
 import 'package:toeic/features/home/home_page.dart';

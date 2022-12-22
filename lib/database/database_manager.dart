@@ -31,7 +31,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'database_manager.g.dart';
 
-@Database(version: 1, entities: [
+@Database(version: 2, entities: [
   ExamEntity,
   ExaminationDetailEntity,
   ExaminationEntity,

@@ -1,9 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:toeic/database/entities/user_entity.dart';
 
-@Entity(tableName: 'routine', foreignKeys: [
-  ForeignKey(childColumns: ['user_id'], parentColumns: ['id'], entity: UserEntity)
-])
+@Entity(tableName: 'routine')
 class RoutineEntity {
   @primaryKey
   @ColumnInfo(name: 'id')
@@ -13,7 +11,7 @@ class RoutineEntity {
   final int? userId;
 
   @ColumnInfo(name: 'created_at')
-  final int? createdAt;
+  final String? createdAt;
 
   @ColumnInfo(name: 'total_time')
   final int? totalTime;

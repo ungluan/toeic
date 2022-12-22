@@ -5,6 +5,7 @@ import 'package:toeic/apis/models/DateRoutine.dart';
 import 'models/Examination.dart';
 import 'models/Level.dart';
 import 'models/Number_of_examination.dart';
+import 'models/Routine.dart';
 import 'models/Test.dart';
 import 'models/TypeTest.dart';
 import 'models/user.dart';
@@ -83,5 +84,11 @@ abstract class TokenRestClient {
 
   @GET('type_test/')
   Future<List<TypeTest>> getAllTypeTest(@Query('limit') int limit, @Query('skip') int skip);
+
+  @GET('examination/get-examination/max-examination-id')
+  Future<List<Examination>> getExaminationByMaxId(@Query('examination_id') int id);
+
+  @GET('routine/get-routine-from-max-id/{id}')
+  Future<List<Routine>> getRoutineFromMaxId(@Path('id') int maxId);
 
 }

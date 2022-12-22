@@ -12,6 +12,9 @@ abstract class RoutineDao {
   @insert
   Future<void> insertRoutineEntity(RoutineEntity routineEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertRoutineEntities(List<RoutineEntity> entities);
+
   @Query('DELETE FROM routine')
   Future<void> deleteAllRoutine();
 
