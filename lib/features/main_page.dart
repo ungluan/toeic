@@ -48,6 +48,10 @@ class _MainPageState extends State<MainPage> {
       // }
       // notificationService.showNotification(id: 1, title: "Có công mài sắt có ngày nên kim.", body: "Tới giờ ôn luyện rồi, chăm chỉ luyện tập để có một kết quả vượt qua cả sự mong đợi.", payload: "Payload");
     });
+    logger('===========================');
+    logger(_pageController);
+    logger('===========================');
+
   }
 
   @override

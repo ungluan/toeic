@@ -10,6 +10,7 @@ import '../../apis/models/user.dart';
 import '../../apis/rest_client.dart';
 import '../../apis/rest_client_factory.dart';
 import '../../apis/token_rest_client.dart';
+import '../../database/database_manager.dart';
 import '../../features/login/cubit/authentication_cubit.dart';
 import '../../hive/hive_service.dart';
 import '../../utils/utils.dart';
@@ -18,7 +19,7 @@ import '../authentication_repository.dart';
 @LazySingleton(as: AuthenticationRepository)
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
   AuthenticationRepositoryImpl(
-      RestClientFactory factory, this.hiveService, this._userRepository)
+      RestClientFactory factory, this.hiveService, this._userRepository, this.dbProvider)
       : _tokenRestClient = factory.obtainTokenRestClient(),
         _restClient = factory.obtainRestClient();
 
@@ -26,6 +27,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final UserRepository _userRepository;
   final RestClient _restClient;
   final HiveService hiveService;
+  final DatabaseProvider dbProvider;
+
 
   // final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final BehaviorSubject<AuthenticationState> authenticationStateSubject =
@@ -58,8 +61,14 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
               .add(const AuthenticationState.authenticated());
         }
       } on DioError catch (e) {
-        authenticationStateSubject
-            .add(const AuthenticationState.unauthenticated());
+        var user = await _userRepository.getUserFromDb();
+        if (e.type == DioErrorType.other && user != null) {
+          authenticationStateSubject
+              .add(const AuthenticationState.authenticated());
+        } else {
+          authenticationStateSubject
+              .add(const AuthenticationState.unauthenticated());
+        }
       }
     } else {
       authenticationStateSubject
@@ -77,10 +86,13 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     } catch (e) {
       logger(e);
       // logger(e.response?.statusCode);
+      if (e is DioError && e.type == DioErrorType.other) {
+        dispatch();
+      }
       if (e is DioError && e.response?.statusCode != 500) {
         // DataResponse dataResponse = DataResponse.fromJson(e.response?.data);
-        authenticationStateSubject
-            .add(const AuthenticationState.failed("Tài khoản hoặc mật khẩu không chính xác."));
+        authenticationStateSubject.add(const AuthenticationState.failed(
+            "Tài khoản hoặc mật khẩu không chính xác."));
       } else {
         authenticationStateSubject
             .add(AuthenticationState.failed(e.toString()));
@@ -90,7 +102,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  User? get user => userSubject.value;
+  User? get user => userSubject.valueOrNull;
 
   // @override
   // void updateOnboarding(bool value) {

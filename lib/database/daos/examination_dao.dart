@@ -25,4 +25,13 @@ abstract class ExaminationDao {
 
   @delete
   Future<void> deleteExaminationEntity(ExaminationEntity examinationEntity);
+
+  @Query('''
+      SELECT * FROM examination 
+      WHERE type_test_id = 8 AND
+      finished_at IS NOT NULL
+      ORDER BY id DESC
+      LIMIT 3
+  ''')
+  Future<List<ExaminationEntity>> get3LastExaminationFromDB();
 }

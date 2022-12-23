@@ -31,7 +31,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'database_manager.g.dart';
 
-@Database(version: 2, entities: [
+@Database(version: 3, entities: [
   ExamEntity,
   ExaminationDetailEntity,
   ExaminationEntity,
@@ -76,7 +76,7 @@ abstract class DatabaseManager extends FloorDatabase {
 class DatabaseProvider {
   late DatabaseManager database;
 
-  DatabaseProvider() {
+  DatabaseProvider()  {
     build();
   }
 

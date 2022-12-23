@@ -98,14 +98,15 @@ class _ActivityPageState extends State<ActivityPage>
   void initState() {
     super.initState();
     setup();
-
     userCubit.stream.listen((state) {
       print("OOKOKOKO");
       logger(userCubit.user);
     });
   }
 
-  void setup() async {}
+  void setup() async {
+    userCubit.getUser();
+  }
 
   void showPickImageBottomSheet() {
     showModalBottomSheet(
@@ -249,111 +250,219 @@ class _ActivityPageState extends State<ActivityPage>
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: BlocBuilder<UserCubit, UserState>(
                       bloc: userCubit,
-                      builder: (context, state) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
+                      builder: (context, state) => state.maybeWhen(
+                          loaded: (user)=> Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Stack(
-                                alignment: Alignment.bottomRight,
+                              const SizedBox(
+                                height: 25,
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
                                 children: [
-                                  makeFowImage(
-                                    userCubit.user?.avatar ?? '',
-                                    size: 112,
-                                    ratio: 1,
-                                    borderRadius: 16,
+                                  Stack(
+                                    alignment: Alignment.bottomRight,
+                                    children: [
+                                      makeFowImage(
+                                        user?.avatar ?? '',
+                                        size: 112,
+                                        ratio: 1,
+                                        borderRadius: 16,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showPickImageBottomSheet();
+                                        },
+                                        child: SvgPicture.asset(
+                                          "assets/images/la-user-edit.svg",
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      showPickImageBottomSheet();
-                                    },
-                                    child: SvgPicture.asset(
-                                      "assets/images/la-user-edit.svg",
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/images/membership.svg',
+                                              width: 24,
+                                              height: 24,
+                                              color: orangeColor,
+                                            ),
+                                            Flexible(
+                                              child: Text(
+                                                '${user?.firstName} ${user?.lastName}',
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Mục tiêu: ${user?.target ?? 0}',
+                                              textAlign: TextAlign.left,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            SvgPicture.asset('assets/images/la-medal.svg', width: 24, height: 24,)
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/images/membership.svg',
-                                          width: 24,
-                                          height: 24,
-                                          color: orangeColor,
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                            '${userCubit.user?.firstName} ${userCubit.user?.lastName}',
-                                            textAlign: TextAlign.left,
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Mục tiêu: ${userCubit.user?.target ?? 0}',
-                                          textAlign: TextAlign.left,
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        SvgPicture.asset('assets/images/la-medal.svg', width: 24, height: 24,)
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
+                              const SizedBox(height: 24),
+                              Divider(color: blueColor),
+                              const SizedBox(height: 16),
+                              // buildTitle('1'),
+                              const SizedBox(height: 12),
+                              buildContent('assets/images/profile-icon.svg',
+                                  'Cập nhật thông tin', onTap: () {
+                                    _interceptTap(DrawerItem.UpdateProfile);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent(
+                                  'assets/images/la-medal.svg', 'Lịch sử luyện tập',
+                                  onTap: () {
+                                    _interceptTap(DrawerItem.History);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent('assets/images/ic_chat_time.svg',
+                                  'Nhắc nhở ôn luyện', onTap: () {
+                                    _interceptTap(DrawerItem.Notification);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent(
+                                  'assets/images/report.svg', 'Điều khoản sử dụng',
+                                  onTap: () {
+                                    _interceptTap(DrawerItem.Policy);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent('assets/images/logout.svg', 'Đăng xuất',
+                                  onTap: () {
+                                    logout();
+                                  }, enable: true),
+                              const SizedBox(height: 32),
                             ],
                           ),
-                          const SizedBox(height: 24),
-                          Divider(color: blueColor),
-                          const SizedBox(height: 16),
-                          // buildTitle('1'),
-                          const SizedBox(height: 12),
-                          buildContent('assets/images/profile-icon.svg',
-                              'Cập nhật thông tin', onTap: () {
-                            _interceptTap(DrawerItem.UpdateProfile);
-                          }, enable: true),
-                          const SizedBox(height: 16),
-                          buildContent(
-                              'assets/images/la-medal.svg', 'Lịch sử luyện tập',
-                              onTap: () {
-                            _interceptTap(DrawerItem.History);
-                          }, enable: true),
-                          const SizedBox(height: 16),
-                          buildContent('assets/images/ic_chat_time.svg',
-                              'Nhắc nhở ôn luyện', onTap: () {
-                            _interceptTap(DrawerItem.Notification);
-                          }, enable: true),
-                          const SizedBox(height: 16),
-                          buildContent(
-                              'assets/images/report.svg', 'Điều khoản sử dụng',
-                              onTap: () {
-                            _interceptTap(DrawerItem.Policy);
-                          }, enable: true),
-                          const SizedBox(height: 16),
-                          buildContent('assets/images/logout.svg', 'Đăng xuất',
-                              onTap: () {
-                            logout();
-                          }, enable: true),
-                          const SizedBox(height: 32),
-                        ],
+                          orElse: ()=> Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const SizedBox(
+                                height: 25,
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.bottomRight,
+                                    children: [
+                                      makeFowImage(
+                                        userCubit.user?.avatar ?? '',
+                                        size: 112,
+                                        ratio: 1,
+                                        borderRadius: 16,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showPickImageBottomSheet();
+                                        },
+                                        child: SvgPicture.asset(
+                                          "assets/images/la-user-edit.svg",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/images/membership.svg',
+                                              width: 24,
+                                              height: 24,
+                                              color: orangeColor,
+                                            ),
+                                            Flexible(
+                                              child: Text(
+                                                '${userCubit.user?.firstName} ${userCubit.user?.lastName}',
+                                                textAlign: TextAlign.left,
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Mục tiêu: ${userCubit.user?.target ?? 0}',
+                                              textAlign: TextAlign.left,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            SvgPicture.asset('assets/images/la-medal.svg', width: 24, height: 24,)
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 24),
+                              Divider(color: blueColor),
+                              const SizedBox(height: 16),
+                              // buildTitle('1'),
+                              const SizedBox(height: 12),
+                              buildContent('assets/images/profile-icon.svg',
+                                  'Cập nhật thông tin', onTap: () {
+                                    _interceptTap(DrawerItem.UpdateProfile);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent(
+                                  'assets/images/la-medal.svg', 'Lịch sử luyện tập',
+                                  onTap: () {
+                                    _interceptTap(DrawerItem.History);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent('assets/images/ic_chat_time.svg',
+                                  'Nhắc nhở ôn luyện', onTap: () {
+                                    _interceptTap(DrawerItem.Notification);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent(
+                                  'assets/images/report.svg', 'Điều khoản sử dụng',
+                                  onTap: () {
+                                    _interceptTap(DrawerItem.Policy);
+                                  }, enable: true),
+                              const SizedBox(height: 16),
+                              buildContent('assets/images/logout.svg', 'Đăng xuất',
+                                  onTap: () {
+                                    logout();
+                                  }, enable: true),
+                              const SizedBox(height: 32),
+                            ],
+                          ),
                       ),
                     ),
                   ),

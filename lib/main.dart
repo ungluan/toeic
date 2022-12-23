@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:toeic/database/database_manager.dart';
 import 'package:toeic/features/main_page.dart';
 import 'package:toeic/features/update_profile_lv1/update_profile_page.dart';
 import 'package:toeic/services/notification.dart';
@@ -40,6 +41,7 @@ void main() async {
   configureInjection();
   var notificationService = getIt<NotificationService>();
   await notificationService.init();
+  var db = getIt<DatabaseProvider>();
   AuthenticationCubit cubit = getIt<AuthenticationCubit>();
 
   await cubit.dispatch();

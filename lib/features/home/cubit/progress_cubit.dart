@@ -35,7 +35,13 @@ class ProgressCubit extends Cubit<ProgressState> {
       var data = await userRepository.getAverageScoreFrom3LastExamination();
       emit(ProgressState.loaded(data));
     } on DioError catch (e) {
-      emit(ProgressState.failed(e.message));
+      if(e.type == DioErrorType.other){
+        var data = await userRepository.getAverageScoreFrom3LastExaminationFromDB();
+        print(data);
+        emit(ProgressState.loaded(data));
+      }else{
+        emit(ProgressState.failed(e.message));
+      }
     }
   }
 }

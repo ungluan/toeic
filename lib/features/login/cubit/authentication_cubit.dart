@@ -13,6 +13,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationRepository authenticationRepository;
   UserRepository userRepository;
   HiveService hive = HiveService();
+
   AuthenticationCubit(this.authenticationRepository, this.userRepository,
       /*this._databaseManager*/)
       : super(const AuthenticationState.unauthenticated()) {

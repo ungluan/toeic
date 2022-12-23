@@ -69,6 +69,7 @@ _i1.GetIt $initGetIt(
             get<_i7.RestClientFactory>(),
             get<_i4.HiveService>(),
             get<_i10.UserRepository>(),
+            get<_i3.DatabaseProvider>(),
           ));
   gh.lazySingleton<_i14.ExaminationRepository>(
       () => _i15.ExaminationRepositoryImpl(

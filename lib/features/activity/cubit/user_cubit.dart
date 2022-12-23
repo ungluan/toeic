@@ -21,22 +21,32 @@ class UserCubit extends Cubit<UserState> {
   final UserRepository userRepository;
   UserCubit(this.authenticationRepository, this.userRepository)
       : super(const UserState.loading()) {
-    User user = authenticationRepository.user!;
+    User? user = authenticationRepository.user;
     emit(UserState.loaded(user));
     authenticationRepository.userStream.listen((user) {
       // emit(UserState.loaded(user));
     });
   }
 
-  Future<void> getUser(String userId) async {
+  Future<void> getUser() async {
     try {
       emit(const UserState.loading());
       final response = await authenticationRepository.getUserInfo();
       emit(UserState.loaded(response));
     } on DioError catch (e) {
-      emit(UserState.failed(e.message));
+      if(e.type == DioErrorType.other){
+        final user = await userRepository.getUserFromDb();
+        print('USER OFFLINE');
+        print(user?.firstName);
+        print(user?.lastName);
+        logger(user);
+        emit(UserState.loaded(user));
+      }else{
+        emit(UserState.failed(e.message));
+      }
     }
   }
+
 
   Future<void> updateAvatar(File file) async {
     var formData = FormData.fromMap({
@@ -48,6 +58,9 @@ class UserCubit extends Cubit<UserState> {
       final response = await authenticationRepository.getUserInfo();
       emit(UserState.loaded(response));
     } on DioError catch (e) {
+      if(e.type == DioErrorType.other){
+        final response = await userRepository.getUserFromDb();
+      }
       emit(UserState.failed(e.message));
     }
   }
@@ -74,7 +87,7 @@ class UserCubit extends Cubit<UserState> {
 @freezed
 class UserState with _$UserState {
   const factory UserState.loading() = UserStateLoading;
-  const factory UserState.loaded(User user) = UserStateInfoLoaded;
+  const factory UserState.loaded(User? user) = UserStateInfoLoaded;
   const factory UserState.updated() = UserStateUpdated;
   const factory UserState.failed(String error) = UserStateFailed;
 }

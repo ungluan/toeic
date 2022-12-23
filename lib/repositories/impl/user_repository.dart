@@ -12,6 +12,8 @@ import 'package:toeic/database/entities/examination_entity.dart';
 import 'package:toeic/database/entities/level_entity.dart';
 import 'package:toeic/database/entities/part_entity.dart';
 import 'package:toeic/database/entities/routine_entity.dart';
+import 'package:toeic/database/entities/user_entity.dart';
+import 'package:toeic/utils/utils.dart';
 
 import '../../apis/models/Routine.dart';
 import '../../apis/models/user.dart';
@@ -167,7 +169,9 @@ class UserRepositoryImpl extends UserRepository {
               numberCorrectPart6: examination.numberCorrectPart6,
               numberCorrectPart7: examination.numberCorrectPart7,
               finishedAt: examination.finishedAt,
-              startedAt: examination.startedAt),
+              startedAt: examination.startedAt,
+              typeTestId: examination.test?.typeTest?.id,
+          ),
         )
         .toList();
     examinationDao.insertListExaminationEntity(entities);
@@ -182,17 +186,76 @@ class UserRepositoryImpl extends UserRepository {
   Future<void> saveAllRoutine(List<Routine> data) async {
     var routineDao = dbProvider.database.routineDao;
     var entities = data
-        .map(
-          (routine) => RoutineEntity(
+        .map((routine) => RoutineEntity(
             id: routine.id,
             userId: routine.userId,
             numberOfPractice: routine.numberOfPractice,
             numberOfTest: routine.numberOfTest,
             totalTime: routine.totalTime,
-            createdAt: routine.createdAt
-          )
-    ).toList();
+            createdAt: routine.createdAt))
+        .toList();
     routineDao.insertRoutineEntities(entities);
+  }
+
+  @override
+  Future<void> saveUser(User? user) async {
+    var userDao = dbProvider.database.userDao;
+    var entity = UserEntity(
+      id: user?.id,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      phoneNumber: user?.phoneNumber,
+      isActive: true,
+      createdAt: user?.createdAt,
+      address: user?.address,
+      avatar: user?.avatar,
+      birthDate: user?.birthDate,
+      email: user?.email,
+      gender: user?.gender,
+      firebaseToken: '',
+      password: '',
+      ruleId: user?.rule?.id,
+      target: user?.target,
+      updatedAt: user?.updatedAt,
+    );
+    userDao.insertUserEntity(entity);
+  }
+
+  @override
+  Future<double> getAverageScoreFrom3LastExaminationFromDB() async {
+    var examinationDao = dbProvider.database.examinationDao;
+    var threeLastExamination = await examinationDao.get3LastExaminationFromDB();
+    double sum = 0;
+    for (var examination in threeLastExamination) {
+      sum += calScore(examination);
+    }
+    sum = double.parse((sum/threeLastExamination.length).toStringAsFixed(2));
+    return sum;
+  }
+
+  @override
+  Future<User?> getUserFromDb() async {
+    await Future.delayed(Duration(milliseconds: 100));
+    var userDao = dbProvider.database.userDao;
+    var entities = await userDao.getAllUserEntity();
+    if(entities.isEmpty) return null;
+    var user = User(
+      id: entities[0].id,
+      updatedAt: entities[0].updatedAt,
+      target: entities[0].target,
+      gender: entities[0].gender,
+      email: entities[0].email,
+      birthDate: entities[0].birthDate,
+      avatar: entities[0].avatar,
+      address: entities[0].address,
+      createdAt: entities[0].createdAt,
+      isActive: entities[0].isActive,
+      phoneNumber: entities[0].phoneNumber,
+      lastName: entities[0].lastName,
+      firstName: entities[0].firstName,
+      rule: null
+    );
+    return user;
   }
 
 // @override

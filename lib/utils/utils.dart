@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toeic/database/entities/examination_entity.dart';
 
 import '../apis/models/gender.dart';
 import '../features/practice/practice_page.dart';
@@ -272,4 +273,32 @@ Widget buildTestItem() {
       ),
     ),
   );
+}
+
+int calScore(ExaminationEntity? examination) {
+  var totalScore = 0;
+  var listening = (examination?.numberCorrectPart1 ?? 0) +
+      (examination?.numberCorrectPart2 ?? 0) +
+      (examination?.numberCorrectPart3 ?? 0) +
+      (examination?.numberCorrectPart4 ?? 0);
+  var reading = (examination?.numberCorrectPart5 ?? 0) +
+      (examination?.numberCorrectPart6 ?? 0) +
+      (examination?.numberCorrectPart7 ?? 0);
+  if (listening == 0) {
+    totalScore += 5;
+  } else if (listening == 15) {
+    totalScore += 15;
+  } else if (listening < 96) {
+    totalScore += 20 + (listening - 1) * 5;
+  } else {
+    totalScore += 495;
+  }
+
+  if (reading <= 2) {
+    totalScore += 5;
+  } else {
+    totalScore += 5 + (reading - 2) * 5;
+  }
+
+  return totalScore;
 }

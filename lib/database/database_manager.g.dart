@@ -91,7 +91,7 @@ class _$DatabaseManager extends DatabaseManager {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 2,
+      version: 3,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -111,7 +111,7 @@ class _$DatabaseManager extends DatabaseManager {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `examination_detail` (`id` INTEGER, `examination_id` INTEGER, `question_id` INTEGER, `selection` TEXT, FOREIGN KEY (`examination_id`) REFERENCES `examination` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `examination` (`id` INTEGER, `test_id` INTEGER, `user_id` INTEGER, `number_correct_part_1` INTEGER, `number_correct_part_2` INTEGER, `number_correct_part_3` INTEGER, `number_correct_part_4` INTEGER, `number_correct_part_5` INTEGER, `number_correct_part_6` INTEGER, `number_correct_part_7` INTEGER, `started_at` TEXT, `finished_at` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `examination` (`id` INTEGER, `test_id` INTEGER, `user_id` INTEGER, `number_correct_part_1` INTEGER, `number_correct_part_2` INTEGER, `number_correct_part_3` INTEGER, `number_correct_part_4` INTEGER, `number_correct_part_5` INTEGER, `number_correct_part_6` INTEGER, `number_correct_part_7` INTEGER, `started_at` TEXT, `finished_at` TEXT, `type_test_id` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `image` (`id` INTEGER, `exam_id` INTEGER, `index` INTEGER, `url` TEXT, FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
@@ -129,7 +129,7 @@ class _$DatabaseManager extends DatabaseManager {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `type_test` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `user` (`id` INTEGER, `first_name` TEXT, `last_name` TEXT, `email` TEXT, `password` TEXT, `birth_date` TEXT, `address` TEXT, `phone_number` TEXT, `gender` TEXT, `avatar` TEXT, `is_active` INTEGER, `rule_id` TEXT, `target` INTEGER, `firebase_token` TEXT, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `user` (`id` INTEGER, `first_name` TEXT, `last_name` TEXT, `email` TEXT, `password` TEXT, `birth_date` TEXT, `address` TEXT, `phone_number` TEXT, `gender` TEXT, `avatar` TEXT, `is_active` INTEGER, `rule_id` INTEGER, `target` INTEGER, `firebase_token` TEXT, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -307,7 +307,8 @@ class _$ExaminationDao extends ExaminationDao {
                   'number_correct_part_6': item.numberCorrectPart6,
                   'number_correct_part_7': item.numberCorrectPart7,
                   'started_at': item.startedAt,
-                  'finished_at': item.finishedAt
+                  'finished_at': item.finishedAt,
+                  'type_test_id': item.typeTestId
                 },
             changeListener),
         _examinationEntityDeletionAdapter = DeletionAdapter(
@@ -326,7 +327,8 @@ class _$ExaminationDao extends ExaminationDao {
                   'number_correct_part_6': item.numberCorrectPart6,
                   'number_correct_part_7': item.numberCorrectPart7,
                   'started_at': item.startedAt,
-                  'finished_at': item.finishedAt
+                  'finished_at': item.finishedAt,
+                  'type_test_id': item.typeTestId
                 },
             changeListener);
 
@@ -355,7 +357,8 @@ class _$ExaminationDao extends ExaminationDao {
             numberCorrectPart6: row['number_correct_part_6'] as int?,
             numberCorrectPart7: row['number_correct_part_7'] as int?,
             startedAt: row['started_at'] as String?,
-            finishedAt: row['finished_at'] as String?));
+            finishedAt: row['finished_at'] as String?,
+            typeTestId: row['type_test_id'] as int?));
   }
 
   @override
@@ -373,7 +376,8 @@ class _$ExaminationDao extends ExaminationDao {
             numberCorrectPart6: row['number_correct_part_6'] as int?,
             numberCorrectPart7: row['number_correct_part_7'] as int?,
             startedAt: row['started_at'] as String?,
-            finishedAt: row['finished_at'] as String?),
+            finishedAt: row['finished_at'] as String?,
+            typeTestId: row['type_test_id'] as int?),
         arguments: [id],
         queryableName: 'examination',
         isView: false);
@@ -388,6 +392,26 @@ class _$ExaminationDao extends ExaminationDao {
   Future<void> deleteExamination(int id) async {
     await _queryAdapter.queryNoReturn('DELETE * FROM examination WHERE id= ?1',
         arguments: [id]);
+  }
+
+  @override
+  Future<List<ExaminationEntity>> get3LastExaminationFromDB() async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM examination        WHERE type_test_id = 8 AND       finished_at IS NOT NULL       ORDER BY id DESC       LIMIT 3',
+        mapper: (Map<String, Object?> row) => ExaminationEntity(
+            id: row['id'] as int?,
+            testId: row['test_id'] as int?,
+            userId: row['user_id'] as int?,
+            numberCorrectPart1: row['number_correct_part_1'] as int?,
+            numberCorrectPart2: row['number_correct_part_2'] as int?,
+            numberCorrectPart3: row['number_correct_part_3'] as int?,
+            numberCorrectPart4: row['number_correct_part_4'] as int?,
+            numberCorrectPart5: row['number_correct_part_5'] as int?,
+            numberCorrectPart6: row['number_correct_part_6'] as int?,
+            numberCorrectPart7: row['number_correct_part_7'] as int?,
+            startedAt: row['started_at'] as String?,
+            finishedAt: row['finished_at'] as String?,
+            typeTestId: row['type_test_id'] as int?));
   }
 
   @override
@@ -1273,7 +1297,7 @@ class _$UserDao extends UserDao {
             isActive: row['is_active'] == null
                 ? null
                 : (row['is_active'] as int) != 0,
-            ruleId: row['rule_id'] as String?,
+            ruleId: row['rule_id'] as int?,
             target: row['target'] as int?,
             firebaseToken: row['firebase_token'] as String?,
             createdAt: row['created_at'] as String?,
@@ -1297,7 +1321,7 @@ class _$UserDao extends UserDao {
             isActive: row['is_active'] == null
                 ? null
                 : (row['is_active'] as int) != 0,
-            ruleId: row['rule_id'] as String?,
+            ruleId: row['rule_id'] as int?,
             target: row['target'] as int?,
             firebaseToken: row['firebase_token'] as String?,
             createdAt: row['created_at'] as String?,
@@ -1321,7 +1345,7 @@ class _$UserDao extends UserDao {
   @override
   Future<void> insertUserEntity(UserEntity userEntity) async {
     await _userEntityInsertionAdapter.insert(
-        userEntity, OnConflictStrategy.abort);
+        userEntity, OnConflictStrategy.replace);
   }
 
   @override

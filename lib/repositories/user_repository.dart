@@ -7,6 +7,7 @@ import '../apis/models/Part.dart';
 import '../apis/models/Routine.dart';
 import '../apis/models/TypeTest.dart';
 import '../apis/models/user.dart';
+import '../database/entities/user_entity.dart';
 
 
 abstract class UserRepository {
@@ -46,6 +47,7 @@ abstract class UserRepository {
   Future<void> saveAllExamination(List<Examination> entities);
   Future<List<Routine>> getRoutineFromMaxId( int maxId);
   Future<void> saveAllRoutine(List<Routine> entities);
-
-
+  Future<void> saveUser(User? user);
+  Future<double> getAverageScoreFrom3LastExaminationFromDB();
+  Future<User?> getUserFromDb();
 }

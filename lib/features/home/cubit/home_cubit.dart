@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -44,6 +42,7 @@ class HomeCubit extends Cubit<HomeState> {
     saveData();
     saveExaminations();
     saveRoutines();
+    saveUser();
   }
 
   void saveData() async {
@@ -81,6 +80,10 @@ class HomeCubit extends Cubit<HomeState> {
     }
     userRepository.saveAllRoutine(routines);
     hive.updateMaxRoutineId(maxId);
+  }
+
+  void saveUser() async{
+    userRepository.saveUser(authenticationRepository.user);
   }
 }
 

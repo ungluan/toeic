@@ -37,7 +37,7 @@ class UserEntity {
   final bool? isActive;
 
   @ColumnInfo(name: 'rule_id')
-  final String? ruleId;
+  final int? ruleId;
 
   @ColumnInfo(name: 'target')
   final int? target;

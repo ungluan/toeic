@@ -19,7 +19,7 @@ mixin _$UserState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(User user) loaded,
+    required TResult Function(User? user) loaded,
     required TResult Function() updated,
     required TResult Function(String error) failed,
   }) =>
@@ -27,7 +27,7 @@ mixin _$UserState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
   }) =>
@@ -35,7 +35,7 @@ mixin _$UserState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
     required TResult orElse(),
@@ -125,7 +125,7 @@ class _$UserStateLoading implements UserStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(User user) loaded,
+    required TResult Function(User? user) loaded,
     required TResult Function() updated,
     required TResult Function(String error) failed,
   }) {
@@ -136,7 +136,7 @@ class _$UserStateLoading implements UserStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
   }) {
@@ -147,7 +147,7 @@ class _$UserStateLoading implements UserStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
     required TResult orElse(),
@@ -205,7 +205,7 @@ abstract class _$$UserStateInfoLoadedCopyWith<$Res> {
   factory _$$UserStateInfoLoadedCopyWith(_$UserStateInfoLoaded value,
           $Res Function(_$UserStateInfoLoaded) then) =
       __$$UserStateInfoLoadedCopyWithImpl<$Res>;
-  $Res call({User user});
+  $Res call({User? user});
 }
 
 /// @nodoc
@@ -227,7 +227,7 @@ class __$$UserStateInfoLoadedCopyWithImpl<$Res>
       user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as User,
+              as User?,
     ));
   }
 }
@@ -238,7 +238,7 @@ class _$UserStateInfoLoaded implements UserStateInfoLoaded {
   const _$UserStateInfoLoaded(this.user);
 
   @override
-  final User user;
+  final User? user;
 
   @override
   String toString() {
@@ -267,7 +267,7 @@ class _$UserStateInfoLoaded implements UserStateInfoLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(User user) loaded,
+    required TResult Function(User? user) loaded,
     required TResult Function() updated,
     required TResult Function(String error) failed,
   }) {
@@ -278,7 +278,7 @@ class _$UserStateInfoLoaded implements UserStateInfoLoaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
   }) {
@@ -289,7 +289,7 @@ class _$UserStateInfoLoaded implements UserStateInfoLoaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
     required TResult orElse(),
@@ -339,9 +339,9 @@ class _$UserStateInfoLoaded implements UserStateInfoLoaded {
 }
 
 abstract class UserStateInfoLoaded implements UserState {
-  const factory UserStateInfoLoaded(final User user) = _$UserStateInfoLoaded;
+  const factory UserStateInfoLoaded(final User? user) = _$UserStateInfoLoaded;
 
-  User get user;
+  User? get user;
   @JsonKey(ignore: true)
   _$$UserStateInfoLoadedCopyWith<_$UserStateInfoLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -389,7 +389,7 @@ class _$UserStateUpdated implements UserStateUpdated {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(User user) loaded,
+    required TResult Function(User? user) loaded,
     required TResult Function() updated,
     required TResult Function(String error) failed,
   }) {
@@ -400,7 +400,7 @@ class _$UserStateUpdated implements UserStateUpdated {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
   }) {
@@ -411,7 +411,7 @@ class _$UserStateUpdated implements UserStateUpdated {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
     required TResult orElse(),
@@ -530,7 +530,7 @@ class _$UserStateFailed implements UserStateFailed {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(User user) loaded,
+    required TResult Function(User? user) loaded,
     required TResult Function() updated,
     required TResult Function(String error) failed,
   }) {
@@ -541,7 +541,7 @@ class _$UserStateFailed implements UserStateFailed {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
   }) {
@@ -552,7 +552,7 @@ class _$UserStateFailed implements UserStateFailed {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(User user)? loaded,
+    TResult Function(User? user)? loaded,
     TResult Function()? updated,
     TResult Function(String error)? failed,
     required TResult orElse(),

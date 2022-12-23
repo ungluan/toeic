@@ -41,6 +41,9 @@ class ExaminationEntity {
   @ColumnInfo(name: 'finished_at')
   final String? finishedAt;
 
+  @ColumnInfo(name: 'type_test_id')
+  final int? typeTestId;
+
   ExaminationEntity({
     this.id,
     this.testId,
@@ -54,5 +57,6 @@ class ExaminationEntity {
     this.numberCorrectPart7,
     this.startedAt,
     this.finishedAt,
+    this.typeTestId
   });
 }

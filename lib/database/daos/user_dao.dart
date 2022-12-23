@@ -13,7 +13,7 @@ abstract class UserDao {
   @Query('SELECT * FROM user WHERE id = :id')
   Stream<UserEntity?> findUserById(int id);
 
-  @insert
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertUserEntity(UserEntity userEntity);
 
   @Query('DELETE FROM user')
