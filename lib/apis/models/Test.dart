@@ -10,25 +10,30 @@ import 'Exams.dart';
 
 class Test {
   Test({
-      int? id, 
-      TypeTest? typeTest, 
-      int? target, 
-      int? userId, 
-      String? createdAt, 
-      List<Exams>? exams,}){
+    int? id,
+    TypeTest? typeTest,
+    int? target,
+    int? userId,
+    int? typeTestId,
+    String? createdAt,
+    List<Exams>? exams,
+  }) {
     _id = id;
     _typeTest = typeTest;
     _target = target;
     _userId = userId;
     _createdAt = createdAt;
     _exams = exams;
-}
+    _typeTestId = typeTestId;
+  }
 
   Test.fromJson(dynamic json) {
     _id = json['id'];
-    _typeTest = json['type_test'] != null ? TypeTest.fromJson(json['type_test']) : null;
+    _typeTest =
+        json['type_test'] != null ? TypeTest.fromJson(json['type_test']) : null;
     _target = json['target'];
     _userId = json['user_id'];
+    _typeTestId = json['type_test_id'];
     _createdAt = json['created_at'];
     if (json['exams'] != null) {
       _exams = [];
@@ -37,31 +42,46 @@ class Test {
       });
     }
   }
+
   int? _id;
   TypeTest? _typeTest;
   int? _target;
   int? _userId;
   String? _createdAt;
   List<Exams>? _exams;
-Test copyWith({  int? id,
-  TypeTest? typeTest,
-  int? target,
-  int? userId,
-  String? createdAt,
-  List<Exams>? exams,
-}) => Test(  id: id ?? _id,
-  typeTest: typeTest ?? _typeTest,
-  target: target ?? _target,
-  userId: userId ?? _userId,
-  createdAt: createdAt ?? _createdAt,
-  exams: exams ?? _exams,
-);
+  int? _typeTestId;
+
+  Test copyWith({
+    int? id,
+    TypeTest? typeTest,
+    int? target,
+    int? userId,
+    String? createdAt,
+    int? typeTestId,
+    List<Exams>? exams,
+  }) =>
+      Test(
+          id: id ?? _id,
+          typeTest: typeTest ?? _typeTest,
+          target: target ?? _target,
+          userId: userId ?? _userId,
+          createdAt: createdAt ?? _createdAt,
+          exams: exams ?? _exams,
+          typeTestId: typeTestId ?? _typeTestId);
+
   int? get id => _id;
+
   TypeTest? get typeTest => _typeTest;
+
   int? get target => _target;
+
   int? get userId => _userId;
+
   String? get createdAt => _createdAt;
+
   List<Exams>? get exams => _exams;
+
+  int? get typeTestId => _typeTestId;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -72,10 +92,11 @@ Test copyWith({  int? id,
     map['target'] = _target;
     map['user_id'] = _userId;
     map['created_at'] = _createdAt;
+    map['type_test_id'] = _typeTestId;
+
     if (_exams != null) {
       map['exams'] = _exams?.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }

@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
 import 'package:toeic/hive/hive_service.dart';
 import 'package:toeic/injection/injection.dart';
+import 'package:toeic/utils/utils.dart';
 
 import '../../../apis/models/Examination.dart';
 import '../../../repositories/authentication_repository.dart';
@@ -30,13 +31,21 @@ class BarChartCubit extends Cubit<BarChartState> {
   }
 
   Future<void> getDataBarChar() async {
+    logger("GỌI API BAR CHART");
     try {
       emit(const BarChartState.loading());
       var dataUser = await userRepository.getSumOfTest();
       var dataApp = await userRepository.getSumOfTestCreated();
       emit(BarChartState.loaded(dataUser, dataApp));
     } on DioError catch (e) {
-      emit(BarChartState.failed(e.message));
+      if(e.type == DioErrorType.other){
+        logger("KHÔNG CÓ MẠNG");
+        var dataUser = await userRepository.getNumberOfUserTested();
+        var dataApp = await userRepository.getNumberOfTestCreated();
+        emit(BarChartState.loaded(dataUser, dataApp));
+      }else{
+        emit(BarChartState.failed(e.message));
+      }
     }
   }
 }

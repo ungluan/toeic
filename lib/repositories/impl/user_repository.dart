@@ -5,6 +5,7 @@ import 'package:toeic/apis/models/DateRoutine.dart';
 import 'package:toeic/apis/models/Examination.dart';
 import 'package:toeic/apis/models/Level.dart';
 import 'package:toeic/apis/models/Part.dart';
+import 'package:toeic/apis/models/Test.dart';
 import 'package:toeic/apis/models/TypeTest.dart';
 import 'package:toeic/apis/rest_client_factory.dart';
 import 'package:toeic/database/database_manager.dart';
@@ -12,6 +13,7 @@ import 'package:toeic/database/entities/examination_entity.dart';
 import 'package:toeic/database/entities/level_entity.dart';
 import 'package:toeic/database/entities/part_entity.dart';
 import 'package:toeic/database/entities/routine_entity.dart';
+import 'package:toeic/database/entities/test_entity.dart';
 import 'package:toeic/database/entities/user_entity.dart';
 import 'package:toeic/utils/utils.dart';
 
@@ -79,19 +81,66 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<List<double>> getSumOfTest() async {
+    var data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
     var response = await _tokenRestClient.getSumOfTest();
-    var data =
-        response.map((item) => double.parse((item.total!).toString())).toList();
-    print("AAAAA: ${data}");
-    // piechartStateSubject.add(PieChartStateLoaded(data));
+    for (var item in response) {
+      data[item.typeTestId! - 1] = double.parse((item.total!).toString());
+    }
+    logger("USER-REPOSITORY");
+    response.forEach((element) {
+      print(element.typeTestId.toString() + "-" + element.total!.toString());
+    });
+    logger(data);
+    logger("USER-REPOSITORY");
     return data;
   }
 
   @override
   Future<List<double>> getSumOfTestCreated() async {
+    var data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
     var response = await _tokenRestClient.getSumOfTestCreated();
-    var data =
-        response.map((item) => double.parse((item.total!).toString())).toList();
+    for (var item in response) {
+      data[item.typeTestId! - 1] = double.parse((item.total!).toString());
+    }
+    logger("USER-REPOSITORY-TEST-CREATED");
+    logger(response);
+    logger(data);
+    logger("USER-REPOSITORY-TEST-CREATED");
+    return data;
+  }
+
+  @override
+  Future<List<double>> getNumberOfTestCreated() async {
+    var data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+    var userDao = dbProvider.database.userDao;
+    var response = await userDao.getNumberOfTestCreated();
+    logger("SỐ LƯỢNG ĐỀ THI ĐÃ TẠO");
+    logger(response);
+    response.forEach((element) {print(element);});
+    logger("SỐ LƯỢNG ĐỀ THI ĐÃ TẠO");
+    for (var item in response) {
+      data[item.typeTestId! - 1] = double.parse((item.total!).toString());
+    }
+
+    return data;
+  }
+
+  @override
+  Future<List<double>> getNumberOfUserTested() async {
+    var data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+    var userDao = dbProvider.database.userDao;
+    try{
+      var response = await userDao.getNumberTestOfUserTested();
+      for (var item in response) {
+        data[item.typeTestId! - 1] = double.parse((item.total!).toString());
+      }
+      logger("SỐ LƯỢNG ĐỀ THI ĐÃ THI");
+      logger(response);
+      logger("SỐ LƯỢNG ĐỀ THI ĐÃ THI");
+    }catch(e){
+      logger("LỖI KHI GỌI SỐ LƯỢNG BÀI THI ĐÃ THI TỪ DB");
+      logger(e);
+    }
     return data;
   }
 
@@ -158,19 +207,19 @@ class UserRepositoryImpl extends UserRepository {
     var entities = data
         .map(
           (examination) => ExaminationEntity(
-              id: examination.id,
-              testId: examination.testId,
-              userId: examination.userId,
-              numberCorrectPart1: examination.numberCorrectPart1,
-              numberCorrectPart2: examination.numberCorrectPart2,
-              numberCorrectPart3: examination.numberCorrectPart3,
-              numberCorrectPart4: examination.numberCorrectPart4,
-              numberCorrectPart5: examination.numberCorrectPart5,
-              numberCorrectPart6: examination.numberCorrectPart6,
-              numberCorrectPart7: examination.numberCorrectPart7,
-              finishedAt: examination.finishedAt,
-              startedAt: examination.startedAt,
-              typeTestId: examination.test?.typeTest?.id,
+            id: examination.id,
+            testId: examination.testId,
+            userId: examination.userId,
+            numberCorrectPart1: examination.numberCorrectPart1,
+            numberCorrectPart2: examination.numberCorrectPart2,
+            numberCorrectPart3: examination.numberCorrectPart3,
+            numberCorrectPart4: examination.numberCorrectPart4,
+            numberCorrectPart5: examination.numberCorrectPart5,
+            numberCorrectPart6: examination.numberCorrectPart6,
+            numberCorrectPart7: examination.numberCorrectPart7,
+            finishedAt: examination.finishedAt,
+            startedAt: examination.startedAt,
+            typeTestId: examination.test?.typeTest?.id,
           ),
         )
         .toList();
@@ -229,7 +278,7 @@ class UserRepositoryImpl extends UserRepository {
     for (var examination in threeLastExamination) {
       sum += calScore(examination);
     }
-    sum = double.parse((sum/threeLastExamination.length).toStringAsFixed(2));
+    sum = double.parse((sum / threeLastExamination.length).toStringAsFixed(2));
     return sum;
   }
 
@@ -238,24 +287,42 @@ class UserRepositoryImpl extends UserRepository {
     await Future.delayed(Duration(milliseconds: 100));
     var userDao = dbProvider.database.userDao;
     var entities = await userDao.getAllUserEntity();
-    if(entities.isEmpty) return null;
+    if (entities.isEmpty) return null;
     var user = User(
-      id: entities[0].id,
-      updatedAt: entities[0].updatedAt,
-      target: entities[0].target,
-      gender: entities[0].gender,
-      email: entities[0].email,
-      birthDate: entities[0].birthDate,
-      avatar: entities[0].avatar,
-      address: entities[0].address,
-      createdAt: entities[0].createdAt,
-      isActive: entities[0].isActive,
-      phoneNumber: entities[0].phoneNumber,
-      lastName: entities[0].lastName,
-      firstName: entities[0].firstName,
-      rule: null
-    );
+        id: entities[0].id,
+        updatedAt: entities[0].updatedAt,
+        target: entities[0].target,
+        gender: entities[0].gender,
+        email: entities[0].email,
+        birthDate: entities[0].birthDate,
+        avatar: entities[0].avatar,
+        address: entities[0].address,
+        createdAt: entities[0].createdAt,
+        isActive: entities[0].isActive,
+        phoneNumber: entities[0].phoneNumber,
+        lastName: entities[0].lastName,
+        firstName: entities[0].firstName,
+        rule: null);
     return user;
+  }
+
+  @override
+  Future<void> saveAllTests(List<Test> tests) async {
+    var testDao = dbProvider.database.testDao;
+    logger("TEST RETURN ?");
+    logger(tests);
+    var entities = tests
+        .map((test) => TestEntity(
+              id: test.id,
+              createdAt: test.createdAt,
+              target: test.target,
+              userId: test.userId,
+              typeTestId: test.typeTestId,
+              downloaded: false,
+              isAvailable: true,
+            ))
+        .toList();
+    testDao.insertTestEntities(entities);
   }
 
 // @override

@@ -33,6 +33,11 @@ class TestRepositoryImpl extends TestRepository {
     return _tokenRestClient.getListExaminationByTestsId(testsId);
   }
 
+  @override
+  Future<List<Test>> getTestsFromMaxId(int maxId) {
+    return _tokenRestClient.getTestsFromMaxId(maxId);
+  }
+
 
   // @override
   // Stream<List<Test>> get testsStream => testsSubject.stream;

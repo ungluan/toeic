@@ -91,7 +91,7 @@ class _$DatabaseManager extends DatabaseManager {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 3,
+      version: 5,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -123,13 +123,15 @@ class _$DatabaseManager extends DatabaseManager {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `routine` (`id` INTEGER, `user_id` INTEGER, `created_at` TEXT, `total_time` INTEGER, `number_of_practice` INTEGER, `number_of_test` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `test_detail` (`id` INTEGER, `test_id` INTEGER, `exam_id` INTEGER, FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`test_id`) REFERENCES `level` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `test_detail` (`id` INTEGER, `test_id` INTEGER, `exam_id` INTEGER, FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`test_id`) REFERENCES `test` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `level` (`id` INTEGER, `user_id` INTEGER, `type_test_id` INTEGER, `target` INTEGER, `is_available` INTEGER, `created_at` TEXT, FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`type_test_id`) REFERENCES `type_test` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `test` (`id` INTEGER, `user_id` INTEGER, `type_test_id` INTEGER, `target` INTEGER, `is_available` INTEGER, `created_at` TEXT, `downloaded` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `type_test` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `user` (`id` INTEGER, `first_name` TEXT, `last_name` TEXT, `email` TEXT, `password` TEXT, `birth_date` TEXT, `address` TEXT, `phone_number` TEXT, `gender` TEXT, `avatar` TEXT, `is_active` INTEGER, `rule_id` INTEGER, `target` INTEGER, `firebase_token` TEXT, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `NumberOfTestEntity` (`type_test_id` INTEGER, `total` INTEGER, PRIMARY KEY (`type_test_id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -970,7 +972,7 @@ class _$TestDao extends TestDao {
   )   : _queryAdapter = QueryAdapter(database, changeListener),
         _testEntityInsertionAdapter = InsertionAdapter(
             database,
-            'level',
+            'test',
             (TestEntity item) => <String, Object?>{
                   'id': item.id,
                   'user_id': item.userId,
@@ -979,12 +981,15 @@ class _$TestDao extends TestDao {
                   'is_available': item.isAvailable == null
                       ? null
                       : (item.isAvailable! ? 1 : 0),
-                  'created_at': item.createdAt
+                  'created_at': item.createdAt,
+                  'downloaded': item.downloaded == null
+                      ? null
+                      : (item.downloaded! ? 1 : 0)
                 },
             changeListener),
         _testEntityDeletionAdapter = DeletionAdapter(
             database,
-            'level',
+            'test',
             ['id'],
             (TestEntity item) => <String, Object?>{
                   'id': item.id,
@@ -994,7 +999,10 @@ class _$TestDao extends TestDao {
                   'is_available': item.isAvailable == null
                       ? null
                       : (item.isAvailable! ? 1 : 0),
-                  'created_at': item.createdAt
+                  'created_at': item.createdAt,
+                  'downloaded': item.downloaded == null
+                      ? null
+                      : (item.downloaded! ? 1 : 0)
                 },
             changeListener);
 
@@ -1019,7 +1027,10 @@ class _$TestDao extends TestDao {
             isAvailable: row['is_available'] == null
                 ? null
                 : (row['is_available'] as int) != 0,
-            createdAt: row['created_at'] as String?));
+            createdAt: row['created_at'] as String?,
+            downloaded: row['downloaded'] == null
+                ? null
+                : (row['downloaded'] as int) != 0));
   }
 
   @override
@@ -1033,9 +1044,12 @@ class _$TestDao extends TestDao {
             isAvailable: row['is_available'] == null
                 ? null
                 : (row['is_available'] as int) != 0,
-            createdAt: row['created_at'] as String?),
+            createdAt: row['created_at'] as String?,
+            downloaded: row['downloaded'] == null
+                ? null
+                : (row['downloaded'] as int) != 0),
         arguments: [id],
-        queryableName: 'level',
+        queryableName: 'test',
         isView: false);
   }
 
@@ -1054,6 +1068,12 @@ class _$TestDao extends TestDao {
   Future<void> insertTestEntity(TestEntity testEntity) async {
     await _testEntityInsertionAdapter.insert(
         testEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertTestEntities(List<TestEntity> entities) async {
+    await _testEntityInsertionAdapter.insertList(
+        entities, OnConflictStrategy.replace);
   }
 
   @override
@@ -1340,6 +1360,24 @@ class _$UserDao extends UserDao {
   Future<void> deleteUser(int id) async {
     await _queryAdapter
         .queryNoReturn('DELETE * FROM user WHERE id= ?1', arguments: [id]);
+  }
+
+  @override
+  Future<List<NumberOfTestEntity>> getNumberTestOfUserTested() async {
+    return _queryAdapter.queryList(
+        'SELECT COUNT(DISTINCT(examination.test_id)) AS total, type_test_id     FROM examination     WHERE examination.finished_at IS NOT NULL     GROUP BY(type_test_id)',
+        mapper: (Map<String, Object?> row) => NumberOfTestEntity(
+            typeTestId: row['type_test_id'] as int?,
+            total: row['total'] as int?));
+  }
+
+  @override
+  Future<List<NumberOfTestEntity>> getNumberOfTestCreated() async {
+    return _queryAdapter.queryList(
+        'SELECT type_test_id, COUNT(id) AS total     FROM test     GROUP BY (type_test_id)     ORDER BY type_test_id ASC',
+        mapper: (Map<String, Object?> row) => NumberOfTestEntity(
+            typeTestId: row['type_test_id'] as int?,
+            total: row['total'] as int?));
   }
 
   @override

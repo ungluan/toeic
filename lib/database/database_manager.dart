@@ -7,6 +7,7 @@ import 'package:toeic/database/entities/exam_entity.dart';
 import 'package:toeic/database/entities/examination_detail_entity.dart';
 import 'package:toeic/database/entities/examination_entity.dart';
 import 'package:toeic/database/entities/image_entity.dart';
+import 'package:toeic/database/entities/number_of_test_entities.dart';
 import 'package:toeic/database/entities/part_entity.dart';
 import 'package:toeic/database/entities/question_entity.dart';
 import 'package:toeic/database/entities/routine_entity.dart';
@@ -14,6 +15,7 @@ import 'package:toeic/database/entities/test_detail_entity.dart';
 import 'package:toeic/database/entities/test_entity.dart';
 import 'package:toeic/database/entities/type_test_entity.dart';
 
+import '../apis/models/Number_of_examination.dart';
 import 'daos/examination_dao.dart';
 import 'daos/examination_detail_dao.dart';
 import 'daos/image_dao.dart';
@@ -31,7 +33,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'database_manager.g.dart';
 
-@Database(version: 3, entities: [
+@Database(version: 5, entities: [
   ExamEntity,
   ExaminationDetailEntity,
   ExaminationEntity,
@@ -43,7 +45,8 @@ part 'database_manager.g.dart';
   TestDetailEntity,
   TestEntity,
   TypeTestEntity,
-  UserEntity
+  UserEntity,
+  NumberOfTestEntity
 ])
 abstract class DatabaseManager extends FloorDatabase {
   ExamDao get examDao;

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
 import 'package:toeic/hive/hive_service.dart';
 import 'package:toeic/injection/injection.dart';
@@ -35,7 +36,12 @@ class PieChartCubit extends Cubit<PieChartState> {
       var data = await userRepository.getSumOfTest();
       emit(PieChartState.loaded(data));
     } on DioError catch (e) {
-      emit(PieChartState.failed(e.message));
+      if(e.type == DioErrorType.other){
+        var data = await userRepository.getNumberOfUserTested();
+        emit(PieChartState.loaded(data));
+      }else{
+        emit(PieChartState.failed(e.message));
+      }
     }
   }
 }

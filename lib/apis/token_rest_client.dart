@@ -91,4 +91,6 @@ abstract class TokenRestClient {
   @GET('routine/get-routine-from-max-id/{id}')
   Future<List<Routine>> getRoutineFromMaxId(@Path('id') int maxId);
 
+  @GET('test/get-test-from-max-id//{id}')
+  Future<List<Test>> getTestsFromMaxId(@Path('id') int maxId);
 }

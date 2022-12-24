@@ -8,6 +8,8 @@ import 'package:toeic/features/home/cubit/barchart_cubit.dart';
 import 'package:toeic/features/home/cubit/radar_chart_cubit.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/ui_kits/colors.dart';
+import '../../ui_kits/widgets/views/d_chart_bart.dart';
+import '../../ui_kits/widgets/views/pie_chart.dart';
 import '../../utils/utils.dart';
 import '../activity/cubit/user_cubit.dart';
 import 'cubit/home_cubit.dart';
@@ -54,8 +56,9 @@ class _HomePageState extends State<HomePage>
       progressCubit.getAverageScoreFrom3LastExamination(),
       /// Chart 02
       barChartCubit.getDataBarChar(),
+      /// Chart 03
+      pieChartCubit.getSumOfTest(),
 
-      // pieChartCubit.getSumOfTest(),
       //   homeCubit.getActivities(DateTime.now().year, DateTime.now().month),
 
       //   radarChartCubit.getDataRadarChar()
@@ -379,19 +382,27 @@ class _HomePageState extends State<HomePage>
                 color: lightPurpleColor,
               ),
               _buildTitle(title: "2. Tiến độ luyện tập"),
-              // BlocBuilder<BarChartCubit, BarChartState>(
-              //   bloc: barChartCubit,
-              //   buildWhen: (p,c) => c is BarChartStateLoaded,
-              //   builder: (context, state) => state.maybeWhen(
-              //     loaded: (dataUser, dataApp) {
-              //       if(dataUser == null || dataUser.length != 8 || dataApp == null || dataApp.length != 8) return SizedBox(
-              //         child: Center(child: Text('Chưa có dữ liệu')),
-              //       );
-              //       return AppBarChart(dataUser: dataUser, dataApp: dataApp);
-              //     },
-              //     orElse: () => const SizedBox(),
-              //   ),
-              // ),
+              BlocBuilder<BarChartCubit, BarChartState>(
+                bloc: barChartCubit,
+                buildWhen: (p,c) => c is BarChartStateLoaded,
+                builder: (context, state) => state.maybeWhen(
+                  loaded: (dataUser, dataApp) {
+                    logger("BARCHARCUBIT");
+                    logger("DATAUSER:");
+                    logger(dataUser);
+                    logger("DATAAPP:");
+                    logger(dataApp);
+                    if(dataUser == null || dataUser.length != 8 || dataApp == null || dataApp.length != 8) {
+                      return const SizedBox(
+                      child: Center(child: Text('Chưa có dữ liệu')),
+                    );
+                    }
+
+                    return AppBarChart(dataUser: dataUser, dataApp: dataApp);
+                  },
+                  orElse: () => const SizedBox(),
+                ),
+              ),
               const SizedBox(
                 height: 16,
               ),
@@ -401,24 +412,24 @@ class _HomePageState extends State<HomePage>
                 color: lightPurpleColor,
               ),
               _buildTitle(title: "3. Xu hướng luyện tập"),
-              // BlocBuilder<PieChartCubit, PieChartState>(
-              //   bloc: pieChartCubit,
-              //   buildWhen: (p,c) => c is PieChartStateLoaded,
-              //   builder: (context, state) => state.maybeWhen(
-              //     loaded: (data) {
-              //       print("Length: "+data.length.toString());
-              //       if(data == null || data.length == 0 || data.length != 8) {
-              //         return const SizedBox(
-              //         child: Center(
-              //             child: Text('Chưa có dữ liệu'),
-              //         ),
-              //       );
-              //       }
-              //       return PieChartSample2(data: data);
-              //       },
-              //     orElse: () => const SizedBox(),
-              //   ),
-              // ),
+              BlocBuilder<PieChartCubit, PieChartState>(
+                bloc: pieChartCubit,
+                buildWhen: (p,c) => c is PieChartStateLoaded,
+                builder: (context, state) => state.maybeWhen(
+                  loaded: (data) {
+                    print("Length: "+data.length.toString());
+                    if(data == null || data.length == 0 || data.length != 8) {
+                      return const SizedBox(
+                      child: Center(
+                          child: Text('Chưa có dữ liệu'),
+                      ),
+                    );
+                    }
+                    return PieChartSample2(data: data);
+                    },
+                  orElse: () => const SizedBox(),
+                ),
+              ),
               _buildTitleChart(title: "Biểu đồ thể hiện xu hướng luyện tập"),
               const SizedBox(height: 16),
               Divider(

@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
 import 'package:toeic/hive/hive_service.dart';
 import 'package:toeic/injection/injection.dart';
+import 'package:toeic/repositories/test_repository.dart';
 import 'package:toeic/utils/utils.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../repositories/examination_repository.dart';
@@ -18,9 +19,10 @@ class HomeCubit extends Cubit<HomeState> {
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
   final ExaminationRepository examinationRepository;
+  final TestRepository testRepository;
   Map<DateTime, int>? get dateActivities => userRepository.dateActivities;
 
-  HomeCubit(this.authenticationRepository, this.userRepository, this.examinationRepository)
+  HomeCubit(this.authenticationRepository, this.userRepository, this.examinationRepository, this.testRepository)
       : super(const HomeState.loading()) {
     examinationRepository.testStateStream.listen((state) {
       if(state is ExaminationStateSubmitted){
@@ -43,6 +45,7 @@ class HomeCubit extends Cubit<HomeState> {
     saveExaminations();
     saveRoutines();
     saveUser();
+    saveTests();
   }
 
   void saveData() async {
@@ -82,8 +85,22 @@ class HomeCubit extends Cubit<HomeState> {
     hive.updateMaxRoutineId(maxId);
   }
 
+  void saveTests() async{
+    var maxId = hive.maxTestId;
+    var tests = await testRepository.getTestsFromMaxId(maxId);
+    for (var element in tests) {
+      if(maxId < element.id!) {
+        maxId = element.id!;
+      }
+    }
+    userRepository.saveAllTests(tests);
+    hive.updateMaxTestId(maxId);
+  }
+
   void saveUser() async{
-    userRepository.saveUser(authenticationRepository.user);
+    if(authenticationRepository.user!=null){
+      userRepository.saveUser(authenticationRepository.user);
+    }
   }
 }
 

@@ -2,10 +2,7 @@ import 'package:floor/floor.dart';
 import 'package:toeic/database/entities/type_test_entity.dart';
 import 'package:toeic/database/entities/user_entity.dart';
 
-@Entity(tableName: 'level', foreignKeys: [
-  ForeignKey(childColumns: ['user_id'], parentColumns: ['id'], entity: UserEntity),
-  ForeignKey(childColumns: ['type_test_id'], parentColumns: ['id'], entity: TypeTestEntity),
-])
+@Entity(tableName: 'test')
 class TestEntity {
   @primaryKey
   @ColumnInfo(name: 'id')
@@ -26,6 +23,9 @@ class TestEntity {
   @ColumnInfo(name: 'created_at')
   final String? createdAt;
 
+  @ColumnInfo(name: 'downloaded')
+  final bool? downloaded;
+
   TestEntity({
     this.id,
     this.userId,
@@ -33,5 +33,6 @@ class TestEntity {
     this.target,
     this.isAvailable,
     this.createdAt,
+    this.downloaded
   });
 }

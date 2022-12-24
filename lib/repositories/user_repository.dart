@@ -5,6 +5,7 @@ import '../apis/models/Examination.dart';
 import '../apis/models/Level.dart';
 import '../apis/models/Part.dart';
 import '../apis/models/Routine.dart';
+import '../apis/models/Test.dart';
 import '../apis/models/TypeTest.dart';
 import '../apis/models/user.dart';
 import '../database/entities/user_entity.dart';
@@ -43,6 +44,8 @@ abstract class UserRepository {
   Future<void> saveAllPart(List<Part> parts);
   Future<void> saveAllLevel(List<Level> levels);
   Future<void> saveAllTypeTest(List<TypeTest> types);
+  Future<void> saveAllTests(List<Test> tests);
+
   Future<List<Examination>> getExaminationByMaxId(int id);
   Future<void> saveAllExamination(List<Examination> entities);
   Future<List<Routine>> getRoutineFromMaxId( int maxId);
@@ -50,4 +53,6 @@ abstract class UserRepository {
   Future<void> saveUser(User? user);
   Future<double> getAverageScoreFrom3LastExaminationFromDB();
   Future<User?> getUserFromDb();
+  Future<List<double>> getNumberOfUserTested();
+  Future<List<double>> getNumberOfTestCreated();
 }

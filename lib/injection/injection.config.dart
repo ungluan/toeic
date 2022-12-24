@@ -85,6 +85,7 @@ _i1.GetIt $initGetIt(
         get<_i12.AuthenticationRepository>(),
         get<_i10.UserRepository>(),
         get<_i14.ExaminationRepository>(),
+        get<_i8.TestRepository>(),
       ));
   gh.factory<_i18.LoginCubit>(
       () => _i18.LoginCubit(get<_i12.AuthenticationRepository>()));

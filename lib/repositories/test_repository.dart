@@ -10,4 +10,6 @@ abstract class TestRepository {
   // Stream<TestState> get testStateStream;
   Future<List<Test>> getListTestByTypeTest(int typeTestId, int target);
   Future<List<Examination?>> getListExaminationByTestsId(List<int> testsId);
+  Future<List<Test>> getTestsFromMaxId(int maxId);
+
 }
