@@ -41,6 +41,7 @@ class _ListTestPageState extends State<ListTestPage> {
     super.initState();
     loadingCubit.showLoading();
     testCubit.getListTestByTypeTest(widget.typeTestId);
+    testCubit.getIdsFromTestDownloaded();
     testCubit.stream.listen((event) {
       if (event is TestStateLoading) {
         logger('Loading');
@@ -115,15 +116,42 @@ class _ListTestPageState extends State<ListTestPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 4,),
-                          test.typeTest?.id == 8 && examination!=null ? Text(
-                            'Điểm: ${calScore(examination)}',
-                            style: GoogleFonts.openSans(
-                              fontSize: 14,
-                              color: orangeColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ): const SizedBox(),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          test.typeTest?.id == 8 && examination != null
+                              ? Text(
+                                  'Điểm: ${calScore(examination)}',
+                                  style: GoogleFonts.openSans(
+                                    fontSize: 14,
+                                    color: orangeColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          const Spacer(),
+                          testCubit.isDownloaded(test.id!)
+                              ? const SizedBox(
+                                  width: 72,
+                                  height: 48,
+                                  child: Icon(
+                                    Icons.download_done_sharp,
+                                    size: 24,
+                                  ),
+                                )
+                              : InkWell(
+                                  onTap: () async {
+                                    print("Downloaded");
+                                  },
+                                  child: const SizedBox(
+                                    width: 72,
+                                    height: 48,
+                                    child: Icon(
+                                      Icons.download_sharp,
+                                      size: 24,
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
@@ -182,7 +210,6 @@ class _ListTestPageState extends State<ListTestPage> {
                                     : '',
                               ),
                             ),
-                            //Todo: Icon download hoặc đã download tại đây
                           ),
                         ],
                       ),
@@ -224,6 +251,7 @@ class _ListTestPageState extends State<ListTestPage> {
       return 'Thi thử';
     }
   }
+
   int calScore(Examination? examination) {
     if (examination?.test?.typeTest?.id != 8) return 0;
     var totalScore = 0;
@@ -266,6 +294,7 @@ class _ListTestPageState extends State<ListTestPage> {
           style: GoogleFonts.openSans(
               fontSize: 18, color: darkBlueColor, fontWeight: FontWeight.bold),
         ),
+
         /// Thi thử thì không có nút back
         leading: widget.typeTestId != 8
             ? GestureDetector(
@@ -330,17 +359,17 @@ class _ListTestPageState extends State<ListTestPage> {
                           // padding: EdgeInsets.only(bottom: 150),
                           height: MediaQuery.of(context).size.height - 100,
                           child: ListView.builder(
-                            itemBuilder: (context, index){
-                              if(index == testCubit.listTest.length){
+                            itemBuilder: (context, index) {
+                              if (index == testCubit.listTest.length) {
                                 return Container(
                                   height: widget.typeTestId == 8 ? 150 : 100,
                                 );
                               }
+
                               /// Điểm mấu chốt quan trọng ở đây chỉ cần đảm bảo 2 điều kiện sau:
                               /// 1. Lấy được danh sách đề bài. Nếu không mạng gọi db
                               /// 2. Lấy được danh sách lịch sử thi. Nếu không mạng gọi db
-                              return _buildTestItem(
-                                  testCubit.listTest[index],
+                              return _buildTestItem(testCubit.listTest[index],
                                   testCubit.examination?[index]);
                             },
                             itemCount: testCubit.listTest.length + 1,

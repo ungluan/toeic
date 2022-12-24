@@ -36,6 +36,9 @@ class TestCubit extends Cubit<TestState> {
 
   List<Examination?>? get examination => _examinations;
 
+  /// Danh sách đề thi đã tải xuống
+  List<int> _idsDownloaded = [];
+
   TestCubit(this.userRepository, this.testRepository,
       this.authenticationRepository, this.examinationRepository)
       : super(const TestState.loading()) {
@@ -93,6 +96,14 @@ class TestCubit extends Cubit<TestState> {
   Future<List<Examination?>> getListExaminationByTestsId(
       List<int> testsId) async {
     return await testRepository.getListExaminationByTestsId(testsId);
+  }
+
+  Future<void> getIdsFromTestDownloaded() async {
+    _idsDownloaded = await testRepository.getIdsFromTestDownloaded();
+  }
+
+  bool isDownloaded(int testId){
+    return _idsDownloaded.contains(testId);
   }
 
 // Nộp bài

@@ -2,6 +2,8 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:toeic/apis/models/Examination.dart';
 import 'package:toeic/apis/models/Test.dart';
+import 'package:toeic/database/database_manager.dart';
+import 'package:toeic/database/entities/test_entity.dart';
 import 'package:toeic/features/practice/cubit/test_cubit.dart';
 
 import '../../apis/rest_client_factory.dart';
@@ -14,13 +16,14 @@ class TestRepositoryImpl extends TestRepository {
 
   final TokenRestClient _tokenRestClient;
   final HiveService hiveService;
+  final DatabaseProvider dbProvider;
   // final BehaviorSubject<List<Test>> testsSubject = BehaviorSubject();
   // final BehaviorSubject<Map<String, dynamic>> dataSubject = BehaviorSubject();
   // final BehaviorSubject<TestState> testStateSubject =
   // BehaviorSubject();
 
 
-  TestRepositoryImpl(RestClientFactory factory, this.hiveService) :
+  TestRepositoryImpl(RestClientFactory factory, this.hiveService, this.dbProvider) :
         _tokenRestClient = factory.obtainTokenRestClient();
 
   @override
@@ -36,6 +39,12 @@ class TestRepositoryImpl extends TestRepository {
   @override
   Future<List<Test>> getTestsFromMaxId(int maxId) {
     return _tokenRestClient.getTestsFromMaxId(maxId);
+  }
+
+  @override
+  Future<List<int>> getIdsFromTestDownloaded() async {
+    var testDao = dbProvider.database.testDao;
+    return (await testDao.getIdsFromTestDownloaded()) ?? [];
   }
 
 

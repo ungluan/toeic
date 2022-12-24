@@ -9,6 +9,9 @@ abstract class TestDao {
   @Query('SELECT * FROM test WHERE id = :id')
   Stream<TestEntity?> findTestById(int id);
 
+  @Query('SELECT id FROM test WHERE downloaded = true')
+  Future<List<int>?> getIdsFromTestDownloaded();
+
   @insert
   Future<void> insertTestEntity(TestEntity testEntity);
 

@@ -2,6 +2,7 @@ import 'package:toeic/features/practice/cubit/test_cubit.dart';
 
 import '../apis/models/Examination.dart';
 import '../apis/models/Test.dart';
+import '../database/entities/test_entity.dart';
 
 abstract class TestRepository {
   // Stream<List<Test>> get testsStream;
@@ -11,5 +12,6 @@ abstract class TestRepository {
   Future<List<Test>> getListTestByTypeTest(int typeTestId, int target);
   Future<List<Examination?>> getListExaminationByTestsId(List<int> testsId);
   Future<List<Test>> getTestsFromMaxId(int maxId);
+  Future<List<int>> getIdsFromTestDownloaded();
 
 }

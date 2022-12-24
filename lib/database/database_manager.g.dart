@@ -1077,6 +1077,12 @@ class _$TestDao extends TestDao {
   }
 
   @override
+  Future<List<int>?> getIdsFromTestDownloaded() async {
+    await _queryAdapter
+        .queryNoReturn('SELECT id FROM test WHERE downloaded = true');
+  }
+
+  @override
   Future<void> deleteAllTest() async {
     await _queryAdapter.queryNoReturn('DELETE FROM test');
   }
