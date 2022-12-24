@@ -23,4 +23,18 @@ abstract class RoutineDao {
 
   @delete
   Future<void> deleteRoutineEntity(RoutineEntity routineEntity);
+
+  @Query('''
+    SELECT * FROM routine
+    WHERE strftime('%m',created_at) = :month AND strftime('%Y',created_at) = :year
+  ''')
+  Future<List<RoutineEntity>> getActivity(String year, String month);
+
+  @Query('''
+    SELECT * FROM routine
+    WHERE strftime('%m',created_at) = :month AND strftime('%Y',created_at) = :year AND strftime('%d',created_at) = :date
+    LIMIT 1
+  ''')
+  Future<RoutineEntity?> getExaminationByDate(
+      String year, String month, String date);
 }

@@ -56,4 +56,7 @@ abstract class UserRepository {
   Future<List<double>> getNumberOfUserTested();
   Future<List<double>> getNumberOfTestCreated();
   Future<List<double>> getAverageNumberOfScoreEachPartFrom3LastExaminationFromDB();
+  Future<void> getActivityFromDB(String year, String month);
+  Future<RoutineEntity?> getRoutineByDateFromDB(
+      String year, String month, String date);
 }

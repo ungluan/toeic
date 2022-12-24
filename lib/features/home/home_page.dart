@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,10 +64,10 @@ class _HomePageState extends State<HomePage>
       pieChartCubit.getSumOfTest(),
 
       /// Chart 04
-      radarChartCubit.getDataRadarChar()
+      radarChartCubit.getDataRadarChar(),
 
-      //   homeCubit.getActivities(DateTime.now().year, DateTime.now().month),
-
+      /// chart 05
+      homeCubit.getActivities(DateTime.now().year, DateTime.now().month)
     ]);
     userCubit.getUser();
     homeCubit.saveDataToDB();
@@ -453,10 +454,15 @@ class _HomePageState extends State<HomePage>
                     loaded: (data) {
                       logger("Radar Chart");
                       logger(data);
-                      if(data == null || data.length == 0 || data.length != 7) {
+                      if (data == null ||
+                          data.length == 0 ||
+                          data.length != 7) {
                         return const SizedBox(
-                        child: Center(child: Text('Chưa có dữ liệu',)),
-                      );
+                          child: Center(
+                              child: Text(
+                            'Chưa có dữ liệu',
+                          )),
+                        );
                       }
                       var newData = [
                         (data[0] / 6) * 100,
@@ -491,29 +497,90 @@ class _HomePageState extends State<HomePage>
                 color: lightPurpleColor,
               ),
               _buildTitle(title: "5. Lịch sử hoạt động"),
-              // BlocBuilder<HomeCubit, HomeState>(
-              //   bloc: homeCubit,
-              //   builder: (context, state) {
-              //     return HeatMapCalendar(
-              //       defaultColor: Colors.white,
-              //       flexible: true,
-              //       colorMode: ColorMode.color,
-              //       datasets: homeCubit.dateActivities,
-              //       colorsets: const {
-              //         1: Colors.green,
-              //       },
-              //       borderRadius: 100.0,
-              //       showColorTip: false,
-              //       onMonthChange: (value) {
-              //         homeCubit.getActivities(value.year, value.month);
-              //       },
-              //       // onClick: (value) {
-              //       //   ScaffoldMessenger.of(context).showSnackBar(
-              //       //       SnackBar(content: Text(value.toString())));
-              //       // },
-              //     );
-              //   },
-              // ),
+              BlocBuilder<HomeCubit, HomeState>(
+                bloc: homeCubit,
+                builder: (context, state) {
+                  return HeatMapCalendar(
+                    defaultColor: Colors.white,
+                    flexible: true,
+                    colorMode: ColorMode.color,
+                    datasets: homeCubit.dateActivities,
+                    colorsets: const {
+                      1: Colors.green,
+                    },
+                    borderRadius: 100.0,
+                    showColorTip: false,
+                    onMonthChange: (value) {
+                      homeCubit.getActivities(value.year, value.month);
+                    },
+                    onClick: (value) async {
+                      var year = value.year.toString();
+                      var month = value.month < 10
+                          ? '0${value.month}'
+                          : value.month.toString();
+                      var date = value.day < 10
+                          ? '0${value.day}'
+                          : value.day.toString();
+                      var entity =
+                          await homeCubit.getRoutineFromDB(year, month, date);
+                      if (entity != null) {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 120,
+                              color: Colors.white,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text("Ngày: $date/$month/$year"),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                        "Thời gian ôn luyện: ${entity.totalTime} phút"),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text("Đã thi: ${entity.numberOfTest} đề"),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                        "Đã thực hành: ${entity.numberOfPractice} đề"),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 60,
+                              color: Colors.white,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(
+                                        "Bạn không ôn luyện ngày: $date/$month/$year"),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
               const SizedBox(
                 height: 8,
               ),

@@ -948,6 +948,29 @@ class _$RoutineDao extends RoutineDao {
   }
 
   @override
+  Future<List<RoutineEntity>> getActivity(
+    String year,
+    String month,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM routine     WHERE strftime(\'%m\',created_at) = ?2 AND strftime(\'%Y\',created_at) = ?1',
+        mapper: (Map<String, Object?> row) => RoutineEntity(id: row['id'] as int?, userId: row['user_id'] as int?, createdAt: row['created_at'] as String?, totalTime: row['total_time'] as int?, numberOfPractice: row['number_of_practice'] as int?, numberOfTest: row['number_of_test'] as int?),
+        arguments: [year, month]);
+  }
+
+  @override
+  Future<RoutineEntity?> getExaminationByDate(
+    String year,
+    String month,
+    String date,
+  ) async {
+    return _queryAdapter.query(
+        'SELECT * FROM routine     WHERE strftime(\'%m\',created_at) = ?2 AND strftime(\'%Y\',created_at) = ?1 AND strftime(\'%d\',created_at) = ?3     LIMIT 1',
+        mapper: (Map<String, Object?> row) => RoutineEntity(id: row['id'] as int?, userId: row['user_id'] as int?, createdAt: row['created_at'] as String?, totalTime: row['total_time'] as int?, numberOfPractice: row['number_of_practice'] as int?, numberOfTest: row['number_of_test'] as int?),
+        arguments: [year, month, date]);
+  }
+
+  @override
   Future<void> insertRoutineEntity(RoutineEntity routineEntity) async {
     await _routineEntityInsertionAdapter.insert(
         routineEntity, OnConflictStrategy.abort);

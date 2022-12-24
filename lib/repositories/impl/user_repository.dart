@@ -342,6 +342,31 @@ class UserRepositoryImpl extends UserRepository {
     return data.map((e) => e/3).toList();
   }
 
+  @override
+  Future<void> getActivityFromDB(String year, String month) async  {
+    var routineDao = dbProvider.database.routineDao;
+    var routines = await routineDao.getActivity(year, month);
+    logger("Activity");
+    Map<DateTime, int> map = {};
+    for (var item in routines) {
+      var token = item.createdAt!.split('T')[0].split('-');
+      var key = DateTime(
+          int.parse(token[0]), int.parse(token[1]), int.parse(token[2]));
+      print(key);
+      map.addAll({key: 1});
+    }
+    logger("Activity");
+
+    dateActivitiesSubject.add(map);
+  }
+
+  @override
+  Future<RoutineEntity?> getRoutineByDateFromDB(String year, String month, String date) async {
+    var routineDao = dbProvider.database.routineDao;
+    var entities = await routineDao.getExaminationByDate(year, month, date);
+    return entities;
+  }
+
 // @override
 // Stream<PieChartState> get pieChartState => piechartStateSubject.stream;
 }

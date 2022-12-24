@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:toeic/database/entities/routine_entity.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
 import 'package:toeic/hive/hive_service.dart';
 import 'package:toeic/injection/injection.dart';
@@ -36,8 +37,19 @@ class HomeCubit extends Cubit<HomeState> {
       await userRepository.getActivities(year, month);
       emit(const HomeState.loaded());
     } on DioError catch (e) {
-      emit(HomeState.failed(e.message));
+      if(e.type == DioErrorType.other){
+      String mStr = month < 10 ? '0$month' : month.toString();
+      await userRepository.getActivityFromDB(year.toString(), mStr);
+      emit(const HomeState.loaded());
+
+      }else{
+        emit(HomeState.failed(e.message));
+      }
     }
+  }
+
+  Future<RoutineEntity?> getRoutineFromDB(String year, String month, String date) async{
+    return await userRepository.getRoutineByDateFromDB(year, month, date);
   }
 
   void saveDataToDB() async{
