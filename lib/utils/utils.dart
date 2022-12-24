@@ -7,6 +7,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toeic/database/entities/examination_entity.dart';
 
@@ -206,6 +207,7 @@ Widget makeFowImage(String? url,
               fit: BoxFit.cover,
               width: size,
               height: ratio * size,
+              errorWidget: (context, url, error)=> SvgPicture.asset('assets/images/oops.svg'),
               placeholder: (context, item) => Container(
                 color: Colors.grey,
               ),
