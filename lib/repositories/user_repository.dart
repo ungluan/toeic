@@ -55,4 +55,5 @@ abstract class UserRepository {
   Future<User?> getUserFromDb();
   Future<List<double>> getNumberOfUserTested();
   Future<List<double>> getNumberOfTestCreated();
+  Future<List<double>> getAverageNumberOfScoreEachPartFrom3LastExaminationFromDB();
 }

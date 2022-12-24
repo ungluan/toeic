@@ -1,6 +1,7 @@
 // dao/person_dao.dart
 
 import 'package:floor/floor.dart';
+import 'package:toeic/database/entities/examination_entity.dart';
 import 'package:toeic/database/entities/number_of_test_entities.dart';
 import 'package:toeic/database/entities/user_entity.dart';
 
@@ -43,4 +44,12 @@ abstract class UserDao {
   ''')
   Future<List<NumberOfTestEntity>> getNumberOfTestCreated();
 
+  @Query('''
+    SELECT *
+    FROM examination
+    WHERE type_test_id = 8
+    ORDER BY id DESC
+    LIMIT 3
+  ''')
+  Future<List<ExaminationEntity>> get3TheLastExamination();
 }

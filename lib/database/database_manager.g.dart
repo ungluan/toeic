@@ -1381,6 +1381,26 @@ class _$UserDao extends UserDao {
   }
 
   @override
+  Future<List<ExaminationEntity>> get3TheLastExamination() async {
+    return _queryAdapter.queryList(
+        'SELECT *     FROM examination     WHERE type_test_id = 8     ORDER BY id DESC     LIMIT 3',
+        mapper: (Map<String, Object?> row) => ExaminationEntity(
+            id: row['id'] as int?,
+            testId: row['test_id'] as int?,
+            userId: row['user_id'] as int?,
+            numberCorrectPart1: row['number_correct_part_1'] as int?,
+            numberCorrectPart2: row['number_correct_part_2'] as int?,
+            numberCorrectPart3: row['number_correct_part_3'] as int?,
+            numberCorrectPart4: row['number_correct_part_4'] as int?,
+            numberCorrectPart5: row['number_correct_part_5'] as int?,
+            numberCorrectPart6: row['number_correct_part_6'] as int?,
+            numberCorrectPart7: row['number_correct_part_7'] as int?,
+            startedAt: row['started_at'] as String?,
+            finishedAt: row['finished_at'] as String?,
+            typeTestId: row['type_test_id'] as int?));
+  }
+
+  @override
   Future<void> insertUserEntity(UserEntity userEntity) async {
     await _userEntityInsertionAdapter.insert(
         userEntity, OnConflictStrategy.replace);

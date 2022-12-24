@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -54,14 +55,18 @@ class _HomePageState extends State<HomePage>
     Future.wait([
       /// Chart 01
       progressCubit.getAverageScoreFrom3LastExamination(),
+
       /// Chart 02
       barChartCubit.getDataBarChar(),
+
       /// Chart 03
       pieChartCubit.getSumOfTest(),
 
+      /// Chart 04
+      radarChartCubit.getDataRadarChar()
+
       //   homeCubit.getActivities(DateTime.now().year, DateTime.now().month),
 
-      //   radarChartCubit.getDataRadarChar()
     ]);
     userCubit.getUser();
     homeCubit.saveDataToDB();
@@ -384,7 +389,7 @@ class _HomePageState extends State<HomePage>
               _buildTitle(title: "2. Tiến độ luyện tập"),
               BlocBuilder<BarChartCubit, BarChartState>(
                 bloc: barChartCubit,
-                buildWhen: (p,c) => c is BarChartStateLoaded,
+                buildWhen: (p, c) => c is BarChartStateLoaded,
                 builder: (context, state) => state.maybeWhen(
                   loaded: (dataUser, dataApp) {
                     logger("BARCHARCUBIT");
@@ -392,10 +397,13 @@ class _HomePageState extends State<HomePage>
                     logger(dataUser);
                     logger("DATAAPP:");
                     logger(dataApp);
-                    if(dataUser == null || dataUser.length != 8 || dataApp == null || dataApp.length != 8) {
+                    if (dataUser == null ||
+                        dataUser.length != 8 ||
+                        dataApp == null ||
+                        dataApp.length != 8) {
                       return const SizedBox(
-                      child: Center(child: Text('Chưa có dữ liệu')),
-                    );
+                        child: Center(child: Text('Chưa có dữ liệu')),
+                      );
                     }
 
                     return AppBarChart(dataUser: dataUser, dataApp: dataApp);
@@ -414,19 +422,19 @@ class _HomePageState extends State<HomePage>
               _buildTitle(title: "3. Xu hướng luyện tập"),
               BlocBuilder<PieChartCubit, PieChartState>(
                 bloc: pieChartCubit,
-                buildWhen: (p,c) => c is PieChartStateLoaded,
+                buildWhen: (p, c) => c is PieChartStateLoaded,
                 builder: (context, state) => state.maybeWhen(
                   loaded: (data) {
-                    print("Length: "+data.length.toString());
-                    if(data == null || data.length == 0 || data.length != 8) {
+                    print("Length: " + data.length.toString());
+                    if (data == null || data.length == 0 || data.length != 8) {
                       return const SizedBox(
-                      child: Center(
+                        child: Center(
                           child: Text('Chưa có dữ liệu'),
-                      ),
-                    );
+                        ),
+                      );
                     }
                     return PieChartSample2(data: data);
-                    },
+                  },
                   orElse: () => const SizedBox(),
                 ),
               ),
@@ -437,40 +445,40 @@ class _HomePageState extends State<HomePage>
                 color: lightPurpleColor,
               ),
               _buildTitle(title: "4. Năng lực bản thân"),
-              // SizedBox(
-              //   height: 324,
-              //   child: BlocBuilder<RadarChartCubit, RadarChartState>(
-              //     bloc: radarChartCubit,
-              //     builder: (context, state) => state.maybeWhen(
-              //       loaded: (data) {
-              //         logger("Radar Chart");
-              //         logger(data);
-              //         if(data == null || data.length == 0 || data.length != 7) {
-              //           return const SizedBox(
-              //           child: Center(child: Text('Chưa có dữ liệu',)),
-              //         );
-              //         }
-              //         var newData = [
-              //           (data[0] / 6) * 100,
-              //           (data[1] / 25) * 100,
-              //           (data[2] / 39) * 100,
-              //           (data[3] / 30) * 100,
-              //           (data[4] / 30) * 100,
-              //           (data[5] / 16) * 100,
-              //           (data[6] / 54) * 100
-              //         ];
-              //         return RadarChart.light(
-              //           ticks: ticks,
-              //           features: features,
-              //           data: [newData],
-              //           reverseAxis: false,
-              //           useSides: true,
-              //         );
-              //       },
-              //       orElse: () => const SizedBox(),
-              //     ),
-              //   ),
-              // ),
+              SizedBox(
+                height: 324,
+                child: BlocBuilder<RadarChartCubit, RadarChartState>(
+                  bloc: radarChartCubit,
+                  builder: (context, state) => state.maybeWhen(
+                    loaded: (data) {
+                      logger("Radar Chart");
+                      logger(data);
+                      if(data == null || data.length == 0 || data.length != 7) {
+                        return const SizedBox(
+                        child: Center(child: Text('Chưa có dữ liệu',)),
+                      );
+                      }
+                      var newData = [
+                        (data[0] / 6) * 100,
+                        (data[1] / 25) * 100,
+                        (data[2] / 39) * 100,
+                        (data[3] / 30) * 100,
+                        (data[4] / 30) * 100,
+                        (data[5] / 16) * 100,
+                        (data[6] / 54) * 100
+                      ];
+                      return RadarChart.light(
+                        ticks: ticks,
+                        features: features,
+                        data: [newData],
+                        reverseAxis: false,
+                        useSides: true,
+                      );
+                    },
+                    orElse: () => const SizedBox(),
+                  ),
+                ),
+              ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 16),
                 child: _buildTitleChart(

@@ -325,6 +325,23 @@ class UserRepositoryImpl extends UserRepository {
     testDao.insertTestEntities(entities);
   }
 
+  @override
+  Future<List<double>> getAverageNumberOfScoreEachPartFrom3LastExaminationFromDB() async {
+    var userDao = dbProvider.database.userDao;
+    var examinations = await userDao.get3TheLastExamination();
+    var data = [0.0,0.0,0.0,0.0,0.0,0.0,0.0];
+    for (var examination in examinations) {
+      data[0] += examination.numberCorrectPart1 ?? 0 ;
+      data[1] += examination.numberCorrectPart2 ?? 0 ;
+      data[2] += examination.numberCorrectPart3 ?? 0 ;
+      data[3] += examination.numberCorrectPart4 ?? 0 ;
+      data[4] += examination.numberCorrectPart5 ?? 0 ;
+      data[5] += examination.numberCorrectPart6 ?? 0 ;
+      data[6] += examination.numberCorrectPart7 ?? 0 ;
+    }
+    return data.map((e) => e/3).toList();
+  }
+
 // @override
 // Stream<PieChartState> get pieChartState => piechartStateSubject.stream;
 }

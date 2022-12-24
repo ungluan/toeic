@@ -34,7 +34,12 @@ class RadarChartCubit extends Cubit<RadarChartState> {
       var data = await userRepository.getAverageNumberOfScoreEachPartFrom3LastExamination();
       emit(RadarChartState.loaded(data));
     } on DioError catch (e) {
-      emit(RadarChartState.failed(e.message));
+      if(e.type == DioErrorType.other){
+        var data = await userRepository.getAverageNumberOfScoreEachPartFrom3LastExaminationFromDB();
+        emit(RadarChartState.loaded(data));
+      }else{
+        emit(RadarChartState.failed(e.message));
+      }
     }
   }
 }
