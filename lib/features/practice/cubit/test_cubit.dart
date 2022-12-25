@@ -1,9 +1,14 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:toeic/apis/models/Choice.dart';
+import 'package:toeic/hive/hive_service.dart';
+import 'package:toeic/injection/injection.dart';
 import 'package:toeic/repositories/examination_repository.dart';
+import 'package:toeic/utils/utils.dart';
 
 import '../../../apis/models/Examination.dart';
 import '../../../apis/models/Questions.dart';
@@ -20,6 +25,7 @@ class TestCubit extends Cubit<TestState> {
   final TestRepository testRepository;
   final ExaminationRepository examinationRepository;
   final AuthenticationRepository authenticationRepository;
+  final hive = getIt<HiveService>();
 
   /// Danh sách đề thi
   List<Test> _listTest = [];
@@ -88,7 +94,21 @@ class TestCubit extends Cubit<TestState> {
           await getListExaminationByTestsId(tests.map((e) => e.id!).toList());
       emit(const TestStateLoaded());
     } on DioError catch (e) {
-      emit(TestState.failed(e.response?.statusMessage ?? ''));
+      if(e.type == DioErrorType.other){
+        var user = await userRepository.getUserById(hive.userId);
+        var tests = await testRepository.getListTestByTypeAndTargetFromDb(typeTestId,user!.target!);
+        _listTest = tests;
+        var ids = tests.map((e) => e.id!).toList();
+        logger("DANH SACH ID");
+        logger(ids);
+        await Future.forEach(ids, (int id) async{
+          var examination = await userRepository.getTheLastExaminationByTestId(id);
+          _examinations?.add(examination);
+        });
+        emit(const TestStateLoaded());
+      }else{
+        emit(TestState.failed(e.response?.statusMessage ?? ''));
+      }
     }
   }
 
@@ -104,6 +124,17 @@ class TestCubit extends Cubit<TestState> {
 
   bool isDownloaded(int testId){
     return _idsDownloaded.contains(testId);
+  }
+
+  void addDownload(int testId){
+    emit(TestState.loading());
+    _idsDownloaded.add(testId);
+    emit(TestState.loaded());
+  }
+
+  void updateDownload(int testId) async {
+    testRepository.updateDownload(testId);
+    addDownload(testId);
   }
 
 // Nộp bài

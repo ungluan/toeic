@@ -16,6 +16,9 @@ abstract class UserDao {
   @Query('SELECT * FROM user WHERE id = :id')
   Stream<UserEntity?> findUserById(int id);
 
+  @Query('SELECT * FROM user LIMIT 1')
+  Future<UserEntity?> getUserFromDB();
+
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertUserEntity(UserEntity userEntity);
 
@@ -52,4 +55,7 @@ abstract class UserDao {
     LIMIT 3
   ''')
   Future<List<ExaminationEntity>> get3TheLastExamination();
+
+  @Query('SELECT * FROM user WHERE id = :id')
+  Future<UserEntity?> getUserById(int id);
 }

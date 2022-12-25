@@ -1,8 +1,16 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_archive/flutter_archive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:toeic/apis/models/Test.dart';
 import 'package:toeic/features/practice/Introduce_Examination.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
@@ -35,6 +43,8 @@ class _ListTestPageState extends State<ListTestPage> {
   final testCubit = getIt<TestCubit>();
   final loadingCubit = getIt<LoadingCubit>();
   final examinationCubit = getIt<ExaminationCubit>();
+  ReceivePort _port = ReceivePort();
+
 
   @override
   void initState() {
@@ -54,7 +64,78 @@ class _ListTestPageState extends State<ListTestPage> {
         loadingCubit.hideLoading();
       }
     });
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState(() {});
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
   }
+
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
+  }
+
+  @pragma('vm:entry-point')
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort? send =
+    IsolateNameServer.lookupPortByName('downloader_send_port');
+    send?.send([id, status, progress]);
+  }
+
+  Future<void> download(String nameFile) async {
+    var url = "$FIREBASE_URL/$nameFile?alt=media";
+    final appDocDir = await getExternalStorageDirectory();
+    final filePath = "${appDocDir?.path}";
+    await FlutterDownloader.enqueue(
+      url: url,
+      headers: {},
+      // optional: header send with url (auth token etc)
+      savedDir: filePath,
+      showNotification: true,
+      // show download progress in status bar (for Android)
+      openFileFromNotification: true,
+      // click on notification to open downloaded file (for Android)
+      saveInPublicStorage: true,
+    );
+    await unzip(nameFile);
+  }
+
+  Future<void> unzip(String nameFile) async {
+    final destinationDir = await getExternalStorageDirectory();
+    final zipFile = File("${destinationDir?.path}/$nameFile");
+
+    try {
+      await ZipFile.extractToDirectory(
+          zipFile: zipFile,
+          destinationDir: destinationDir!,
+          onExtracting: (zipEntry, progress) {
+            if (kDebugMode) {
+              print('progress: ${progress.toStringAsFixed(1)}%');
+              print('name: ${zipEntry.name}');
+              print('isDirectory: ${zipEntry.isDirectory}');
+              print(
+                  'modificationDate: ${zipEntry.modificationDate?.toLocal().toIso8601String()}');
+              print('uncompressedSize: ${zipEntry.uncompressedSize}');
+              print('compressedSize: ${zipEntry.compressedSize}');
+              print('compressionMethod: ${zipEntry.compressionMethod}');
+              print('crc: ${zipEntry.crc}');
+            }
+            return ZipFileOperation.includeItem;
+          });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
 
   /// Build Item: đầu vào là bài test, bài thi gần nhất
   Widget _buildTestItem(Test test, Examination? examination) {
@@ -141,7 +222,12 @@ class _ListTestPageState extends State<ListTestPage> {
                                 )
                               : InkWell(
                                   onTap: () async {
-                                    print("Downloaded");
+                                    try{
+                                      await download("part1.zip");
+                                      testCubit.updateDownload(test.id!);
+                                    }catch(e){
+
+                                    }
                                   },
                                   child: const SizedBox(
                                     width: 72,
@@ -365,7 +451,11 @@ class _ListTestPageState extends State<ListTestPage> {
                                   height: widget.typeTestId == 8 ? 150 : 100,
                                 );
                               }
-
+                              if(testCubit.examination?.length == 0){
+                                return Text(
+                                  "Examination rong"
+                                );
+                              }
                               /// Điểm mấu chốt quan trọng ở đây chỉ cần đảm bảo 2 điều kiện sau:
                               /// 1. Lấy được danh sách đề bài. Nếu không mạng gọi db
                               /// 2. Lấy được danh sách lịch sử thi. Nếu không mạng gọi db

@@ -34,4 +34,13 @@ abstract class ExaminationDao {
       LIMIT 3
   ''')
   Future<List<ExaminationEntity>> get3LastExaminationFromDB();
+
+  @Query('''
+      select * 
+      FROM examination
+      WHERE test_id = :testId AND examination.finished_at IS NOT NULL
+      ORDER BY examination.id DESC
+      LIMIT 1
+  ''')
+  Future<ExaminationEntity?> getTheLastExaminationByTestId(int testId);
 }

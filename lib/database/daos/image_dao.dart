@@ -15,7 +15,7 @@ abstract class ImageDao {
   Future<void> insertImageEntity(ImageEntity imageEntity);
 
   @Insert(onConflict: OnConflictStrategy.replace)
-  Future<void> insertImagesEntity(List<ImageEntity> imagesEntity);
+  Future<void> insertImageEntities(List<ImageEntity> entities);
 
   @Query('DELETE FROM image')
   Future<void> deleteAllImage();
@@ -25,4 +25,11 @@ abstract class ImageDao {
 
   @delete
   Future<void> deleteImageEntity(ImageEntity imageEntity);
+
+  @Query('''
+    SELECT *
+    FROM image
+    WHERE image.exam_id = :examId
+  ''')
+  Future<List<ImageEntity>> getListImageByExamId(int examId);
 }

@@ -12,6 +12,9 @@ abstract class QuestionDao {
   @insert
   Future<void> insertQuestionEntity(QuestionEntity questionEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertQuestionEntities(List<QuestionEntity> entities);
+
   @Query('DELETE FROM question')
   Future<void> deleteAllQuestion();
 
@@ -20,4 +23,15 @@ abstract class QuestionDao {
 
   @delete
   Future<void> deleteQuestionEntity(QuestionEntity questionEntity);
+
+  @Query('''
+    SELECT *
+    FROM question
+    WHERE question.exam_id = :examId
+    ORDER BY id ASC
+  ''')
+  Future<List<QuestionEntity>> getListQuestionByExamId(int examId);
+
+  @Query('SELECT * FROM question WHERE id = :id')
+  Future<QuestionEntity?> getQuestionById(int id);
 }

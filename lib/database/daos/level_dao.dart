@@ -25,4 +25,7 @@ abstract class LevelDao {
 
   @delete
   Future<void> deleteLevelEntity(LevelEntity levelEntity);
+
+  @Query('SELECT * FROM level WHERE id = :id')
+  Future<LevelEntity?> getLevelById(int id);
 }

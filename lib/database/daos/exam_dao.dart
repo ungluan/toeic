@@ -14,6 +14,9 @@ abstract class ExamDao {
   @insert
   Future<void> insertExamEntity(ExamEntity examEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertExamEntities(List<ExamEntity> entities);
+
   @Query('DELETE FROM exam')
   Future<void> deleteAllExam();
 
@@ -22,4 +25,11 @@ abstract class ExamDao {
 
   @delete
   Future<void> deleteExamEntity(ExamEntity examEntity);
+
+  @Query('''
+    SELECT exam.id, exam.paragraph, exam.audio, exam.level_id, exam.part_id
+    FROM exam, test_detail
+    WHERE exam.id = test_detail.exam_id AND test_detail.test_id = :testId
+  ''')
+  Future<List<ExamEntity>> getListExamByTestId(int testId);
 }

@@ -91,7 +91,7 @@ class _$DatabaseManager extends DatabaseManager {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 5,
+      version: 8,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -107,13 +107,15 @@ class _$DatabaseManager extends DatabaseManager {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `exam` (`id` INTEGER, `paragraph` TEXT, `audio` TEXT, `level_id` INTEGER, `part_id` INTEGER, FOREIGN KEY (`level_id`) REFERENCES `level` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`part_id`) REFERENCES `part` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `exam` (`id` INTEGER, `paragraph` TEXT, `audio` TEXT, `level_id` INTEGER, `part_id` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `examination_detail` (`id` INTEGER, `examination_id` INTEGER, `question_id` INTEGER, `selection` TEXT, FOREIGN KEY (`examination_id`) REFERENCES `examination` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `examination_detail` (`id` INTEGER, `examination_id` INTEGER, `question_id` INTEGER, `selection` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `examination` (`id` INTEGER, `test_id` INTEGER, `user_id` INTEGER, `number_correct_part_1` INTEGER, `number_correct_part_2` INTEGER, `number_correct_part_3` INTEGER, `number_correct_part_4` INTEGER, `number_correct_part_5` INTEGER, `number_correct_part_6` INTEGER, `number_correct_part_7` INTEGER, `started_at` TEXT, `finished_at` TEXT, `type_test_id` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `image` (`id` INTEGER, `exam_id` INTEGER, `index` INTEGER, `url` TEXT, FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `image` (`id` INTEGER, `exam_id` INTEGER, `index` INTEGER, `url` TEXT, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `level` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `level` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
@@ -123,7 +125,7 @@ class _$DatabaseManager extends DatabaseManager {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `routine` (`id` INTEGER, `user_id` INTEGER, `created_at` TEXT, `total_time` INTEGER, `number_of_practice` INTEGER, `number_of_test` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `test_detail` (`id` INTEGER, `test_id` INTEGER, `exam_id` INTEGER, FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`test_id`) REFERENCES `test` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `test_detail` (`id` INTEGER, `test_id` INTEGER, `exam_id` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `test` (`id` INTEGER, `user_id` INTEGER, `type_test_id` INTEGER, `target` INTEGER, `is_available` INTEGER, `created_at` TEXT, `downloaded` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
@@ -278,9 +280,23 @@ class _$ExamDao extends ExamDao {
   }
 
   @override
+  Future<List<ExamEntity>> getListExamByTestId(int testId) async {
+    return _queryAdapter.queryList(
+        'SELECT exam.id, exam.paragraph, exam.audio, exam.level_id, exam.part_id     FROM exam, test_detail     WHERE exam.id = test_detail.exam_id AND test_detail.test_id = ?1',
+        mapper: (Map<String, Object?> row) => ExamEntity(paragraph: row['paragraph'] as String?, audio: row['audio'] as String?, levelId: row['level_id'] as int?, partId: row['part_id'] as int?, id: row['id'] as int?),
+        arguments: [testId]);
+  }
+
+  @override
   Future<void> insertExamEntity(ExamEntity examEntity) async {
     await _examEntityInsertionAdapter.insert(
         examEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertExamEntities(List<ExamEntity> entities) async {
+    await _examEntityInsertionAdapter.insertList(
+        entities, OnConflictStrategy.replace);
   }
 
   @override
@@ -417,6 +433,14 @@ class _$ExaminationDao extends ExaminationDao {
   }
 
   @override
+  Future<ExaminationEntity?> getTheLastExaminationByTestId(int testId) async {
+    return _queryAdapter.query(
+        'select *        FROM examination       WHERE test_id = ?1 AND examination.finished_at IS NOT NULL       ORDER BY examination.id DESC       LIMIT 1',
+        mapper: (Map<String, Object?> row) => ExaminationEntity(id: row['id'] as int?, testId: row['test_id'] as int?, userId: row['user_id'] as int?, numberCorrectPart1: row['number_correct_part_1'] as int?, numberCorrectPart2: row['number_correct_part_2'] as int?, numberCorrectPart3: row['number_correct_part_3'] as int?, numberCorrectPart4: row['number_correct_part_4'] as int?, numberCorrectPart5: row['number_correct_part_5'] as int?, numberCorrectPart6: row['number_correct_part_6'] as int?, numberCorrectPart7: row['number_correct_part_7'] as int?, startedAt: row['started_at'] as String?, finishedAt: row['finished_at'] as String?, typeTestId: row['type_test_id'] as int?),
+        arguments: [testId]);
+  }
+
+  @override
   Future<void> insertExaminationEntity(
       ExaminationEntity examinationEntity) async {
     await _examinationEntityInsertionAdapter.insert(
@@ -512,10 +536,26 @@ class _$ExaminationDetailDao extends ExaminationDetailDao {
   }
 
   @override
+  Future<List<ExaminationDetailEntity>> getExaminationDetailByExaminationId(
+      int id) async {
+    return _queryAdapter.queryList(
+        'select *        FROM examination_detail       WHERE examination_detail.examination_id = ?1       ORDER BY examination_detail.id ASC',
+        mapper: (Map<String, Object?> row) => ExaminationDetailEntity(id: row['id'] as int?, examinationId: row['examination_id'] as int?, questionId: row['question_id'] as int?, selection: row['selection'] as String?),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> insertExaminationDetailEntity(
       ExaminationDetailEntity examinationDetailEntity) async {
     await _examinationDetailEntityInsertionAdapter.insert(
         examinationDetailEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertExaminationDetails(
+      List<ExaminationDetailEntity> entities) async {
+    await _examinationDetailEntityInsertionAdapter.insertList(
+        entities, OnConflictStrategy.replace);
   }
 
   @override
@@ -598,15 +638,27 @@ class _$ImageDao extends ImageDao {
   }
 
   @override
+  Future<List<ImageEntity>> getListImageByExamId(int examId) async {
+    return _queryAdapter.queryList(
+        'SELECT *     FROM image     WHERE image.exam_id = ?1',
+        mapper: (Map<String, Object?> row) => ImageEntity(
+            id: row['id'] as int?,
+            examId: row['exam_id'] as int?,
+            index: row['index'] as int?,
+            url: row['url'] as String?),
+        arguments: [examId]);
+  }
+
+  @override
   Future<void> insertImageEntity(ImageEntity imageEntity) async {
     await _imageEntityInsertionAdapter.insert(
         imageEntity, OnConflictStrategy.replace);
   }
 
   @override
-  Future<void> insertImagesEntity(List<ImageEntity> imagesEntity) async {
+  Future<void> insertImageEntities(List<ImageEntity> entities) async {
     await _imageEntityInsertionAdapter.insertList(
-        imagesEntity, OnConflictStrategy.replace);
+        entities, OnConflictStrategy.replace);
   }
 
   @override
@@ -670,6 +722,14 @@ class _$LevelDao extends LevelDao {
   Future<void> deleteLevel(int id) async {
     await _queryAdapter
         .queryNoReturn('DELETE * FROM level WHERE id= ?1', arguments: [id]);
+  }
+
+  @override
+  Future<LevelEntity?> getLevelById(int id) async {
+    return _queryAdapter.query('SELECT * FROM level WHERE id = ?1',
+        mapper: (Map<String, Object?> row) =>
+            LevelEntity(id: row['id'] as int?, name: row['name'] as String?),
+        arguments: [id]);
   }
 
   @override
@@ -745,6 +805,14 @@ class _$PartDao extends PartDao {
   Future<void> deletePart(int id) async {
     await _queryAdapter
         .queryNoReturn('DELETE * FROM part WHERE id= ?1', arguments: [id]);
+  }
+
+  @override
+  Future<PartEntity?> getPartById(int id) async {
+    return _queryAdapter.query('SELECT * FROM part WHERE id = ?1',
+        mapper: (Map<String, Object?> row) =>
+            PartEntity(id: row['id'] as int?, name: row['name'] as String?),
+        arguments: [id]);
   }
 
   @override
@@ -857,9 +925,39 @@ class _$QuestionDao extends QuestionDao {
   }
 
   @override
+  Future<List<QuestionEntity>> getListQuestionByExamId(int examId) async {
+    return _queryAdapter.queryList(
+        'SELECT *     FROM question     WHERE question.exam_id = ?1     ORDER BY id ASC',
+        mapper: (Map<String, Object?> row) => QuestionEntity(id: row['id'] as int?, content: row['content'] as String?, explain: row['explain'] as String?, a: row['a'] as String?, b: row['b'] as String?, c: row['c'] as String?, d: row['d'] as String?, answer: row['answer'] as String?, examId: row['exam_id'] as int?),
+        arguments: [examId]);
+  }
+
+  @override
+  Future<QuestionEntity?> getQuestionById(int id) async {
+    return _queryAdapter.query('SELECT * FROM question WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => QuestionEntity(
+            id: row['id'] as int?,
+            content: row['content'] as String?,
+            explain: row['explain'] as String?,
+            a: row['a'] as String?,
+            b: row['b'] as String?,
+            c: row['c'] as String?,
+            d: row['d'] as String?,
+            answer: row['answer'] as String?,
+            examId: row['exam_id'] as int?),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> insertQuestionEntity(QuestionEntity questionEntity) async {
     await _questionEntityInsertionAdapter.insert(
         questionEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertQuestionEntities(List<QuestionEntity> entities) async {
+    await _questionEntityInsertionAdapter.insertList(
+        entities, OnConflictStrategy.replace);
   }
 
   @override
@@ -1077,6 +1175,24 @@ class _$TestDao extends TestDao {
   }
 
   @override
+  Future<TestEntity?> getTestById(int id) async {
+    return _queryAdapter.query('SELECT * FROM test WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => TestEntity(
+            id: row['id'] as int?,
+            userId: row['user_id'] as int?,
+            typeTestId: row['type_test_id'] as int?,
+            target: row['target'] as int?,
+            isAvailable: row['is_available'] == null
+                ? null
+                : (row['is_available'] as int) != 0,
+            createdAt: row['created_at'] as String?,
+            downloaded: row['downloaded'] == null
+                ? null
+                : (row['downloaded'] as int) != 0),
+        arguments: [id]);
+  }
+
+  @override
   Future<List<int>?> getIdsFromTestDownloaded() async {
     await _queryAdapter
         .queryNoReturn('SELECT id FROM test WHERE downloaded = true');
@@ -1091,6 +1207,24 @@ class _$TestDao extends TestDao {
   Future<void> deleteTest(int id) async {
     await _queryAdapter
         .queryNoReturn('DELETE * FROM test WHERE id= ?1', arguments: [id]);
+  }
+
+  @override
+  Future<void> updateDownload(int id) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE test       SET downloaded = true       WHERE id = ?1',
+        arguments: [id]);
+  }
+
+  @override
+  Future<List<TestEntity>> getListTestByTypeAndTarget(
+    int typeId,
+    int target,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM test     WHERE type_test_id = ?1 AND target = ?2 AND downloaded = true',
+        mapper: (Map<String, Object?> row) => TestEntity(id: row['id'] as int?, userId: row['user_id'] as int?, typeTestId: row['type_test_id'] as int?, target: row['target'] as int?, isAvailable: row['is_available'] == null ? null : (row['is_available'] as int) != 0, createdAt: row['created_at'] as String?, downloaded: row['downloaded'] == null ? null : (row['downloaded'] as int) != 0),
+        arguments: [typeId, target]);
   }
 
   @override
@@ -1185,6 +1319,12 @@ class _$TestDetailDao extends TestDetailDao {
   }
 
   @override
+  Future<void> insertTestDetailEntities(List<TestDetailEntity> entities) async {
+    await _testDetailEntityInsertionAdapter.insertList(
+        entities, OnConflictStrategy.replace);
+  }
+
+  @override
   Future<void> deleteTestDetailEntity(TestDetailEntity typeTestEntity) async {
     await _testDetailEntityDeletionAdapter.delete(typeTestEntity);
   }
@@ -1194,20 +1334,18 @@ class _$TypeTestDao extends TypeTestDao {
   _$TypeTestDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database, changeListener),
+  )   : _queryAdapter = QueryAdapter(database),
         _typeTestEntityInsertionAdapter = InsertionAdapter(
             database,
             'type_test',
             (TypeTestEntity item) =>
-                <String, Object?>{'id': item.id, 'name': item.name},
-            changeListener),
+                <String, Object?>{'id': item.id, 'name': item.name}),
         _typeTestEntityDeletionAdapter = DeletionAdapter(
             database,
             'type_test',
             ['id'],
             (TypeTestEntity item) =>
-                <String, Object?>{'id': item.id, 'name': item.name},
-            changeListener);
+                <String, Object?>{'id': item.id, 'name': item.name});
 
   final sqflite.DatabaseExecutor database;
 
@@ -1227,13 +1365,11 @@ class _$TypeTestDao extends TypeTestDao {
   }
 
   @override
-  Stream<TypeTestEntity?> findTypeTestById(int id) {
-    return _queryAdapter.queryStream('SELECT * FROM type_test WHERE id = ?1',
+  Future<TypeTestEntity?> findTypeTestById(int id) async {
+    return _queryAdapter.query('SELECT * FROM type_test WHERE id = ?1',
         mapper: (Map<String, Object?> row) =>
             TypeTestEntity(id: row['id'] as int?, name: row['name'] as String?),
-        arguments: [id],
-        queryableName: 'type_test',
-        isView: false);
+        arguments: [id]);
   }
 
   @override
@@ -1381,6 +1517,30 @@ class _$UserDao extends UserDao {
   }
 
   @override
+  Future<UserEntity?> getUserFromDB() async {
+    return _queryAdapter.query('SELECT * FROM user LIMIT 1',
+        mapper: (Map<String, Object?> row) => UserEntity(
+            id: row['id'] as int?,
+            firstName: row['first_name'] as String?,
+            lastName: row['last_name'] as String?,
+            email: row['email'] as String?,
+            password: row['password'] as String?,
+            birthDate: row['birth_date'] as String?,
+            address: row['address'] as String?,
+            phoneNumber: row['phone_number'] as String?,
+            gender: row['gender'] as String?,
+            avatar: row['avatar'] as String?,
+            isActive: row['is_active'] == null
+                ? null
+                : (row['is_active'] as int) != 0,
+            ruleId: row['rule_id'] as int?,
+            target: row['target'] as int?,
+            firebaseToken: row['firebase_token'] as String?,
+            createdAt: row['created_at'] as String?,
+            updatedAt: row['updated_at'] as String?));
+  }
+
+  @override
   Future<void> deleteAllUser() async {
     await _queryAdapter.queryNoReturn('DELETE FROM user');
   }
@@ -1427,6 +1587,31 @@ class _$UserDao extends UserDao {
             startedAt: row['started_at'] as String?,
             finishedAt: row['finished_at'] as String?,
             typeTestId: row['type_test_id'] as int?));
+  }
+
+  @override
+  Future<UserEntity?> getUserById(int id) async {
+    return _queryAdapter.query('SELECT * FROM user WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => UserEntity(
+            id: row['id'] as int?,
+            firstName: row['first_name'] as String?,
+            lastName: row['last_name'] as String?,
+            email: row['email'] as String?,
+            password: row['password'] as String?,
+            birthDate: row['birth_date'] as String?,
+            address: row['address'] as String?,
+            phoneNumber: row['phone_number'] as String?,
+            gender: row['gender'] as String?,
+            avatar: row['avatar'] as String?,
+            isActive: row['is_active'] == null
+                ? null
+                : (row['is_active'] as int) != 0,
+            ruleId: row['rule_id'] as int?,
+            target: row['target'] as int?,
+            firebaseToken: row['firebase_token'] as String?,
+            createdAt: row['created_at'] as String?,
+            updatedAt: row['updated_at'] as String?),
+        arguments: [id]);
   }
 
   @override

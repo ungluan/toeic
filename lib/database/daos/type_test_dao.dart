@@ -7,7 +7,7 @@ abstract class TypeTestDao {
   Future<List<TypeTestEntity>> getAllTypeTestEntity();
 
   @Query('SELECT * FROM type_test WHERE id = :id')
-  Stream<TypeTestEntity?> findTypeTestById(int id);
+  Future<TypeTestEntity?> findTypeTestById(int id);
 
   @insert
   Future<void> insertTypeTestEntity(TypeTestEntity typeTestEntity);

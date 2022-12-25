@@ -1,14 +1,6 @@
 import 'package:floor/floor.dart';
-import 'package:toeic/database/entities/question_entity.dart';
 
-import 'examination_entity.dart';
-
-@Entity(tableName: 'examination_detail',
-    foreignKeys: [
-      ForeignKey(childColumns: ['examination_id'], parentColumns: ['id'], entity: ExaminationEntity),
-      ForeignKey(childColumns: ['question_id'], parentColumns: ['id'], entity: QuestionEntity),
-    ]
-)
+@Entity(tableName: 'examination_detail')
 class ExaminationDetailEntity {
   @primaryKey
   @ColumnInfo(name: 'id')

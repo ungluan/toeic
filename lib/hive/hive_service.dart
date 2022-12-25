@@ -34,5 +34,9 @@ class HiveService {
   int get maxTestId => box.get('max_test_id', defaultValue: 0);
 
   void updateMaxTestId(int id) => box.put('max_test_id', id);
+
+  int get userId => box.get('user_id', defaultValue: 0);
+
+  void updateUserId(int id) => box.put('user_id', id);
 }
 

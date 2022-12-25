@@ -24,4 +24,15 @@ abstract class ExaminationDetailDao {
   @delete
   Future<void> deleteExaminationDetailEntity(
       ExaminationDetailEntity examinationDetailEntity);
+
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertExaminationDetails(List<ExaminationDetailEntity> entities);
+
+  @Query('''
+      select * 
+      FROM examination_detail
+      WHERE examination_detail.examination_id = :id
+      ORDER BY examination_detail.id ASC
+  ''')
+  Future<List<ExaminationDetailEntity>> getExaminationDetailByExaminationId(int id);
 }

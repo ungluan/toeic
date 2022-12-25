@@ -33,11 +33,12 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'database_manager.g.dart';
 
-@Database(version: 5, entities: [
+@Database(version: 8, entities: [
   ExamEntity,
   ExaminationDetailEntity,
   ExaminationEntity,
   ImageEntity,
+  LevelEntity,
   LevelEntity,
   PartEntity,
   QuestionEntity,

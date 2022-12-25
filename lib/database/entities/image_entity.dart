@@ -1,9 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:toeic/database/entities/exam_entity.dart';
 
-@Entity(tableName: 'image', foreignKeys: [
-  ForeignKey(childColumns: ['exam_id'], parentColumns: ['id'], entity: ExamEntity),
-])
+@Entity(tableName: 'image')
 class ImageEntity {
   @primaryKey
   @ColumnInfo(name: 'id')

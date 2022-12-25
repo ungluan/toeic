@@ -13,5 +13,7 @@ abstract class TestRepository {
   Future<List<Examination?>> getListExaminationByTestsId(List<int> testsId);
   Future<List<Test>> getTestsFromMaxId(int maxId);
   Future<List<int>> getIdsFromTestDownloaded();
+  Future<void> updateDownload(int id);
+  Future<List<Test>> getListTestByTypeAndTargetFromDb(int typeId, int target);
 
 }

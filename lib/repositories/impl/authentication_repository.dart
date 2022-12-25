@@ -51,6 +51,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     if (hiveService.token.isNotEmpty) {
       try {
         final userInfo = await getUserInfo();
+        hiveService.updateUserId(userInfo.id ?? 0);
         userSubject.add(userInfo);
         // Update Routine với thời gian??
         await _userRepository.saveActivityInApp();

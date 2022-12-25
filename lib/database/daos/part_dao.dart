@@ -23,4 +23,7 @@ abstract class PartDao {
 
   @delete
   Future<void> deletePartEntity(PartEntity partEntity);
+
+  @Query('SELECT * FROM part WHERE id = :id')
+  Future<PartEntity?> getPartById(int id);
 }

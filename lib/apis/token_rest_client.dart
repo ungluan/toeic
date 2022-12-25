@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:toeic/apis/models/DateRoutine.dart';
+import 'package:toeic/apis/models/ExaminationDetailModel.dart';
+import 'package:toeic/apis/models/Exams.dart';
+import 'package:toeic/apis/models/TestDetail.dart';
 
 import 'models/Examination.dart';
 import 'models/Level.dart';
@@ -93,4 +96,14 @@ abstract class TokenRestClient {
 
   @GET('test/get-test-from-max-id//{id}')
   Future<List<Test>> getTestsFromMaxId(@Path('id') int maxId);
+
+
+  @POST('test-detail/get-list-test-detail-by-list-test-id')
+  Future<List<TestDetail>> getListTestDetailByListTestId( @Body() List<int> data);
+
+  @POST('exam/get-exam-by-list-exam-id')
+  Future<List<Exams>> getExamByListExamId( @Body() List<int> data);
+
+  @POST('examination-detail/get-list-examination-detail-by-list-examination-id')
+  Future<List<ExaminationDetailModel>> getExaminationByListExaminationId(@Body() List<int> data);
 }

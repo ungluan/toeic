@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -35,6 +36,12 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await FlutterDownloader.initialize(
+      debug: true,
+      // optional: set to false to disable printing logs to console (default: true)
+      ignoreSsl:
+      true // option: set to false to disable working with http links (default: false)
+  );
   await Hive.initFlutter();
   await Hive.openBox(boxName);
   await Firebase.initializeApp();

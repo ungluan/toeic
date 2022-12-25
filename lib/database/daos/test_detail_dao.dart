@@ -12,6 +12,9 @@ abstract class TestDetailDao {
   @insert
   Future<void> insertTestDetailEntity(TestDetailEntity typeTestEntity);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertTestDetailEntities(List<TestDetailEntity> entities);
+
   @Query('DELETE FROM test_detail')
   Future<void> deleteAllTestDetail();
 
