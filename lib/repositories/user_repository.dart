@@ -14,6 +14,7 @@ import '../apis/models/Test.dart';
 import '../apis/models/TestDetail.dart';
 import '../apis/models/TypeTest.dart';
 import '../apis/models/user.dart';
+import '../database/entities/examination_entity.dart';
 import '../database/entities/user_entity.dart';
 
 
@@ -77,4 +78,8 @@ abstract class UserRepository {
   Future<List<ExaminationDetailModel>> getExaminationDetailByListExaminationId(List<int> data);
   Future<void> insertExaminationDetails(List<ExaminationDetailModel> data);
   Future<Examination?> getTheLastExaminationByTestId(int testId);
+  Future<ExaminationEntity?> getExaminationHaveNotFinished(int userId, int testId);
+  Future<int?> getTypeTestIdByTestId(int id);
+  Future<void> createExaminationEntity(ExaminationEntity entity);
+  Future<Examination> getExaminationByIdFromDB(int id);
 }

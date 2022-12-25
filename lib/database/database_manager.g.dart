@@ -402,6 +402,26 @@ class _$ExaminationDao extends ExaminationDao {
   }
 
   @override
+  Future<ExaminationEntity?> getExaminationByIdFromDB(int id) async {
+    return _queryAdapter.query('SELECT * FROM examination WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => ExaminationEntity(
+            id: row['id'] as int?,
+            testId: row['test_id'] as int?,
+            userId: row['user_id'] as int?,
+            numberCorrectPart1: row['number_correct_part_1'] as int?,
+            numberCorrectPart2: row['number_correct_part_2'] as int?,
+            numberCorrectPart3: row['number_correct_part_3'] as int?,
+            numberCorrectPart4: row['number_correct_part_4'] as int?,
+            numberCorrectPart5: row['number_correct_part_5'] as int?,
+            numberCorrectPart6: row['number_correct_part_6'] as int?,
+            numberCorrectPart7: row['number_correct_part_7'] as int?,
+            startedAt: row['started_at'] as String?,
+            finishedAt: row['finished_at'] as String?,
+            typeTestId: row['type_test_id'] as int?),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> deleteAllExamination() async {
     await _queryAdapter.queryNoReturn('DELETE FROM examination');
   }
@@ -438,6 +458,17 @@ class _$ExaminationDao extends ExaminationDao {
         'select *        FROM examination       WHERE test_id = ?1 AND examination.finished_at IS NOT NULL       ORDER BY examination.id DESC       LIMIT 1',
         mapper: (Map<String, Object?> row) => ExaminationEntity(id: row['id'] as int?, testId: row['test_id'] as int?, userId: row['user_id'] as int?, numberCorrectPart1: row['number_correct_part_1'] as int?, numberCorrectPart2: row['number_correct_part_2'] as int?, numberCorrectPart3: row['number_correct_part_3'] as int?, numberCorrectPart4: row['number_correct_part_4'] as int?, numberCorrectPart5: row['number_correct_part_5'] as int?, numberCorrectPart6: row['number_correct_part_6'] as int?, numberCorrectPart7: row['number_correct_part_7'] as int?, startedAt: row['started_at'] as String?, finishedAt: row['finished_at'] as String?, typeTestId: row['type_test_id'] as int?),
         arguments: [testId]);
+  }
+
+  @override
+  Future<ExaminationEntity?> getExaminationHaveNotFinished(
+    int userId,
+    int testId,
+  ) async {
+    return _queryAdapter.query(
+        'SELECT * FROM examination     WHERE examination.user_id = ?1 AND examination.finished_at IS NOT NULL AND examination.test_id = ?2     ORDER BY examination.id DESC     LIMIT 1',
+        mapper: (Map<String, Object?> row) => ExaminationEntity(id: row['id'] as int?, testId: row['test_id'] as int?, userId: row['user_id'] as int?, numberCorrectPart1: row['number_correct_part_1'] as int?, numberCorrectPart2: row['number_correct_part_2'] as int?, numberCorrectPart3: row['number_correct_part_3'] as int?, numberCorrectPart4: row['number_correct_part_4'] as int?, numberCorrectPart5: row['number_correct_part_5'] as int?, numberCorrectPart6: row['number_correct_part_6'] as int?, numberCorrectPart7: row['number_correct_part_7'] as int?, startedAt: row['started_at'] as String?, finishedAt: row['finished_at'] as String?, typeTestId: row['type_test_id'] as int?),
+        arguments: [userId, testId]);
   }
 
   @override
@@ -1225,6 +1256,13 @@ class _$TestDao extends TestDao {
         'SELECT * FROM test     WHERE type_test_id = ?1 AND target = ?2 AND downloaded = true',
         mapper: (Map<String, Object?> row) => TestEntity(id: row['id'] as int?, userId: row['user_id'] as int?, typeTestId: row['type_test_id'] as int?, target: row['target'] as int?, isAvailable: row['is_available'] == null ? null : (row['is_available'] as int) != 0, createdAt: row['created_at'] as String?, downloaded: row['downloaded'] == null ? null : (row['downloaded'] as int) != 0),
         arguments: [typeId, target]);
+  }
+
+  @override
+  Future<int?> getTypeTestIdByTestId(int id) async {
+    await _queryAdapter.queryNoReturn(
+        'SELECT type_test_id FROM test     WHERE id = ?1',
+        arguments: [id]);
   }
 
   @override

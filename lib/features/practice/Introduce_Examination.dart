@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -11,7 +10,6 @@ import 'package:toeic/ui_kits/widgets/views/sbox_button.dart';
 import '../../apis/models/Test.dart';
 import '../../injection/injection.dart';
 import '../../ui_kits/widgets/views/sbox_loading.dart';
-import 'cubit/test_cubit.dart';
 import 'examination_page.dart';
 
 class IntroduceExamination extends StatefulWidget {

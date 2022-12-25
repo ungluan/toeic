@@ -134,6 +134,8 @@ _i1.GetIt $initGetIt(
         get<_i12.AuthenticationRepository>(),
         get<_i14.ExaminationRepository>(),
         get<_i8.TestRepository>(),
+        get<_i10.UserRepository>(),
+        get<_i4.HiveService>(),
       ));
   return get;
 }

@@ -1,16 +1,21 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:toeic/apis/models/Choice.dart';
+import 'package:toeic/database/entities/examination_entity.dart';
 
 import '../../../apis/models/Examination.dart';
 import '../../../apis/models/Exams.dart';
 import '../../../apis/models/Questions.dart';
 import '../../../apis/models/Test.dart';
+import '../../../hive/hive_service.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../repositories/examination_repository.dart';
 import '../../../repositories/test_repository.dart';
+import '../../../repositories/user_repository.dart';
 import '../../../utils/utils.dart';
 
 part 'examination_cubit.freezed.dart';
@@ -20,8 +25,10 @@ class ExaminationCubit extends Cubit<ExaminationState> {
   final AuthenticationRepository authenticationRepository;
   final ExaminationRepository examinationRepository;
   final TestRepository testRepository;
+  final UserRepository userRepository;
+  final HiveService hiveService;
 
-  ExaminationCubit(this.authenticationRepository, this.examinationRepository, this.testRepository)
+  ExaminationCubit(this.authenticationRepository, this.examinationRepository, this.testRepository, this.userRepository, this.hiveService)
       : super(const ExaminationState.loading()) {
     _examination = examinationRepository.examination;
   }
@@ -70,6 +77,9 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       emit(const ExaminationState.loading());
       /// Gán exams = danh sách các câu hỏi của đề thi
       List<Exams>? exams = test.exams;
+      logger("DANH SACH CAU HOI");
+      logger(exams?.map((e) => e.id).toList());
+      logger("===========================");
       /// Khởi tạo danh sách lựa chọn
       for (int i = 0; i < exams!.length; i++) {
         var questions = exams[i].questions;
@@ -127,6 +137,7 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       _examination?.test?.exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
       /// Lưu trữ chi tiết bài thi trong repository
       examinationRepository.examination = _examination;
+      hiveService.updateIsOnline(true);
       emit(const ExaminationStateStarted());
     } on DioError catch (e) {
       /// Ngay chổ này.
@@ -134,7 +145,44 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       /// Sắp xếp lại danh sách câu hỏi theo phần nếu cần thiết
       /// lưu trữ chi tiết bài thi trong ExaminationRepository
       /// emit Success
-      emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
+      if(e.type == DioErrorType.other){
+        var examinationHaveNotFinished = await userRepository.getExaminationHaveNotFinished(hiveService.userId, testId);
+        var typeTestId = await userRepository.getTypeTestIdByTestId(testId);
+        if(examinationHaveNotFinished==null){
+          var entity = ExaminationEntity(
+            userId: hiveService.userId,
+            typeTestId: typeTestId,
+            testId: testId,
+            startedAt: DateTime.now().toString(),
+            finishedAt: null,
+            numberCorrectPart1: 0,
+            numberCorrectPart2: 0,
+            numberCorrectPart3: 0,
+            numberCorrectPart4: 0,
+            numberCorrectPart5: 0,
+            numberCorrectPart6: 0,
+            numberCorrectPart7: 0
+          );
+          await userRepository.createExaminationEntity(entity);
+          var examinationEntity = await userRepository.getExaminationHaveNotFinished(hiveService.userId, testId);
+          _examination = await userRepository.getExaminationByIdFromDB(examinationEntity!.id!);
+          /// Sắp xếp danh sách câu hỏi theo phần thi
+          _examination?.test?.exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
+          /// Lưu trữ chi tiết bài thi trong repository
+          examinationRepository.examination = _examination;
+        }else{
+          _examination = await userRepository.getExaminationByIdFromDB(examinationHaveNotFinished.id!);
+          /// Sắp xếp danh sách câu hỏi theo phần thi
+          _examination?.test?.exams?.sort((a,b)=> a.part!.id!.compareTo(b.part!.id!));
+          /// Lưu trữ chi tiết bài thi trong repository
+          examinationRepository.examination = _examination;
+        }
+        hiveService.updateIsOnline(false);
+        emit(const ExaminationStateStarted());
+      }
+      else{
+        emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
+      }
     }
   }
 

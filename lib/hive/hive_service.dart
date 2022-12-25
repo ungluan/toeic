@@ -38,5 +38,9 @@ class HiveService {
   int get userId => box.get('user_id', defaultValue: 0);
 
   void updateUserId(int id) => box.put('user_id', id);
+
+  bool get isOnline => box.get('is_online', defaultValue: true);
+
+  void updateIsOnline(bool val) => box.put('is_online', val);
 }
 

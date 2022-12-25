@@ -11,6 +11,9 @@ abstract class ExaminationDao {
   @Query('SELECT * FROM examination WHERE id = :id')
   Stream<ExaminationEntity?> findExaminationById(int id);
 
+  @Query('SELECT * FROM examination WHERE id = :id')
+  Future<ExaminationEntity?> getExaminationByIdFromDB(int id);
+
   @insert
   Future<void> insertExaminationEntity(ExaminationEntity examinationEntity);
 
@@ -43,4 +46,12 @@ abstract class ExaminationDao {
       LIMIT 1
   ''')
   Future<ExaminationEntity?> getTheLastExaminationByTestId(int testId);
+
+  @Query('''
+    SELECT * FROM examination
+    WHERE examination.user_id = :userId AND examination.finished_at IS NOT NULL AND examination.test_id = :testId
+    ORDER BY examination.id DESC
+    LIMIT 1
+  ''')
+  Future<ExaminationEntity?> getExaminationHaveNotFinished(int userId, int testId);
 }

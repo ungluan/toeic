@@ -42,4 +42,10 @@ abstract class TestDao {
     WHERE type_test_id = :typeId AND target = :target AND downloaded = true
   ''')
   Future<List<TestEntity>> getListTestByTypeAndTarget(int typeId, int target);
+
+  @Query('''
+    SELECT type_test_id FROM test
+    WHERE id = :id
+  ''')
+  Future<int?> getTypeTestIdByTestId(int id);
 }

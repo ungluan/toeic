@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -28,6 +29,7 @@ class ExaminationPage extends StatefulWidget {
   const ExaminationPage(
       {Key? key, required this.test, required this.examinationId})
       : super(key: key);
+
   /// Input: đề thi, mã bài thi
   final Test test;
   final int examinationId;
@@ -78,18 +80,24 @@ class _ExaminationPageState extends State<ExaminationPage> {
   late GlobalKey _eleven = GlobalKey();
 
   bool theFirstShowCase = true;
+  Directory? appDir;
+  String storePath = "/storage/emulated/0/Android/data/com.example.toeic/files";
 
   @override
   void initState() {
     super.initState();
+    setup();
     if (widget.examinationId != -1) {
       /// Setup status readOnly
       examinationCubit.setupReadExamination(widget.examinationId);
     } else {
       /// Setup thi
       examinationCubit.setupTest(widget.test);
+
       /// Cái này ta có thể chuyển sang trang nhận xét
-      examinationCubit.getTheLastExaminationByTypeTestId(widget.test.typeTest!.id!);
+      examinationCubit
+          .getTheLastExaminationByTypeTestId(widget.test.typeTest!.id!);
+
       /// Timer
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         totalTime.value += 1;
@@ -114,10 +122,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
       }
       if (state is ExaminationStateSubmitted) {
         /// Chuyển tới trang nhận xét
-        Navigator.of(context).pushReplacement(ExamComment.route(theLastExamination));
-      }
-      else if(state is ExaminationStateLated){
-        theLastExamination = state.examinationLasted ;
+        Navigator.of(context)
+            .pushReplacement(ExamComment.route(theLastExamination));
+      } else if (state is ExaminationStateLated) {
+        theLastExamination = state.examinationLasted;
       }
     });
 
@@ -131,13 +139,29 @@ class _ExaminationPageState extends State<ExaminationPage> {
     );
 
     /// Showcase
-    if(hive.didShowCase != true && examinationCubit.examination?.test?.typeTest?.id == 8){
+    if (hive.didShowCase != true &&
+        examinationCubit.examination?.test?.typeTest?.id == 8) {
       WidgetsBinding.instance.addPostFrameCallback(
-            (_) => ShowCaseWidget.of(context)
-            .startShowCase([_one, _two, _three, _four, _five, _six, _seven, _eight, _nine, _ten, _eleven]),
+        (_) => ShowCaseWidget.of(context).startShowCase([
+          _one,
+          _two,
+          _three,
+          _four,
+          _five,
+          _six,
+          _seven,
+          _eight,
+          _nine,
+          _ten,
+          _eleven
+        ]),
       );
       // hive.updateDidShowCase(true);
     }
+  }
+
+  void setup() async {
+    // appDir = await getExternalStorageDirectory();
   }
 
   @override
@@ -160,8 +184,13 @@ class _ExaminationPageState extends State<ExaminationPage> {
 
   void initPlayer(String audioUrl) async {
     await player.stop();
-    await player.play(UrlSource(
-        "https://firebasestorage.googleapis.com/v0/b/toeic-bc79c.appspot.com/o/$audioUrl?alt=media"));
+    if(hive.isOnline){
+      await player.play(UrlSource(
+          "https://firebasestorage.googleapis.com/v0/b/toeic-bc79c.appspot.com/o/$audioUrl?alt=media"));
+    }else {
+      await player.play(DeviceFileSource("$storePath/$audioUrl"));
+    }
+
     isPlaying.value = true;
     position.value = Duration.zero;
     duration.value = await player.getDuration() ?? Duration.zero;
@@ -183,347 +212,361 @@ class _ExaminationPageState extends State<ExaminationPage> {
     if (exam.audio != null || exam.audio!.isNotEmpty) {
       initPlayer(exam.audio!);
     }
-    return !theFirstShowCase ? Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 6,
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(width: 3, color: lightTextColor),
-            ),
-            child: ListView.builder(
-              itemCount: exam.images!.length,
-              /// Đoạn này sẽ có 2 th: 1 render NetworkImage, 2 render FileImage
-              itemBuilder: (context, index) => CachedNetworkImage(
-                imageUrl: "$FIREBASE_URL/${exam.images![index].url}?alt=media",
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 10,
-          child: ListView.builder(
-              itemCount: exam.questions!.length,
-              itemBuilder: (context, index) {
-                var selected = examinationCubit.choices
-                    ?.firstWhere(
-                        (element) => element.id == exam.questions![index].id)
-                    .selected;
-                return OneChoice(
-                  data: examinationCubit
-                      .convertQuestionToMap(exam.questions![index]),
-                  onChanged: (nVal) => examinationCubit.chooseAnswer(
-                      nVal, exam.questions![index].id!),
-                  questionNumber: examinationCubit
-                      .getSelectionNumber(exam.questions![index].id!),
-                  questionContent: exam.questions![index].content!,
-                  kind:
-                  exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
-                  selected: selected!,
-                  isEnable: widget.examinationId == -1,
-                  explain: exam.questions![index].explain ?? '',
-                  answer: exam.questions![index].answer ?? '',
-                );
-              }),
-        ),
-        Expanded(
-          flex: 4,
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              children: [
-                ValueListenableBuilder<Duration>(
-                  valueListenable: position,
-                  builder: (_, data, __) => Slider(
-                    value: data.inSeconds.toDouble(),
-                    min: 0,
-                    max: duration.value.inSeconds.toDouble(),
-                    onChanged: (value) async {
-                      position.value = Duration(seconds: value.toInt());
-                      await player.seek(position.value);
-                    },
+    return !theFirstShowCase
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 6,
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(width: 3, color: lightTextColor),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: ValueListenableBuilder<Duration>(
-                    valueListenable: position,
-                    builder: (_, value, __) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(formatTime(value)),
-                        Text(formatTime(duration.value - position.value))
-                      ],
+                  child: ListView.builder(
+                    itemCount: exam.images!.length,
+
+                    /// Đoạn này sẽ có 2 th: 1 render NetworkImage, 2 render FileImage
+                    itemBuilder: (context, index) => CachedNetworkImage(
+                      imageUrl:
+                          "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+                      errorWidget: (context, _, __) =>  Image.file(File(
+                          "/storage/emulated/0/Android/data/com.example.toeic/files/${exam.images![index].url}")) ),
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            var nVal = position.value.inSeconds + 5;
-                            if (nVal <= duration.value.inSeconds) {
-                              position.value = Duration(
-                                  seconds: position.value.inSeconds + 5);
-                              await player.seek(position.value);
-                            } else {
-                              position.value = duration.value;
-                              await player.seek(position.value);
-                            }
+              Expanded(
+                flex: 10,
+                child: ListView.builder(
+                    itemCount: exam.questions!.length,
+                    itemBuilder: (context, index) {
+                      var selected = examinationCubit.choices
+                          ?.firstWhere((element) =>
+                              element.id == exam.questions![index].id)
+                          .selected;
+                      return OneChoice(
+                        data: examinationCubit
+                            .convertQuestionToMap(exam.questions![index]),
+                        onChanged: (nVal) => examinationCubit.chooseAnswer(
+                            nVal, exam.questions![index].id!),
+                        questionNumber: examinationCubit
+                            .getSelectionNumber(exam.questions![index].id!),
+                        questionContent: exam.questions![index].content!,
+                        kind: exam.part!.id! <= 2
+                            ? KindDisplay.ABCD
+                            : KindDisplay.BOTH,
+                        selected: selected!,
+                        isEnable: widget.examinationId == -1,
+                        explain: exam.questions![index].explain ?? '',
+                        answer: exam.questions![index].answer ?? '',
+                      );
+                    }),
+              ),
+              Expanded(
+                flex: 4,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      ValueListenableBuilder<Duration>(
+                        valueListenable: position,
+                        builder: (_, data, __) => Slider(
+                          value: data.inSeconds.toDouble(),
+                          min: 0,
+                          max: duration.value.inSeconds.toDouble(),
+                          onChanged: (value) async {
+                            position.value = Duration(seconds: value.toInt());
+                            await player.seek(position.value);
                           },
-                          icon: const Icon(Icons.forward_5),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 8, right: 8),
-                          child: IconButton(
-                            onPressed: () async {
-                              if (isPlaying.value) {
-                                isPlaying.value = false;
-                                await player.pause();
-                              } else {
-                                if (isCompleted) {
-                                  initPlayer(exam.audio!);
-                                } else {
-                                  isPlaying.value = true;
-                                  await player.resume();
-                                }
-                              }
-                            },
-                            icon: ValueListenableBuilder<bool>(
-                              valueListenable: isPlaying,
-                              builder: (_, value, __) => Icon(
-                                value
-                                    ? Icons.pause_circle_outline
-                                    : Icons.play_circle_outline,
-                              ),
-                            ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ValueListenableBuilder<Duration>(
+                          valueListenable: position,
+                          builder: (_, value, __) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(formatTime(value)),
+                              Text(formatTime(duration.value - position.value))
+                            ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: () async {
-                            var nVal = position.value.inSeconds - 5;
-                            if (nVal >= 0) {
-                              position.value = Duration(seconds: nVal);
-                              await player.seek(position.value);
-                            } else {
-                              position.value = Duration.zero;
-                              await player.seek(position.value);
-                            }
-                          },
-                          icon: const Icon(Icons.replay_5),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-      ],
-    ) : Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 6,
-          child: Showcase(
-            targetPadding: const EdgeInsets.all(5),
-            key: _five,
-            title: 'Hình ảnh',
-            description:
-            "Hiển thị các hình ảnh nếu có của câu hỏi, kéo lên hoặc xuống để xem các ảnh khác",
-            tooltipBackgroundColor: Theme.of(context).primaryColor,
-            textColor: Colors.white,
-            targetShapeBorder: const RoundedRectangleBorder(),
-            child: Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(width: 3, color: lightTextColor),
-              ),
-              child: ListView.builder(
-                itemCount: exam.images!.length,
-                itemBuilder: (context, index) => CachedNetworkImage(
-                  imageUrl: "$FIREBASE_URL/${exam.images![index].url}?alt=media",
-                ),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 10,
-          child: ListView.builder(
-              itemCount: exam.questions!.length,
-              itemBuilder: (context, index) {
-                var selected = examinationCubit.choices
-                    ?.firstWhere(
-                        (element) => element.id == exam.questions![index].id)
-                    .selected;
-                return OneChoice(
-                  data: examinationCubit
-                      .convertQuestionToMap(exam.questions![index]),
-                  onChanged: (nVal) => examinationCubit.chooseAnswer(
-                      nVal, exam.questions![index].id!),
-                  questionNumber: examinationCubit
-                      .getSelectionNumber(exam.questions![index].id!),
-                  questionContent: exam.questions![index].content!,
-                  kind:
-                  exam.part!.id! <= 2 ? KindDisplay.ABCD : KindDisplay.BOTH,
-                  selected: selected!,
-                  isEnable: widget.examinationId == -1,
-                  explain: exam.questions![index].explain ?? '',
-                  answer: exam.questions![index].answer ?? '',
-                  globalKeys: [_six,_seven],
-                );
-              }),
-        ),
-        Expanded(
-          flex: 4,
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              children: [
-                Showcase(
-                  targetPadding: const EdgeInsets.all(5),
-                  key: _eight,
-                  title: 'Audio',
-                  description:
-                  "Hiển thị độ dài của audio, bạn có thể kéo qua lại để điều khiển vị trí mong muốn.",
-                  tooltipBackgroundColor: Theme.of(context).primaryColor,
-                  textColor: Colors.white,
-                  targetShapeBorder: const CircleBorder(),
-                  child: ValueListenableBuilder<Duration>(
-                    valueListenable: position,
-                    builder: (_, data, __) => Slider(
-                      value: data.inSeconds.toDouble(),
-                      min: 0,
-                      max: duration.value.inSeconds.toDouble(),
-                      onChanged: (value) async {
-                        position.value = Duration(seconds: value.toInt());
-                        await player.seek(position.value);
-                      },
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: ValueListenableBuilder<Duration>(
-                    valueListenable: position,
-                    builder: (_, value, __) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(formatTime(value)),
-                        Text(formatTime(duration.value - position.value))
-                      ],
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Showcase(
-                          targetPadding: const EdgeInsets.all(5),
-                          key: _nine,
-                          title: 'Chuyển tiếp',
-                          description:
-                          "Bấm để chuyển đến 5s tiếp theo",
-                          tooltipBackgroundColor: Theme.of(context).primaryColor,
-                          textColor: Colors.white,
-                          targetShapeBorder: const CircleBorder(),
-                          child: IconButton(
-                            onPressed: () async {
-                              var nVal = position.value.inSeconds + 5;
-                              if (nVal <= duration.value.inSeconds) {
-                                position.value = Duration(
-                                    seconds: position.value.inSeconds + 5);
-                                await player.seek(position.value);
-                              } else {
-                                position.value = duration.value;
-                                await player.seek(position.value);
-                              }
-                            },
-                            icon: const Icon(Icons.forward_5),
-                          ),
-                        ),
-                        Showcase(
-                          targetPadding: const EdgeInsets.all(5),
-                          key: _ten,
-                          title: 'Phát/tạm dừng',
-                          description:
-                          "Bấm để phát audio hoặc tạm dừng audio",
-                          tooltipBackgroundColor: Theme.of(context).primaryColor,
-                          textColor: Colors.white,
-                          targetShapeBorder: const CircleBorder(),
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 8, right: 8),
-                            child: IconButton(
-                              onPressed: () async {
-                                if (isPlaying.value) {
-                                  isPlaying.value = false;
-                                  await player.pause();
-                                } else {
-                                  if (isCompleted) {
-                                    initPlayer(exam.audio!);
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  var nVal = position.value.inSeconds + 5;
+                                  if (nVal <= duration.value.inSeconds) {
+                                    position.value = Duration(
+                                        seconds: position.value.inSeconds + 5);
+                                    await player.seek(position.value);
                                   } else {
-                                    isPlaying.value = true;
-                                    await player.resume();
+                                    position.value = duration.value;
+                                    await player.seek(position.value);
                                   }
-                                }
-                              },
-                              icon: ValueListenableBuilder<bool>(
-                                valueListenable: isPlaying,
-                                builder: (_, value, __) => Icon(
-                                  value
-                                      ? Icons.pause_circle_outline
-                                      : Icons.play_circle_outline,
+                                },
+                                icon: const Icon(Icons.forward_5),
+                              ),
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(left: 8, right: 8),
+                                child: IconButton(
+                                  onPressed: () async {
+                                    if (isPlaying.value) {
+                                      isPlaying.value = false;
+                                      await player.pause();
+                                    } else {
+                                      if (isCompleted) {
+                                        initPlayer(exam.audio!);
+                                      } else {
+                                        isPlaying.value = true;
+                                        await player.resume();
+                                      }
+                                    }
+                                  },
+                                  icon: ValueListenableBuilder<bool>(
+                                    valueListenable: isPlaying,
+                                    builder: (_, value, __) => Icon(
+                                      value
+                                          ? Icons.pause_circle_outline
+                                          : Icons.play_circle_outline,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              IconButton(
+                                onPressed: () async {
+                                  var nVal = position.value.inSeconds - 5;
+                                  if (nVal >= 0) {
+                                    position.value = Duration(seconds: nVal);
+                                    await player.seek(position.value);
+                                  } else {
+                                    position.value = Duration.zero;
+                                    await player.seek(position.value);
+                                  }
+                                },
+                                icon: const Icon(Icons.replay_5),
+                              ),
+                            ],
                           ),
-                        ),
-                        Showcase(
-                          targetPadding: const EdgeInsets.all(5),
-                          key: _eleven,
-                          title: 'Quay lại',
-                          description:
-                          "Bấm để quay lại 5s sau",
-                          tooltipBackgroundColor: Theme.of(context).primaryColor,
-                          textColor: Colors.white,
-                          targetShapeBorder: const CircleBorder(),
-                          child: IconButton(
-                            onPressed: () async {
-                              var nVal = position.value.inSeconds - 5;
-                              if (nVal >= 0) {
-                                position.value = Duration(seconds: nVal);
-                                await player.seek(position.value);
-                              } else {
-                                position.value = Duration.zero;
-                                await player.seek(position.value);
-                              }
-                            },
-                            icon: const Icon(Icons.replay_5),
-                          ),
-                        ),
-                      ],
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 6,
+                child: Showcase(
+                  targetPadding: const EdgeInsets.all(5),
+                  key: _five,
+                  title: 'Hình ảnh',
+                  description:
+                      "Hiển thị các hình ảnh nếu có của câu hỏi, kéo lên hoặc xuống để xem các ảnh khác",
+                  tooltipBackgroundColor: Theme.of(context).primaryColor,
+                  textColor: Colors.white,
+                  targetShapeBorder: const RoundedRectangleBorder(),
+                  child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(width: 3, color: lightTextColor),
                     ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-      ],
-    ) ;
+                    child: ListView.builder(
+                      itemCount: exam.images!.length,
+                      itemBuilder: (context, index) => CachedNetworkImage(
+                        imageUrl:
+                            "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+                        errorWidget: (context, _,__) => Image.file(File(
+                            "$storePath/${exam.images![index].url}")),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 10,
+                child: ListView.builder(
+                    itemCount: exam.questions!.length,
+                    itemBuilder: (context, index) {
+                      var selected = examinationCubit.choices
+                          ?.firstWhere((element) =>
+                              element.id == exam.questions![index].id)
+                          .selected;
+                      return OneChoice(
+                        data: examinationCubit
+                            .convertQuestionToMap(exam.questions![index]),
+                        onChanged: (nVal) => examinationCubit.chooseAnswer(
+                            nVal, exam.questions![index].id!),
+                        questionNumber: examinationCubit
+                            .getSelectionNumber(exam.questions![index].id!),
+                        questionContent: exam.questions![index].content!,
+                        kind: exam.part!.id! <= 2
+                            ? KindDisplay.ABCD
+                            : KindDisplay.BOTH,
+                        selected: selected!,
+                        isEnable: widget.examinationId == -1,
+                        explain: exam.questions![index].explain ?? '',
+                        answer: exam.questions![index].answer ?? '',
+                        globalKeys: [_six, _seven],
+                      );
+                    }),
+              ),
+              Expanded(
+                flex: 4,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Showcase(
+                        targetPadding: const EdgeInsets.all(5),
+                        key: _eight,
+                        title: 'Audio',
+                        description:
+                            "Hiển thị độ dài của audio, bạn có thể kéo qua lại để điều khiển vị trí mong muốn.",
+                        tooltipBackgroundColor: Theme.of(context).primaryColor,
+                        textColor: Colors.white,
+                        targetShapeBorder: const CircleBorder(),
+                        child: ValueListenableBuilder<Duration>(
+                          valueListenable: position,
+                          builder: (_, data, __) => Slider(
+                            value: data.inSeconds.toDouble(),
+                            min: 0,
+                            max: duration.value.inSeconds.toDouble(),
+                            onChanged: (value) async {
+                              position.value = Duration(seconds: value.toInt());
+                              await player.seek(position.value);
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ValueListenableBuilder<Duration>(
+                          valueListenable: position,
+                          builder: (_, value, __) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(formatTime(value)),
+                              Text(formatTime(duration.value - position.value))
+                            ],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Showcase(
+                                targetPadding: const EdgeInsets.all(5),
+                                key: _nine,
+                                title: 'Chuyển tiếp',
+                                description: "Bấm để chuyển đến 5s tiếp theo",
+                                tooltipBackgroundColor:
+                                    Theme.of(context).primaryColor,
+                                textColor: Colors.white,
+                                targetShapeBorder: const CircleBorder(),
+                                child: IconButton(
+                                  onPressed: () async {
+                                    var nVal = position.value.inSeconds + 5;
+                                    if (nVal <= duration.value.inSeconds) {
+                                      position.value = Duration(
+                                          seconds:
+                                              position.value.inSeconds + 5);
+                                      await player.seek(position.value);
+                                    } else {
+                                      position.value = duration.value;
+                                      await player.seek(position.value);
+                                    }
+                                  },
+                                  icon: const Icon(Icons.forward_5),
+                                ),
+                              ),
+                              Showcase(
+                                targetPadding: const EdgeInsets.all(5),
+                                key: _ten,
+                                title: 'Phát/tạm dừng',
+                                description:
+                                    "Bấm để phát audio hoặc tạm dừng audio",
+                                tooltipBackgroundColor:
+                                    Theme.of(context).primaryColor,
+                                textColor: Colors.white,
+                                targetShapeBorder: const CircleBorder(),
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.only(left: 8, right: 8),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      if (isPlaying.value) {
+                                        isPlaying.value = false;
+                                        await player.pause();
+                                      } else {
+                                        if (isCompleted) {
+                                          initPlayer(exam.audio!);
+                                        } else {
+                                          isPlaying.value = true;
+                                          await player.resume();
+                                        }
+                                      }
+                                    },
+                                    icon: ValueListenableBuilder<bool>(
+                                      valueListenable: isPlaying,
+                                      builder: (_, value, __) => Icon(
+                                        value
+                                            ? Icons.pause_circle_outline
+                                            : Icons.play_circle_outline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Showcase(
+                                targetPadding: const EdgeInsets.all(5),
+                                key: _eleven,
+                                title: 'Quay lại',
+                                description: "Bấm để quay lại 5s sau",
+                                tooltipBackgroundColor:
+                                    Theme.of(context).primaryColor,
+                                textColor: Colors.white,
+                                targetShapeBorder: const CircleBorder(),
+                                child: IconButton(
+                                  onPressed: () async {
+                                    var nVal = position.value.inSeconds - 5;
+                                    if (nVal >= 0) {
+                                      position.value = Duration(seconds: nVal);
+                                      await player.seek(position.value);
+                                    } else {
+                                      position.value = Duration.zero;
+                                      await player.seek(position.value);
+                                    }
+                                  },
+                                  icon: const Icon(Icons.replay_5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
   }
 
   Widget _buildPart2(Exams exam) {
@@ -683,7 +726,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
                     itemCount: exam.images!.length,
                     itemBuilder: (context, index) => CachedNetworkImage(
                         imageUrl:
-                            "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+                            "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+                      errorWidget: (context, _, __)=> Image.file(File(
+                          "$storePath/${exam.images![index].url}")),
+                    ),
                   ),
                 ),
               )
@@ -835,7 +881,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
                     itemCount: exam.images!.length,
                     itemBuilder: (context, index) => CachedNetworkImage(
                         imageUrl:
-                            "$FIREBASE_URL/${exam.images![index].url}?alt=media"),
+                            "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+                      errorWidget: (context, _, __)=> Image.file(File(
+                          "$storePath/${exam.images![index].url}")),
+                    ),
                   ),
                 ),
               )
@@ -896,8 +945,10 @@ class _ExaminationPageState extends State<ExaminationPage> {
                   child: ListView.builder(
                     itemCount: exam.images!.length,
                     itemBuilder: (context, index) => CachedNetworkImage(
-                        imageUrl:
-                            "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+                      imageUrl:
+                          "$FIREBASE_URL/${exam.images![index].url}?alt=media",
+                      errorWidget: (context, _, __)=> Image.file(File(
+                          "$storePath/${exam.images![index].url}")),
                       fit: BoxFit.fitHeight,
                     ),
                   ),
@@ -1048,8 +1099,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
                     targetPadding: const EdgeInsets.all(5),
                     key: _three,
                     title: 'Nộp bài',
-                    description:
-                        "Bấm để nộp bài",
+                    description: "Bấm để nộp bài",
                     tooltipBackgroundColor: Theme.of(context).primaryColor,
                     textColor: Colors.white,
                     targetShapeBorder: const CircleBorder(),
@@ -1083,7 +1133,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
               key: _four,
               title: 'Thời gian',
               description:
-              "Hiển thị thời gian đã làm bài, nếu là bài thi thì sau 200 phút sẽ tự động nộp bài",
+                  "Hiển thị thời gian đã làm bài, nếu là bài thi thì sau 200 phút sẽ tự động nộp bài",
               tooltipBackgroundColor: Theme.of(context).primaryColor,
               textColor: Colors.white,
               targetShapeBorder: const CircleBorder(),
@@ -1124,7 +1174,7 @@ class _ExaminationPageState extends State<ExaminationPage> {
               itemCount: examinationCubit.examination?.test?.exams?.length ?? 0,
               controller: pageController,
               itemBuilder: (context, index) {
-                if(index==1) theFirstShowCase = false;
+                if (index == 1) theFirstShowCase = false;
                 return _buildPart(widget.test.exams![index]);
               },
               onPageChanged: (index) {

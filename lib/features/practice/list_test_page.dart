@@ -103,7 +103,7 @@ class _ListTestPageState extends State<ListTestPage> {
       // show download progress in status bar (for Android)
       openFileFromNotification: true,
       // click on notification to open downloaded file (for Android)
-      saveInPublicStorage: true,
+      saveInPublicStorage: false,
     );
     await unzip(nameFile);
   }
