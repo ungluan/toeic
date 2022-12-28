@@ -1,4 +1,5 @@
 import 'package:floor/floor.dart';
+import 'package:toeic/database/entities/ResulEntity.dart';
 import '../entities/question_entity.dart';
 
 @dao
@@ -34,4 +35,11 @@ abstract class QuestionDao {
 
   @Query('SELECT * FROM question WHERE id = :id')
   Future<QuestionEntity?> getQuestionById(int id);
+
+  // @Query('''
+  //   SELECT part_id, answer
+  //   FROM question, exam
+  //   WHERE question.exam_id = exam.id AND question.id = :id
+  // ''')
+  // Future<ResultEntity?> getAnswerByQuestionId(int id);
 }

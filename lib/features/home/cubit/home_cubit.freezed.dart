@@ -22,6 +22,7 @@ mixin _$HomeState {
     required TResult Function() loaded,
     required TResult Function() success,
     required TResult Function(String error) failed,
+    required TResult Function() refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -30,6 +31,7 @@ mixin _$HomeState {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,6 +40,7 @@ mixin _$HomeState {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -47,6 +50,7 @@ mixin _$HomeState {
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateSuccess value) success,
     required TResult Function(HomeStateFailed value) failed,
+    required TResult Function(HomeStateRefresh value) refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +59,7 @@ mixin _$HomeState {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +68,7 @@ mixin _$HomeState {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -128,6 +134,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     required TResult Function() loaded,
     required TResult Function() success,
     required TResult Function(String error) failed,
+    required TResult Function() refresh,
   }) {
     return loading();
   }
@@ -139,6 +146,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
   }) {
     return loading?.call();
   }
@@ -150,6 +158,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -165,6 +174,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateSuccess value) success,
     required TResult Function(HomeStateFailed value) failed,
+    required TResult Function(HomeStateRefresh value) refresh,
   }) {
     return loading(this);
   }
@@ -176,6 +186,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
   }) {
     return loading?.call(this);
   }
@@ -187,6 +198,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -245,6 +257,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     required TResult Function() loaded,
     required TResult Function() success,
     required TResult Function(String error) failed,
+    required TResult Function() refresh,
   }) {
     return loaded();
   }
@@ -256,6 +269,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
   }) {
     return loaded?.call();
   }
@@ -267,6 +281,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -282,6 +297,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateSuccess value) success,
     required TResult Function(HomeStateFailed value) failed,
+    required TResult Function(HomeStateRefresh value) refresh,
   }) {
     return loaded(this);
   }
@@ -293,6 +309,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
   }) {
     return loaded?.call(this);
   }
@@ -304,6 +321,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -362,6 +380,7 @@ class _$HomeStateSuccess implements HomeStateSuccess {
     required TResult Function() loaded,
     required TResult Function() success,
     required TResult Function(String error) failed,
+    required TResult Function() refresh,
   }) {
     return success();
   }
@@ -373,6 +392,7 @@ class _$HomeStateSuccess implements HomeStateSuccess {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
   }) {
     return success?.call();
   }
@@ -384,6 +404,7 @@ class _$HomeStateSuccess implements HomeStateSuccess {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -399,6 +420,7 @@ class _$HomeStateSuccess implements HomeStateSuccess {
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateSuccess value) success,
     required TResult Function(HomeStateFailed value) failed,
+    required TResult Function(HomeStateRefresh value) refresh,
   }) {
     return success(this);
   }
@@ -410,6 +432,7 @@ class _$HomeStateSuccess implements HomeStateSuccess {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
   }) {
     return success?.call(this);
   }
@@ -421,6 +444,7 @@ class _$HomeStateSuccess implements HomeStateSuccess {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -503,6 +527,7 @@ class _$HomeStateFailed implements HomeStateFailed {
     required TResult Function() loaded,
     required TResult Function() success,
     required TResult Function(String error) failed,
+    required TResult Function() refresh,
   }) {
     return failed(error);
   }
@@ -514,6 +539,7 @@ class _$HomeStateFailed implements HomeStateFailed {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
   }) {
     return failed?.call(error);
   }
@@ -525,6 +551,7 @@ class _$HomeStateFailed implements HomeStateFailed {
     TResult Function()? loaded,
     TResult Function()? success,
     TResult Function(String error)? failed,
+    TResult Function()? refresh,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -540,6 +567,7 @@ class _$HomeStateFailed implements HomeStateFailed {
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateSuccess value) success,
     required TResult Function(HomeStateFailed value) failed,
+    required TResult Function(HomeStateRefresh value) refresh,
   }) {
     return failed(this);
   }
@@ -551,6 +579,7 @@ class _$HomeStateFailed implements HomeStateFailed {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
   }) {
     return failed?.call(this);
   }
@@ -562,6 +591,7 @@ class _$HomeStateFailed implements HomeStateFailed {
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateSuccess value)? success,
     TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -578,4 +608,127 @@ abstract class HomeStateFailed implements HomeState {
   @JsonKey(ignore: true)
   _$$HomeStateFailedCopyWith<_$HomeStateFailed> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$HomeStateRefreshCopyWith<$Res> {
+  factory _$$HomeStateRefreshCopyWith(
+          _$HomeStateRefresh value, $Res Function(_$HomeStateRefresh) then) =
+      __$$HomeStateRefreshCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$HomeStateRefreshCopyWithImpl<$Res>
+    extends _$HomeStateCopyWithImpl<$Res>
+    implements _$$HomeStateRefreshCopyWith<$Res> {
+  __$$HomeStateRefreshCopyWithImpl(
+      _$HomeStateRefresh _value, $Res Function(_$HomeStateRefresh) _then)
+      : super(_value, (v) => _then(v as _$HomeStateRefresh));
+
+  @override
+  _$HomeStateRefresh get _value => super._value as _$HomeStateRefresh;
+}
+
+/// @nodoc
+
+class _$HomeStateRefresh implements HomeStateRefresh {
+  const _$HomeStateRefresh();
+
+  @override
+  String toString() {
+    return 'HomeState.refresh()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$HomeStateRefresh);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function() loaded,
+    required TResult Function() success,
+    required TResult Function(String error) failed,
+    required TResult Function() refresh,
+  }) {
+    return refresh();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function()? loaded,
+    TResult Function()? success,
+    TResult Function(String error)? failed,
+    TResult Function()? refresh,
+  }) {
+    return refresh?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function()? loaded,
+    TResult Function()? success,
+    TResult Function(String error)? failed,
+    TResult Function()? refresh,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateSuccess value) success,
+    required TResult Function(HomeStateFailed value) failed,
+    required TResult Function(HomeStateRefresh value) refresh,
+  }) {
+    return refresh(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateSuccess value)? success,
+    TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
+  }) {
+    return refresh?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateSuccess value)? success,
+    TResult Function(HomeStateFailed value)? failed,
+    TResult Function(HomeStateRefresh value)? refresh,
+    required TResult orElse(),
+  }) {
+    if (refresh != null) {
+      return refresh(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeStateRefresh implements HomeState {
+  const factory HomeStateRefresh() = _$HomeStateRefresh;
 }

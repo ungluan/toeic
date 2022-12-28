@@ -49,7 +49,17 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     setup();
+    homeCubit.stream.listen((event) {
+      if (event is HomeStateRefresh) {
+        setState(() {
+          print("Refresh Trang");
+        });
+      }
+    });
   }
+
+  @override
+  void setState(VoidCallback fn) {}
 
   void setup() async {
     /// Vẫn chưa lưu trữ được đống này
@@ -597,5 +607,5 @@ class _HomePageState extends State<HomePage>
 
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

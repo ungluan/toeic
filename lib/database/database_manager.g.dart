@@ -117,8 +117,6 @@ class _$DatabaseManager extends DatabaseManager {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `level` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `level` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
-        await database.execute(
             'CREATE TABLE IF NOT EXISTS `part` (`id` INTEGER, `name` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `question` (`id` INTEGER, `content` TEXT, `explain` TEXT, `a` TEXT, `b` TEXT, `c` TEXT, `d` TEXT, `answer` TEXT, `exam_id` INTEGER, PRIMARY KEY (`id`))');

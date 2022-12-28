@@ -36,6 +36,7 @@ import '../../apis/models/user.dart';
 import '../../apis/models/User.dart' as Upper;
 
 import '../../apis/token_rest_client.dart';
+import '../../database/entities/ResulEntity.dart';
 import '../../database/entities/type_test_entity.dart';
 import '../../hive/hive_service.dart';
 import '../user_repository.dart';
@@ -624,4 +625,10 @@ class UserRepositoryImpl extends UserRepository {
     );
     return examination;
   }
+
+  // @override
+  // Future<ResultEntity?> getAnswerByQuestionId(int id) async {
+  //   var questionDao = dbProvider.database.questionDao;
+  //   return questionDao.getAnswerByQuestionId(id);
+  // }
 }

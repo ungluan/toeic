@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:toeic/apis/models/Choice.dart';
+import 'package:toeic/database/entities/examination_detail_entity.dart';
 import 'package:toeic/database/entities/examination_entity.dart';
 
 import '../../../apis/models/Examination.dart';
+import '../../../apis/models/ExaminationDetailModel.dart';
 import '../../../apis/models/Exams.dart';
 import '../../../apis/models/Questions.dart';
 import '../../../apis/models/Test.dart';
@@ -203,6 +205,30 @@ class ExaminationCubit extends Cubit<ExaminationState> {
       /// Khi không có mạng cần lưu trữ data vào đâu?
       /// Hay là tạo danh sách chi tiết bài thi lưu vào db, tính toán điểm, Khi nào có mạng query submit lên Server
       /// Get lại examination. đem gán vào repository
+      if(e.type == DioErrorType.other){
+          /// 1. Tạo examination_detail
+        var list = [0,0,0,0,0,0,0];
+        List<ExaminationDetailModel> entities = [];
+        await Future.forEach<Choice>(_choices ?? [], (Choice choice) async {
+           var entity = ExaminationDetailModel(
+             selection: choice.selected,
+             questionId: choice.id,
+             examinationId: examination?.id,
+           );
+           entities.add(entity);
+        });
+        await userRepository.insertExaminationDetails(entities);
+        emit(ExaminationState.submitted());
+        // /// 2. Check Đáp án
+        // choices?.forEach((element) async {
+        //   var result = await userRepository.getAnswerByQuestionId(element.id);
+        //   if(result?.answer == element.selected){
+        //     list[result!.partId! - 1] += 1;
+        //   }
+        // });
+        //   /// 3. Cập nhật routine
+
+      }
       emit(ExaminationState.failed(e.response?.statusMessage ?? ''));
     }
   }

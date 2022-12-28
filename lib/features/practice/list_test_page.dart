@@ -212,7 +212,7 @@ class _ListTestPageState extends State<ListTestPage> {
                               : const SizedBox(),
                           const Spacer(),
                           testCubit.isDownloaded(test.id!)
-                              ? const SizedBox(
+                              ? const SizedBox( 
                                   width: 72,
                                   height: 48,
                                   child: Icon(
@@ -223,7 +223,7 @@ class _ListTestPageState extends State<ListTestPage> {
                               : InkWell(
                                   onTap: () async {
                                     try{
-                                      await download("part1.zip");
+                                      await download("eco2018_Test01.zip");
                                       testCubit.updateDownload(test.id!);
                                     }catch(e){
 

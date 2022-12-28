@@ -39,7 +39,6 @@ part 'database_manager.g.dart';
   ExaminationEntity,
   ImageEntity,
   LevelEntity,
-  LevelEntity,
   PartEntity,
   QuestionEntity,
   RoutineEntity,
@@ -47,7 +46,7 @@ part 'database_manager.g.dart';
   TestEntity,
   TypeTestEntity,
   UserEntity,
-  NumberOfTestEntity
+  NumberOfTestEntity,
 ])
 abstract class DatabaseManager extends FloorDatabase {
   ExamDao get examDao;

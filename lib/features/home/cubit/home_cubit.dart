@@ -9,6 +9,7 @@ import 'package:toeic/database/entities/image_entity.dart';
 import 'package:toeic/database/entities/question_entity.dart';
 import 'package:toeic/database/entities/routine_entity.dart';
 import 'package:toeic/features/practice/cubit/examination_cubit.dart';
+import 'package:toeic/features/practice/cubit/test_cubit.dart';
 import 'package:toeic/hive/hive_service.dart';
 import 'package:toeic/injection/injection.dart';
 import 'package:toeic/repositories/test_repository.dart';
@@ -33,7 +34,12 @@ class HomeCubit extends Cubit<HomeState> {
       this.examinationRepository, this.testRepository)
       : super(const HomeState.loading()) {
     examinationRepository.testStateStream.listen((state) {
-      if (state is ExaminationStateSubmitted) {}
+      if (state is TestStateLoaded) {
+        emit(HomeState.refresh());
+      }
+      else{
+        print(state);
+      }
     });
   }
 
@@ -188,4 +194,6 @@ class HomeState with _$HomeState {
   const factory HomeState.success() = HomeStateSuccess;
 
   const factory HomeState.failed(String error) = HomeStateFailed;
+
+  const factory HomeState.refresh() = HomeStateRefresh;
 }
